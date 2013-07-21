@@ -1,0 +1,16 @@
+{
+  "name": "sync-client-localstorage",
+  "repo": "3musket33rs/sync-client-localstorage",
+  "description": "Wrapper for sync-client to transparently synchronize localStorage",
+  "version": "0.0.1",
+  "keywords": [],
+  "dependencies": {
+    "3musket33rs/sync-client": "*",
+  },
+  "development": {},
+  "license": "MIT",
+  "main": "index.js",
+  "scripts": [
+    "index.js"
+  ]
+}

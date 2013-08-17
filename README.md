@@ -41,4 +41,4 @@ Once the library is installed, `window.localStorage` can be used as usual and wi
 
 ## License
 
-[MIT License](http://en.wikipedia.org/wiki/MIT_License)
+[Apache License](http://www.apache.org/licenses/LICENSE-2.0)

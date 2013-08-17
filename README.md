@@ -39,6 +39,14 @@ Once the library is installed, `window.localStorage` can be used as usual and wi
 
 * algorithm described in [What’s the Difference? Efficient Set Reconciliation without Prior Context](http://conferences.sigcomm.org/sigcomm/2011/papers/sigcomm/p218.pdf)
 
+## Development
+
+### Testing
+
+Uses [Cucumber](http://cukes.info/) to run tests on [PhantomJS](http://phantomjs.org/), use `bundle exec cucumber` to run them.
+
+[![Build Status](https://travis-ci.org/3musket33rs/sync.png?branch=master)](https://travis-ci.org/3musket33rs/sync)
+
 ## License
 
 [Apache License](http://www.apache.org/licenses/LICENSE-2.0)

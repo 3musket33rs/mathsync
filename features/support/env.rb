@@ -28,8 +28,7 @@ end
 Capybara.default_selector = :css
 World(RSpec::Matchers)
 
-# configure the base urls for frontend and backend here
-$blog_base_url = 'http://blog.mais-h.eu/'
+$blog_base_url = 'http://blog.mais-h.eu'
 
 def ui_url(path)
   $blog_base_url + path

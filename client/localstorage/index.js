@@ -1,4 +1,4 @@
-var syncBuilder = require('sync-client');
+var syncSetup = require('sync-client');
 
 module.exports = (function() {
   'use strict';
@@ -8,7 +8,7 @@ module.exports = (function() {
     var filter = config.filter || function () { return true; };
     var stringify = config.stringify || function (key, value) { return JSON.stringify({ k: key, v: value }); };
     var parse = config.parse || function (serialized) { return JSON.parse(serialized); };
-    var sync = syncBuilder(createSyncConfig(config));
+    var sync = syncSetup(createSyncConfig(config));
 
     readInitial(storage, sync, stringify);
 

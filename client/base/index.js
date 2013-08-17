@@ -2,37 +2,14 @@
 module.exports = (function() {
   'use strict';
 
-  function sync(config) {
+  function setup(config) {
     var that = {};
 
-    that.start = function () {
-      return transaction(config);
+    that.sync = function (data) {
     };
 
     return that;
   }
 
-  function transaction(config) {
-    var that = {};
-
-    that.add = function (key) {
-      // TODO
-    };
-
-    that.clear = function () {
-      // TODO
-    };
-
-    that.remove = function (key) {
-      // TODO
-    };
-
-    that.commit = function () {
-      // TODO
-    };
-
-    return that;
-  }
-
-  return sync;
+  return setup;
 })();

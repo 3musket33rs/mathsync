@@ -1,9 +1,12 @@
+log
+
 # ruby
 .rbenv-version
 
 # js
 components
 build
+node_modules
 
 # java
 target

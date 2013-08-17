@@ -4,5 +4,6 @@ Feature: Display the homepage
   I want to see blog title
 
   Scenario: Display the of the blog on the homepage
+    Given I have a node server
     When I visit the homepage
     Then I see title

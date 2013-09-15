@@ -1,4 +1,8 @@
-language: ruby
+language:
+  - ruby
+  - java
 rvm:
   - 1.9.3
+jdk:
+  - openjdk7
 script: make test

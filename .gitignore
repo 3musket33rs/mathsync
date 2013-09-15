@@ -1,8 +1,5 @@
 log
 
-# ruby
-.rbenv-version
-
 # js
 components
 build

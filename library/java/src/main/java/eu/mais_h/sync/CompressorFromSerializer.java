@@ -24,7 +24,7 @@ class CompressorFromSerializer<T> implements Compressor<T> {
         buckets.get(bucket).addItem(content);
       }
     }
-    return null;
+    return new ImmutableIbf(buckets);
   }
 
   private int[] destinationBuckets(byte[] content) {

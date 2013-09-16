@@ -15,6 +15,9 @@ class CompressorFromSerializer<T> implements Compressor<T> {
   @Override
   public Ibf compress(Set<T> input, int size) {
     List<MutableBucket> buckets = new ArrayList<MutableBucket>(size);
+    for (int i = 0; i < size; i++) {
+      buckets.add(new MutableBucket());
+    }
     for (T item : input) {
       byte[] content = serializer.serialize(item);
       for (int bucket : destinationBuckets(content)) {

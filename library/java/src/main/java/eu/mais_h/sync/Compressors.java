@@ -8,7 +8,7 @@ public class Compressors {
     throw new AssertionError();
   }
 
-  public static <T> Compressor<T> fromItemCompressor(ItemCompressor<T> itemCompressor) {
-    return new CompressorFromItemCompressor(itemCompressor);
+  public static <T> Compressor<T> fromSerializer(Serializer<T> serializer) {
+    return new CompressorFromSerializer<T>(serializer);
   }
 }

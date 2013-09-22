@@ -7,3 +7,8 @@ node_modules
 
 # java
 target
+
+# eclipse
+.project
+.classpath
+.settings

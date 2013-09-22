@@ -1,18 +1,23 @@
 package eu.mais_h.sync;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Arrays;
 
-class MutableBucket implements Bucket {
+import eu.mais_h.sync.digest.Digester;
+import eu.mais_h.sync.digest.Digesters;
 
-  private static final String DIGEST_ALGORITHM = "SHA-1";
+class MutableBucket implements Bucket {
 
   private int items = 0;
   private byte[] hashed = new byte[0];
   private byte[] xored = new byte[0];
+  private final Digester digester;
 
   MutableBucket() {
+    this(Digesters.sha1());
+  }
+  
+  MutableBucket(Digester digester) {
+    this.digester = digester;
   }
 
   @Override
@@ -35,26 +40,15 @@ class MutableBucket implements Bucket {
 
     hashed = xor(hashed, bytes);
 
-    byte[] hash = digest(bytes);
+    byte[] hash = digester.digest(bytes);
     xored = xor(xored, hash);
   }
 
   private byte[] xor(byte[] source, byte[] added) {
     byte[] xored = Arrays.copyOf(source, Math.max(source.length, added.length));
     for (int i = 0; i < added.length; i++) {
-      xored[i] = (byte)(0xff & ((int)xored[i] ^ (int)added[i]));
+      xored[i] = (byte) (0xff & ((int) xored[i] ^ (int) added[i]));
     }
     return xored;
-  }
-
-  private byte[] digest(byte[] bytes) {
-    MessageDigest md;
-    try {
-      md = MessageDigest.getInstance(DIGEST_ALGORITHM);
-    } catch (NoSuchAlgorithmException e) {
-      throw new RuntimeException("Cannot compute the hash of items with algorithm " + DIGEST_ALGORITHM, e);
-    }
-    md.update(bytes);
-    return md.digest();
   }
 }

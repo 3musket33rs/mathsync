@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import eu.mais_h.sync.digest.Digester;
 
-class MutableBucket implements Bucket {
+class MutableBucket extends AbstractBucket {
 
   private int items = 0;
   private byte[] hashed = new byte[0];

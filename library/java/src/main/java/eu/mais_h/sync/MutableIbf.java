@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 import eu.mais_h.sync.digest.Digester;
 
-public class MutableIbf implements Ibf {
+public class MutableIbf extends AbstractIbf {
 
   private final MutableBucket[] buckets;
   private final byte spread;
@@ -32,12 +32,12 @@ public class MutableIbf implements Ibf {
   }
 
   private int[] destinationBuckets(byte[] content) {
-    int[] buckets = new int[spread];
+    int[] destinations = new int[spread];
     byte[] paddedContent = Arrays.copyOf(content, content.length + 1);
     for (byte i = 0; i < spread; i++) {
       paddedContent[content.length] = i;
-      buckets[i] = digester.digest(paddedContent)[0] % buckets.length;
+      destinations[i] = digester.digest(paddedContent)[0] % buckets.length;
     }
-    return new int[0];
+    return destinations;
   }
 }

@@ -1,6 +1,5 @@
 package eu.mais_h.sync;
 
-import java.util.List;
 
-public interface Ibf extends List<Bucket> {
+public interface Ibf extends Iterable<Bucket> {
 }

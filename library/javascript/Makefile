@@ -4,6 +4,4 @@ install:
 
 build: install
 	grunt
-
-test: build
 	npm test

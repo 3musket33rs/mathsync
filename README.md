@@ -1,51 +1,31 @@
 # sync
 
-__WORK IN PROGRESS__
-
 Almost transparent synchronization between browser and server.
 
 ## API
 
-### Client - Local Storage
+__WORK IN PROGRESS__
 
-Once the library is installed, `window.localStorage` can be used as usual and will get automatic synchronization with the server counterpart.
+## Architecture
 
-#### Maps all keys to the server
+Per-language low levels libraries to be easily integrated anywhere plus higher level integrations for common needs. Everything located in a single git repository to synchronize changes.
 
-    var setup = require('sync-client-localStorage')
-    setup(window.localStorage);
-
-#### Maps a subset of keys to the server
-
-    var setup = require('sync-client-localStorage')
-    setup(window.localStorage, {
-      filter: function (key) { return key.length > 3; }
-    });
-
-#### More efficient key compression
-
-    var setup = require('sync-client-localStorage')
-    setup(window.localStorage, {
-      stringify: function (key, value) {
-        return key + '-' + value;
-      },
-      parse: function (serialized) {
-        var a = serialized.split('-', 2);
-        return { k: a[0], v: a[1] };
-      }
-    });
-
-## Inspiration
-
-* algorithm described in [What’s the Difference? Efficient Set Reconciliation without Prior Context](http://conferences.sigcomm.org/sigcomm/2011/papers/sigcomm/p218.pdf)
+Inspirational algorithm described in [What’s the Difference? Efficient Set Reconciliation without Prior Context](http://conferences.sigcomm.org/sigcomm/2011/papers/sigcomm/p218.pdf).
 
 ## Development
 
+[![Build Status](https://travis-ci.org/3musket33rs/sync.png?branch=master)](https://travis-ci.org/3musket33rs/sync)
+
+### Requirements
+
+* [make](http://www.gnu.org/software/make/)
+* JDK7
+* Node
+* [EditorConfig](http://editorconfig.org/)
+
 ### Testing
 
-Uses [Cucumber](http://cukes.info/) to run tests on [PhantomJS](http://phantomjs.org/), use `make test` to run them.
-
-[![Build Status](https://travis-ci.org/3musket33rs/sync.png?branch=master)](https://travis-ci.org/3musket33rs/sync)
+Each module isUses [Cucumber](http://cukes.info/) to run tests on [PhantomJS](http://phantomjs.org/), use `make test` to run them.
 
 ## License
 

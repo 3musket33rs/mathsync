@@ -1,0 +1,19 @@
+{
+  "name" : "sync",
+  "version" : "0.0.1",
+  "description" : "",
+  "main" : "src/index.js",
+  "scripts" : {
+    "test" : "mocha"
+  },
+  "author" : "Mathieu Bruyen <code@mais-h.eu>",
+  "license" : "Apache",
+  "dependencies" : {
+    "crypto-js" : "3.1.x"
+  },
+  "devDependencies" : {
+    "grunt": "0.4.x",
+    "grunt-contrib-jshint" : "0.6.x",
+    "mocha" : "0.13.x"
+  }
+}

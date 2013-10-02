@@ -1,4 +1,3 @@
 build:
-	make build -C browser
-	make build -C node
+	make build -C javascript
 	make build -C java

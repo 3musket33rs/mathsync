@@ -25,7 +25,7 @@ Inspirational algorithm described in [What’s the Difference? Efficient Set Rec
 
 ### Testing
 
-Each module isUses [Cucumber](http://cukes.info/) to run tests on [PhantomJS](http://phantomjs.org/), use `make test` to run them.
+Each module is unit tested and modules are cross-tested using [Cucumber](http://cukes.info/), with [PhantomJS](http://phantomjs.org/) for in-browser code.
 
 ## License
 

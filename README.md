@@ -1,8 +1,12 @@
 # sync
 
-Almost transparent synchronization between browser and server.
+Transparent synchronization between client (browser included) and server.
 
-## API
+### Api at a glance
+
+__WORK IN PROGRESS__
+
+### Integration Module
 
 __WORK IN PROGRESS__
 
@@ -23,9 +27,30 @@ Inspirational algorithm described in [What’s the Difference? Efficient Set Rec
 * Node
 * [EditorConfig](http://editorconfig.org/)
 
+### Installation
+Simply
+
+```javascript
+make
+```
+
+### Simple Example
+
+
 ### Testing
 
 Each module is unit tested and modules are cross-tested using [Cucumber](http://cukes.info/), with [PhantomJS](http://phantomjs.org/) for in-browser code.
+
+### Support
+
+1. Go to the issues section of the sync repo
+   (https://github.com/3musket33rs/sync/issues) and search for an answer to your
+   question or problem.
+2. If no answer exists, file a new ticket!  Somebody will typically respond
+   within a few hours.
+
+It's that easy.
+
 
 ## License
 

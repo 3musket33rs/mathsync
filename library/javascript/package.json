@@ -4,7 +4,7 @@
   "description" : "",
   "main" : "build/browser.js",
   "scripts" : {
-    "test" : "mocha"
+    "test" : "mocha --reporter spec"
   },
   "author" : "Mathieu Bruyen <code@mais-h.eu>",
   "license" : "Apache",

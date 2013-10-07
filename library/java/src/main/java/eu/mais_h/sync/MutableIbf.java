@@ -5,7 +5,7 @@ import java.util.Iterator;
 
 import eu.mais_h.sync.digest.Digester;
 
-public class MutableIbf extends AbstractIbf {
+class MutableIbf extends AbstractIbf {
 
   private final MutableBucket[] buckets;
   private final byte spread;

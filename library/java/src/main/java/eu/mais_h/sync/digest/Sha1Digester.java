@@ -3,7 +3,7 @@ package eu.mais_h.sync.digest;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class Sha1Digester implements Digester {
+class Sha1Digester implements Digester {
 
   private static final String DIGEST_ALGORITHM = "SHA-1";
 

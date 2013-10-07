@@ -1,7 +1,7 @@
 package eu.mais_h.sync;
 
 
-public interface Compressor<T> {
+public interface Compressor {
 
   Ibf compress(int size);
 }

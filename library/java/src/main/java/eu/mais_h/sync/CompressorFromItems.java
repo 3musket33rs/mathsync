@@ -2,7 +2,7 @@ package eu.mais_h.sync;
 
 import eu.mais_h.sync.digest.Digester;
 
-class CompressorFromItems<T> implements Compressor<T> {
+class CompressorFromItems implements Compressor {
 
   private final Iterable<byte[]> items;
   private final Digester digester;

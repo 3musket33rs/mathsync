@@ -2,7 +2,7 @@ package eu.mais_h.sync;
 
 import java.util.Iterator;
 
-public abstract class AbstractIbf implements Ibf {
+abstract class AbstractIbf implements Summary, Iterable<Bucket> {
 
   @Override
   public final int hashCode() {
@@ -19,10 +19,10 @@ public abstract class AbstractIbf implements Ibf {
     if (this == obj) {
       return true;
     }
-    if (!(obj instanceof Ibf)) {
+    if (!(obj instanceof AbstractIbf)) {
       return false;
     }
-    Ibf other = (Ibf)obj;
+    AbstractIbf other = (AbstractIbf)obj;
     Iterator<Bucket> buckets = iterator();
     Iterator<Bucket> otherBuckets = other.iterator();
     while (buckets.hasNext() && otherBuckets.hasNext()) {

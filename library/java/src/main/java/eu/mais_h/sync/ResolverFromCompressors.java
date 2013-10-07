@@ -1,14 +1,13 @@
 package eu.mais_h.sync;
 
-import java.util.Set;
 
 class ResolverFromCompressors<T> implements Resolver<T> {
 
-  private final Compressor remote;
-  private final Compressor local;
+  private final Summarizer remote;
+  private final Summarizer local;
   private final Deserializer<T> deserializer;
 
-  ResolverFromCompressors(Compressor remote, Compressor local, Deserializer<T> deserializer) {
+  ResolverFromCompressors(Summarizer remote, Summarizer local, Deserializer<T> deserializer) {
     this.remote = remote;
     this.local = local;
     this.deserializer = deserializer;
@@ -20,14 +19,14 @@ class ResolverFromCompressors<T> implements Resolver<T> {
     Difference<byte[]> difference = null;
     while (difference == null) {
       size = size * 2;
-      Ibf localIbf = local.compress(size);
-      Ibf remoteIbf = remote.compress(size);
+      Summary localIbf = local.compress(size);
+      Summary remoteIbf = remote.compress(size);
       difference = computeDifference(remoteIbf, localIbf);
     }
     return deserialize(difference);
   }
 
-  private Difference<byte[]> computeDifference(Ibf remoteIbf, Ibf localIbf) {
+  private Difference<byte[]> computeDifference(Summary remoteIbf, Summary localIbf) {
     // TODO
     return null;
   }

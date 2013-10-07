@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import org.apache.commons.codec.binary.Hex;
 
-public abstract class AbstractBucket implements Bucket {
+abstract class AbstractBucket implements Bucket {
 
   @Override
   public final int hashCode() {

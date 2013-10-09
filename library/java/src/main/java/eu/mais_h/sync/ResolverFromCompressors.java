@@ -19,8 +19,8 @@ class ResolverFromCompressors<T> implements Resolver<T> {
     Difference<byte[]> difference = null;
     while (difference == null) {
       level++;
-      Summary localIbf = local.compress(level);
-      Summary remoteIbf = remote.compress(level);
+      Summary localIbf = local.summarize(level);
+      Summary remoteIbf = remote.summarize(level);
       difference = computeDifference(remoteIbf, localIbf);
     }
     return deserialize(difference);

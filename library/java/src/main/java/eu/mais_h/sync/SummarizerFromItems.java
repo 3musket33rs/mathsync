@@ -15,11 +15,15 @@ class SummarizerFromItems implements Summarizer {
   }
 
   @Override
-  public Summary compress(int size) {
-    Ibf ibf = new Ibf(size, spread, digester);
+  public Summary compress(int level) {
+    Ibf ibf = new Ibf(ibfSizeFromLevel(level), spread, digester);
     for (byte[] item : items) {
       ibf.addItem(item);
     }
     return ibf;
+  }
+
+  private int ibfSizeFromLevel(int level) {
+    return (int)Math.pow(2, level);
   }
 }

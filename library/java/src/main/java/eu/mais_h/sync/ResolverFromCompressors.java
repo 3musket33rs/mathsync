@@ -15,12 +15,12 @@ class ResolverFromCompressors<T> implements Resolver<T> {
 
   @Override
   public Difference<T> difference() {
-    int size = 1;
+    int level = 1;
     Difference<byte[]> difference = null;
     while (difference == null) {
-      size = size * 2;
-      Summary localIbf = local.compress(size);
-      Summary remoteIbf = remote.compress(size);
+      level++;
+      Summary localIbf = local.compress(level);
+      Summary remoteIbf = remote.compress(level);
       difference = computeDifference(remoteIbf, localIbf);
     }
     return deserialize(difference);

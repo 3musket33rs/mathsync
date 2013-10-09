@@ -23,15 +23,10 @@ class ResolverFromCompressors<T> implements Resolver<T> {
       Summary remoteIbf = remote.summarize(level);
       difference = computeDifference(remoteIbf, localIbf);
     }
-    return deserialize(difference);
+    return new DeserializedDifference<T>(difference, deserializer);
   }
 
   private Difference<byte[]> computeDifference(Summary remoteIbf, Summary localIbf) {
-    // TODO
-    return null;
-  }
-
-  private Difference<T> deserialize(Difference<byte[]> serializedDifference) {
     // TODO
     return null;
   }

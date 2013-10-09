@@ -16,7 +16,7 @@ class SummarizerFromItems implements Summarizer {
 
   @Override
   public Summary compress(int size) {
-    MutableIbf ibf = new MutableIbf(size, spread, digester);
+    Ibf ibf = new Ibf(size, spread, digester);
     for (byte[] item : items) {
       ibf.addItem(item);
     }

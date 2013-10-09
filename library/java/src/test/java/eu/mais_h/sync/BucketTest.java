@@ -8,10 +8,10 @@ import org.mockito.Mockito;
 
 import eu.mais_h.sync.digest.Digester;
 
-public class MutableBucketTest {
+public class BucketTest {
 
   private Digester digester = Mockito.mock(Digester.class);
-  private MutableBucket bucket = new MutableBucket(digester);
+  private Bucket bucket = new Bucket(digester);
 
   @Test
   public void item_number_is_zero_by_default() {
@@ -21,12 +21,12 @@ public class MutableBucketTest {
   @Test
   public void adding_an_item_increments_item_number() {
     Mockito.when(digester.digest(Matchers.<byte[]>any())).thenReturn(new byte[0]);
-    
+
     bucket.addItem(new byte[0]);
-    
+
     assertThat(bucket.items()).isEqualTo(1);
   }
-  
+
   @Test
   public void xored_is_empty_by_default() {
     assertThat(bucket.xored()).isEqualTo(new byte[0]);
@@ -38,10 +38,10 @@ public class MutableBucketTest {
 
     bucket.addItem(new byte[] { (byte)1 });
     bucket.addItem(new byte[] { (byte)3 });
-    
+
     assertThat(bucket.xored()).isEqualTo(new byte[] { (byte)(1 ^ 3) });
   }
-  
+
   @Test
   public void hashed_is_empty_by_default() {
     assertThat(bucket.hashed()).isEqualTo(new byte[0]);
@@ -54,7 +54,7 @@ public class MutableBucketTest {
 
     bucket.addItem(new byte[] { (byte)1 });
     bucket.addItem(new byte[] { (byte)2 });
-    
+
     assertThat(bucket.hashed()).isEqualTo(new byte[] { (byte)(4 ^ 5) });
   }
 }

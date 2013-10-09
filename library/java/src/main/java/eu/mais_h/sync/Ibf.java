@@ -1,8 +1,45 @@
 package eu.mais_h.sync;
 
+import java.util.Arrays;
 import java.util.Iterator;
 
-abstract class AbstractIbf implements Summary, Iterable<Bucket> {
+import eu.mais_h.sync.digest.Digester;
+
+class Ibf implements Summary, Iterable<Bucket> {
+
+  private final Bucket[] buckets;
+  private final byte spread;
+  private final Digester digester;
+
+  Ibf(int size, byte spread, Digester digester) {
+    this.spread = spread;
+    this.digester = digester;
+    buckets = new Bucket[size];
+    for (int i = 0; i < size; i++) {
+      buckets[i] = new Bucket(digester);
+    }
+  }
+
+  @Override
+  public Iterator<Bucket> iterator() {
+    return Arrays.<Bucket>asList(buckets).iterator();
+  }
+
+  void addItem(byte[] content) {
+    for (int bucket : destinationBuckets(content)) {
+      buckets[bucket].addItem(content);
+    }
+  }
+
+  private int[] destinationBuckets(byte[] content) {
+    int[] destinations = new int[spread];
+    byte[] paddedContent = Arrays.copyOf(content, content.length + 1);
+    for (byte i = 0; i < spread; i++) {
+      paddedContent[content.length] = i;
+      destinations[i] = digester.digest(paddedContent)[0] % buckets.length;
+    }
+    return destinations;
+  }
 
   @Override
   public final int hashCode() {
@@ -19,10 +56,10 @@ abstract class AbstractIbf implements Summary, Iterable<Bucket> {
     if (this == obj) {
       return true;
     }
-    if (!(obj instanceof AbstractIbf)) {
+    if (!(obj instanceof Ibf)) {
       return false;
     }
-    AbstractIbf other = (AbstractIbf)obj;
+    Ibf other = (Ibf)obj;
     Iterator<Bucket> buckets = iterator();
     Iterator<Bucket> otherBuckets = other.iterator();
     while (buckets.hasNext() && otherBuckets.hasNext()) {

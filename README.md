@@ -36,8 +36,8 @@ make
 
 ### Version bump
 
-* for development purposes: `make set-dev-version 0.42.1`
-* right before releasing: `make set-release-version 1.0.0`
+* before development: `env VERSION=0.42.1 make set-dev-version`
+* right before releasing: `env VERSION=0.42.1 make set-release-version`
 
 ### Simple Example
 

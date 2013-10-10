@@ -5,3 +5,9 @@ install:
 build: install
 	grunt
 	npm test
+
+set-dev-version:
+	npm version $(VERSION)-alpha
+
+set-release-version:
+	npm version $(VERSION)

@@ -1,21 +1,21 @@
 {
-  "name" : "sync",
-  "version" : "0.0.1",
-  "description" : "",
-  "main" : "build/browser.js",
-  "scripts" : {
-    "test" : "mocha --reporter spec"
+  "name": "sync",
+  "version": "0.1.0-alpha",
+  "description": "",
+  "main": "build/browser.js",
+  "scripts": {
+    "test": "mocha --reporter spec"
   },
-  "author" : "Mathieu Bruyen <code@mais-h.eu>",
-  "license" : "Apache",
-  "dependencies" : {
-    "crypto-js" : "3.1.x"
+  "author": "Mathieu Bruyen <code@mais-h.eu>",
+  "license": "Apache",
+  "dependencies": {
+    "crypto-js": "3.1.x"
   },
-  "devDependencies" : {
+  "devDependencies": {
     "grunt": "0.4.x",
-    "grunt-contrib-jshint" : "0.6.x",
-    "mocha" : "0.13.x",
-    "grunt-browserify" : "1.2.x",
-    "underscore" : "1.5.x"
+    "grunt-contrib-jshint": "0.6.x",
+    "mocha": "0.13.x",
+    "grunt-browserify": "1.2.x",
+    "underscore": "1.5.x"
   }
 }

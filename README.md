@@ -34,6 +34,11 @@ Simply
 make
 ```
 
+### Version bump
+
+* for development purposes: `make set-dev-version 0.42.1`
+* right before releasing: `make set-release-version 1.0.0`
+
 ### Simple Example
 
 

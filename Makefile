@@ -1,12 +1,14 @@
 build:
-	make build -C library
-	make build -C integrations
+	make build -C java
+	make build -C javascript/core
 
 test: build
 	echo "Not yet implemented - bundle exec cucumber"
 
 set-dev-version:
-	make set-dev-version -C library
+	make set-dev-version -C java
+	make set-dev-version -C javascript/core
 
 set-release-version:
-	make set-release-version -C library
+	make set-release-version -C java
+	make set-release-version -C javascript/core

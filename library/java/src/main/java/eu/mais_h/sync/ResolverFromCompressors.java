@@ -27,7 +27,12 @@ class ResolverFromCompressors<T> implements Resolver<T> {
   }
 
   private Difference<byte[]> computeDifference(Summary remoteIbf, Summary localIbf) {
-    // TODO
-    return null;
+    if (!(remoteIbf instanceof Ibf)) {
+      throw new IllegalArgumentException("Remote summary has an invalid type: " + remoteIbf);
+    }
+    if (!(localIbf instanceof Ibf)) {
+      throw new IllegalArgumentException("Local summary has an invalid type: " + localIbf);
+    }
+    return ((Ibf)localIbf).substract((Ibf)remoteIbf).asDifference();
   }
 }

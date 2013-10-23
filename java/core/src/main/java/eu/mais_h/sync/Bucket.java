@@ -4,8 +4,6 @@ import java.util.Arrays;
 
 import org.apache.commons.codec.binary.Hex;
 
-import eu.mais_h.sync.digest.Digester;
-
 class Bucket {
 
   static final Bucket EMPTY_BUCKET = new Bucket(0, new byte[0], new byte[0]);

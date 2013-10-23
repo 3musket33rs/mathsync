@@ -4,8 +4,6 @@ import static org.fest.assertions.Assertions.assertThat;
 
 import org.junit.Test;
 
-import eu.mais_h.sync.digest.Digester;
-
 public class BucketTest {
 
   private byte[] emptyBytes = new byte[0];

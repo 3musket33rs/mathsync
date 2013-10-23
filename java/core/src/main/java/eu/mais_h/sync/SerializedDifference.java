@@ -1,7 +1,5 @@
 package eu.mais_h.sync;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 class SerializedDifference implements Difference<byte[]> {

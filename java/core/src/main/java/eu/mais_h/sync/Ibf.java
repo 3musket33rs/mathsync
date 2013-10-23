@@ -61,36 +61,61 @@ class Ibf implements Summary {
     Set<byte[]> removed = new HashSet<byte[]>();
 
     Ibf filtered = this;
-    boolean iterate = true;
-    while (iterate) {
-      iterate = false;
-      for (Bucket b : filtered.buckets) {
-        int items = b.items();
-        if (items == 1 || items == -1) {
-          byte[] hashed = b.hashed();
-          byte[] xored = b.xored();
-          //TODO handle trailing 0s
-          if (Arrays.equals(digester.digest(xored), hashed)) {
-            iterate = true;
-            filtered = filtered.modify(-items, xored);
-            if (items == 1) {
-              added.add(xored);
-            } else {
-              removed.add(xored);
-            }
-            break;
-          }
+    Operation next = filtered.findNextOperation();
+    while (next != null) {
+      switch (next.type) {
+      case ADDED:
+        added.add(next.content);
+        break;
+      case REMOVED:
+        removed.add(next.content);
+        break;
+      }
+      filtered = next.afterOperation;
+      next = filtered.findNextOperation();
+    }
+
+    if (filtered.isEmpty()) {
+      return new SerializedDifference(added, removed);
+    } else {
+      return null;
+    }
+  }
+  
+  private Operation findNextOperation() {
+    for (Bucket b : buckets) {
+      OperationType type = getBucketOperation(b);
+      if (type != null) {
+        byte[] xored = b.xored();
+        byte[] hashed = b.hashed();
+        //TODO handle trailing 0s
+        if (Arrays.equals(digester.digest(xored), hashed)) {
+          Ibf afterOperation = modify(-b.items(), xored);
+          return new Operation(xored, afterOperation, type);
         }
       }
     }
-
-    for (Bucket b : filtered.buckets) {
+    return null;
+  }
+  
+  private OperationType getBucketOperation(Bucket b) {
+    switch (b.items()) {
+    case 1:
+      return OperationType.ADDED;
+    case -1:
+      return OperationType.REMOVED;
+    default:
+      return null;
+    }
+  }
+  
+  private boolean isEmpty() {
+    for (Bucket b : buckets) {
       if (b.items() != 0) {
-        return null;
+        return false;
       }
     }
-
-    return new SerializedDifference(added, removed);
+    return true;
   }
 
   private Ibf modify(int variation, byte[] content) {
@@ -137,5 +162,20 @@ class Ibf implements Summary {
       buckets[i] = Bucket.EMPTY_BUCKET;
     }
     return buckets;
+  }
+  
+  private static enum OperationType { ADDED, REMOVED }
+  
+  private static final class Operation {
+    
+    private final byte[] content;
+    private final Ibf afterOperation;
+    private final OperationType type;
+    
+    private Operation(byte[] content, Ibf afterOperation, OperationType type) {
+      this.content = content;
+      this.afterOperation = afterOperation;
+      this.type = type;
+    }
   }
 }

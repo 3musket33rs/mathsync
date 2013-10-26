@@ -57,56 +57,7 @@ class Ibf implements Summary {
   }
 
   Difference<byte[]> asDifference() {
-    Set<byte[]> added = new HashSet<byte[]>();
-    Set<byte[]> removed = new HashSet<byte[]>();
-
-    Ibf filtered = this;
-    Operation next = filtered.findNextOperation();
-    while (next != null) {
-      switch (next.type) {
-      case ADDED:
-        added.add(next.content);
-        break;
-      case REMOVED:
-        removed.add(next.content);
-        break;
-      }
-      filtered = next.afterOperation;
-      next = filtered.findNextOperation();
-    }
-
-    if (filtered.isEmpty()) {
-      return new SerializedDifference(added, removed);
-    } else {
-      return null;
-    }
-  }
-  
-  private Operation findNextOperation() {
-    for (Bucket b : buckets) {
-      OperationType type = getBucketOperation(b);
-      if (type != null) {
-        byte[] xored = b.xored();
-        byte[] hashed = b.hashed();
-        //TODO handle trailing 0s
-        if (Arrays.equals(digester.digest(xored), hashed)) {
-          Ibf afterOperation = modify(-b.items(), xored);
-          return new Operation(xored, afterOperation, type);
-        }
-      }
-    }
-    return null;
-  }
-  
-  private OperationType getBucketOperation(Bucket b) {
-    switch (b.items()) {
-    case 1:
-      return OperationType.ADDED;
-    case -1:
-      return OperationType.REMOVED;
-    default:
-      return null;
-    }
+    return new DifferenceBuilder(this).difference;
   }
   
   private boolean isEmpty() {
@@ -164,18 +115,58 @@ class Ibf implements Summary {
     return buckets;
   }
   
-  private static enum OperationType { ADDED, REMOVED }
-  
-  private static final class Operation {
+  private final class DifferenceBuilder {
     
-    private final byte[] content;
-    private final Ibf afterOperation;
-    private final OperationType type;
+    private final Set<byte[]> added = new HashSet<>();
+    private final Set<byte[]> removed = new HashSet<>();
+    private final Difference<byte[]> difference;
     
-    private Operation(byte[] content, Ibf afterOperation, OperationType type) {
-      this.content = content;
-      this.afterOperation = afterOperation;
-      this.type = type;
+    private DifferenceBuilder(Ibf original) {
+      if (performOperations(original).isEmpty()) {
+        difference = new SerializedDifference(added, removed);
+      } else {
+        difference = null;
+      }
+    }
+    
+    private Ibf performOperations(Ibf original) {
+      Ibf previous = original;
+      Ibf next = original;
+      while (next != null) {
+        previous = next;
+        next = performNextOperation(previous);
+      }
+      return previous;
+    }
+    
+    private Ibf performNextOperation(Ibf filtered) {
+      for (Bucket b : filtered.buckets) {
+        int items = b.items();
+        if (items == 1 || items == -1) {
+          byte[] verified = verify(b);
+          if (verified != null) {
+            switch (items) {
+            case 1:
+              added.add(verified);
+              break;
+            case -1:
+              removed.add(verified);
+              break;
+            }
+            return filtered.modify(-b.items(), verified);
+          }
+        }
+      }
+      return null;
+    }
+    
+    private byte[] verify(Bucket b) {
+      //TODO handle trailing 0s
+      if (Arrays.equals(digester.digest(b.xored()), b.hashed())) {
+        return b.xored();
+      } else {
+        return null;
+      }
     }
   }
 }

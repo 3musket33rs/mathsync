@@ -9,6 +9,10 @@ class Sha1Digester implements Digester {
 
   @Override
   public byte[] digest(byte[] source) {
+    if (source == null) {
+      throw new IllegalArgumentException("Cannot digest null source");
+    }
+    
     MessageDigest md;
     try {
       md = MessageDigest.getInstance(DIGEST_ALGORITHM);

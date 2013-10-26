@@ -1,6 +1,7 @@
 package eu.mais_h.sync.digest;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.Fail.fail;
 
 import org.junit.Test;
 
@@ -8,6 +9,17 @@ public class Sha1DigesterTest {
 
   Sha1Digester sha1 = new Sha1Digester();
 
+  @Test
+  public void throws_exception_for_null_input() {
+    try {
+      sha1.digest(null);
+      fail();
+    } catch (IllegalArgumentException e) {
+      assertThat(e.getMessage()).contains("null");
+      assertThat(e.getMessage()).contains("source");
+    }
+  }
+  
   @Test
   public void sha1_of_ascii_abc_corresponds_to_specification_example() {
     byte[] abc = new byte[] {

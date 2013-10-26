@@ -13,7 +13,7 @@ class Sha1Digester implements Digester {
     try {
       md = MessageDigest.getInstance(DIGEST_ALGORITHM);
     } catch (NoSuchAlgorithmException e) {
-      throw new RuntimeException("JVM does not support " + DIGEST_ALGORITHM + " algorithm", e);
+      throw new AssertionError("JVM does not support " + DIGEST_ALGORITHM + " algorithm", e);
     }
     md.update(source);
     return md.digest();

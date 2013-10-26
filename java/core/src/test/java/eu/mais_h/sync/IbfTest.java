@@ -18,24 +18,34 @@ public class IbfTest {
   private Digester digester = Mockito.mock(Digester.class);
   private byte[] item1 = new byte[] { (byte)5 };
   private byte[] item2 = new byte[] { (byte)6 };
-  private Ibf empty = new Ibf(5, (byte)2, digester);
+  private byte[] item3 = new byte[] { (byte)7, (byte)8, (byte)9 };
+  private Ibf empty = new Ibf(5, (byte)3, digester);
   private Ibf just1;
   private Ibf just2;
+  private Ibf just3;
   private Ibf full;
   private Difference<byte[]> difference;
 
   @Before
   public void prepareIbf() {
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)0 }))).thenReturn(new byte[] { (byte)9 });
+    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)0 }))).thenReturn(new byte[] { (byte)1 });
     Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)1 }))).thenReturn(new byte[] { (byte)3 });
+    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)2 }))).thenReturn(new byte[] { (byte)4 });
     Mockito.when(digester.digest(Matchers.eq(item1))).thenReturn(new byte[] { (byte)4 });
 
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)6, (byte)0 }))).thenReturn(new byte[] { (byte)1 });
+    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)6, (byte)0 }))).thenReturn(new byte[] { (byte)2 });
     Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)6, (byte)1 }))).thenReturn(new byte[] { (byte)3 });
+    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)6, (byte)2 }))).thenReturn(new byte[] { (byte)4 });
     Mockito.when(digester.digest(Matchers.eq(item2))).thenReturn(new byte[] { (byte)8 });
+    
+    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)7, (byte)8, (byte)9, (byte)0 }))).thenReturn(new byte[] { (byte)0 });
+    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)7, (byte)8, (byte)9, (byte)1 }))).thenReturn(new byte[] { (byte)1 });
+    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)7, (byte)8, (byte)9, (byte)2 }))).thenReturn(new byte[] { (byte)2 });
+    Mockito.when(digester.digest(Matchers.eq(item3))).thenReturn(new byte[] { (byte)12 });
 
     just1 = empty.addItem(item1);
     just2 = empty.addItem(item2);
+    just3 = empty.addItem(item3);
     full = just1.addItem(item2);
   }
 
@@ -55,6 +65,10 @@ public class IbfTest {
     difference = just2.asDifference();
     assertThatSetOfArrayEquals(difference.added(), item2);
     assertThat(difference.removed()).isEmpty();
+    
+    difference = just3.asDifference();
+    assertThatSetOfArrayEquals(difference.added(), item3);
+    assertThat(difference.removed()).isEmpty();
 
     difference = full.asDifference();
     assertThatSetOfArrayEquals(difference.added(), item1, item2);
@@ -70,6 +84,10 @@ public class IbfTest {
     difference = empty.substract(just2).asDifference();
     assertThat(difference.added()).isEmpty();
     assertThatSetOfArrayEquals(difference.removed(), item2);
+    
+    difference = empty.substract(just3).asDifference();
+    assertThat(difference.added()).isEmpty();
+    assertThatSetOfArrayEquals(difference.removed(), item3);
 
     difference = empty.substract(full).asDifference();
     assertThat(difference.added()).isEmpty();
@@ -81,6 +99,13 @@ public class IbfTest {
     difference = just1.substract(just2).asDifference();
     assertThatSetOfArrayEquals(difference.added(), item1);
     assertThatSetOfArrayEquals(difference.removed(), item2);
+  }
+
+  @Test
+  public void different_item_sizes_in_the_same_bucket_are_resolved() {
+    difference = just1.addItem(item2).substract(just3).asDifference();
+    assertThatSetOfArrayEquals(difference.added(), item1, item2);
+    assertThatSetOfArrayEquals(difference.removed(), item3);
   }
 
   @Test

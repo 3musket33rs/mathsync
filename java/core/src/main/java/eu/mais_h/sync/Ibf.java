@@ -161,11 +161,16 @@ class Ibf implements Summary {
     }
     
     private byte[] verify(Bucket b) {
-      //TODO handle trailing 0s
-      if (Arrays.equals(digester.digest(b.xored()), b.hashed())) {
-        return b.xored();
-      } else {
-        return null;
+      byte[] content = b.xored();
+      while (true) {
+        if (Arrays.equals(digester.digest(content), b.hashed())) {
+          return content;
+        }
+        if (content.length > 0 && content[content.length - 1] == (byte)0) {
+          content = Arrays.copyOf(content, content.length - 1);
+        } else {
+          return null;
+        }
       }
     }
   }

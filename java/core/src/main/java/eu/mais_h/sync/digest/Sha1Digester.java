@@ -22,4 +22,9 @@ class Sha1Digester implements Digester {
     md.update(source);
     return md.digest();
   }
+  
+  @Override
+  public String toString() {
+    return DIGEST_ALGORITHM;
+  }
 }

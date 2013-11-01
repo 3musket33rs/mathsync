@@ -15,8 +15,7 @@ public class Sha1DigesterTest {
       sha1.digest(null);
       fail();
     } catch (IllegalArgumentException e) {
-      assertThat(e.getMessage()).contains("null");
-      assertThat(e.getMessage()).contains("source");
+      assertThat(e.getMessage()).contains("null").contains("source");
     }
   }
   

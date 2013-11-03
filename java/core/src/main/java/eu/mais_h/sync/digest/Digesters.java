@@ -15,7 +15,7 @@ public class Digesters {
    * Retrieves a digester producing SHA-1 digests.
    * 
    * @return a digester producing SHA-1 digests.
-   * @see <a href="http://fr.wikipedia.org/wiki/SHA-1">Wikipedia's article on SHA-1</a>.
+   * @see <a href="http://fr.wikipedia.org/wiki/SHA-1">Wikipedia's article on SHA-1</a>
    */
   public static Digester sha1() {
     return SHA1;

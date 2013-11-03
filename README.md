@@ -1,24 +1,28 @@
 # sync
 
-Transparent synchronization between client (browser included) and server.
-
-### Api at a glance
-
 __WORK IN PROGRESS__
 
-### Integration Module
+## Features
 
-__WORK IN PROGRESS__
+Helping synchronization between clients and servers accross a network. The client is expected to have pushed its changes to the server and then requests the library to pull changes from the server.
 
-## Architecture
+Clients of the library must provide on the server a way to serialize items and an endpoint, as well as a way to deserialize  items and to access the server endpoint on the client.
 
-Per-language low levels libraries to be easily integrated anywhere plus higher level integrations for common needs. Everything located in a single git repository to synchronize changes.
+The algorithm requires `O(log(n))` roundtrips to the server and consumes a total bandwidth of `O(n)` where `n` is the number of items which changed on the server since the last synchronization. Underlying algorithm greatly inspired from [What’s the Difference? Efficient Set Reconciliation without Prior Context](http://conferences.sigcomm.org/sigcomm/2011/papers/sigcomm/p218.pdf).
 
-Inspirational algorithm described in [What’s the Difference? Efficient Set Reconciliation without Prior Context](http://conferences.sigcomm.org/sigcomm/2011/papers/sigcomm/p218.pdf).
+Nice features:
+
+* underlying structure can be computed ahead of time
+* self-stabilizing algorithm (an error is corrected at the next synchronization)
+* does not require the server to record all changes
 
 ## Development
 
 [![Build Status](https://travis-ci.org/3musket33rs/sync.png?branch=master)](https://travis-ci.org/3musket33rs/sync)
+
+### Architecture
+
+Per-language low levels libraries to be easily integrated anywhere plus higher level integrations for common needs. Everything located in a single git repository to synchronize changes.
 
 ### Requirements
 
@@ -28,7 +32,6 @@ Inspirational algorithm described in [What’s the Difference? Efficient Set Rec
 * [EditorConfig](http://editorconfig.org/)
 
 ### Installation
-Simply
 
 ```javascript
 make
@@ -38,9 +41,6 @@ make
 
 * before development: `env VERSION=0.42.1 make set-dev-version`
 * right before releasing: `env VERSION=0.42.1 make set-release-version`
-
-### Simple Example
-
 
 ### Testing
 

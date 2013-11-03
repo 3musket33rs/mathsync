@@ -16,7 +16,7 @@ class SummarizerFromItems implements Summarizer {
 
   @Override
   public Summary summarize(int level) {
-    Ibf ibf = new Ibf(ibfSizeFromLevel(level), spread, digester);
+    Ibf ibf = new Ibf(ibfSizeFromLevel(level), digester, spread);
     for (byte[] item : items) {
       ibf.addItem(item);
     }

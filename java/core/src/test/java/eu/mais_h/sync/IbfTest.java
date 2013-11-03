@@ -19,11 +19,12 @@ public class IbfTest {
   private byte[] item1 = new byte[] { (byte)5 };
   private byte[] item2 = new byte[] { (byte)6 };
   private byte[] item3 = new byte[] { (byte)7, (byte)8, (byte)9 };
-  private Ibf empty = new Ibf(5, (byte)3, digester);
+  private byte spread = 3;
+  private Ibf empty = new Ibf(5, digester, spread);
   private Ibf just1;
   private Ibf just2;
   private Ibf just3;
-  private Ibf full;
+  private Ibf items1and2;
   private Difference<byte[]> difference;
 
   @Before
@@ -46,12 +47,19 @@ public class IbfTest {
     just1 = empty.addItem(item1);
     just2 = empty.addItem(item2);
     just3 = empty.addItem(item3);
-    full = just1.addItem(item2);
+    items1and2 = just1.addItem(item2);
   }
 
   @Test
   public void empty_ibf_leads_to_empty_difference() {
     difference = empty.asDifference();
+    assertThat(difference.added()).isEmpty();
+    assertThat(difference.removed()).isEmpty();
+  }
+
+  @Test
+  public void json_serialization_keeps_empty_ibf_empty() {
+    difference = goThroughJson(empty).asDifference();
     assertThat(difference.added()).isEmpty();
     assertThat(difference.removed()).isEmpty();
   }
@@ -70,7 +78,26 @@ public class IbfTest {
     assertThatSetOfArrayEquals(difference.added(), item3);
     assertThat(difference.removed()).isEmpty();
 
-    difference = full.asDifference();
+    difference = items1and2.asDifference();
+    assertThatSetOfArrayEquals(difference.added(), item1, item2);
+    assertThat(difference.removed()).isEmpty();
+  }
+
+  @Test
+  public void json_serialization_keeps_added_item_in_difference() {
+    difference = goThroughJson(just1).asDifference();
+    assertThatSetOfArrayEquals(difference.added(), item1);
+    assertThat(difference.removed()).isEmpty();
+
+    difference = goThroughJson(just2).asDifference();
+    assertThatSetOfArrayEquals(difference.added(), item2);
+    assertThat(difference.removed()).isEmpty();
+    
+    difference = goThroughJson(just3).asDifference();
+    assertThatSetOfArrayEquals(difference.added(), item3);
+    assertThat(difference.removed()).isEmpty();
+
+    difference = goThroughJson(items1and2).asDifference();
     assertThatSetOfArrayEquals(difference.added(), item1, item2);
     assertThat(difference.removed()).isEmpty();
   }
@@ -89,7 +116,26 @@ public class IbfTest {
     assertThat(difference.added()).isEmpty();
     assertThatSetOfArrayEquals(difference.removed(), item3);
 
-    difference = empty.substract(full).asDifference();
+    difference = empty.substract(items1and2).asDifference();
+    assertThat(difference.added()).isEmpty();
+    assertThatSetOfArrayEquals(difference.removed(), item1, item2);
+  }
+
+  @Test
+  public void json_serialization_keeps_removed_item_in_difference() {
+    difference = goThroughJson(empty.substract(just1)).asDifference();
+    assertThat(difference.added()).isEmpty();
+    assertThatSetOfArrayEquals(difference.removed(), item1);
+
+    difference = goThroughJson(empty.substract(just2)).asDifference();
+    assertThat(difference.added()).isEmpty();
+    assertThatSetOfArrayEquals(difference.removed(), item2);
+    
+    difference = goThroughJson(empty.substract(just3)).asDifference();
+    assertThat(difference.added()).isEmpty();
+    assertThatSetOfArrayEquals(difference.removed(), item3);
+
+    difference = goThroughJson(empty.substract(items1and2)).asDifference();
     assertThat(difference.added()).isEmpty();
     assertThatSetOfArrayEquals(difference.removed(), item1, item2);
   }
@@ -111,6 +157,10 @@ public class IbfTest {
   @Test
   public void unresolvable_difference_leads_to_null() {
     assertThat(just1.addItem(item1).asDifference()).isNull();
+  }
+  
+  private Ibf goThroughJson(Ibf origin) {
+    return new Ibf(origin.toJson(), digester, spread);
   }
 
   private void assertThatSetOfArrayEquals(Set<byte[]> actual, byte[]... expected) {

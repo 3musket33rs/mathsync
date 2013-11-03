@@ -4,6 +4,8 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.json.JSONArray;
+
 import eu.mais_h.sync.digest.Digester;
 
 class Ibf implements Summary {
@@ -11,12 +13,16 @@ class Ibf implements Summary {
   private final Bucket[] buckets;
   private final byte spread;
   private final Digester digester;
-
-  Ibf(int size, byte spread, Digester digester) {
-    this(bucketsOfSize(size), spread, digester);
+  
+  Ibf(String jsonString, Digester digester, byte spread) {
+    this(bucketsFromJson(jsonString), digester, spread);
   }
 
-  private Ibf(Bucket[] buckets, byte spread, Digester digester) {
+  Ibf(int size, Digester digester, byte spread) {
+    this(bucketsOfSize(size), digester, spread);
+  }
+
+  private Ibf(Bucket[] buckets, Digester digester, byte spread) {
     if (buckets == null) {
       throw new IllegalArgumentException("Buckets cannot be null");
     }
@@ -30,6 +36,15 @@ class Ibf implements Summary {
     this.buckets = buckets;
     this.spread = spread;
     this.digester = digester;
+  }
+  
+  @Override
+  public String toJson() {
+    JSONArray array = new JSONArray();
+    for (Bucket b : buckets) {
+      array.put(b.toJson());
+    }
+    return array.toString();
   }
 
   Ibf addItem(byte[] content) {
@@ -53,7 +68,7 @@ class Ibf implements Summary {
       Bucket otherBucket = other.buckets[i];
       updated[i] = buckets[i].modify(-otherBucket.items(), otherBucket.xored(), otherBucket.hashed());
     }
-    return new Ibf(updated, spread, digester);
+    return new Ibf(updated, digester, spread);
   }
 
   Difference<byte[]> asDifference() {
@@ -75,7 +90,7 @@ class Ibf implements Summary {
     for (int bucket : destinationBuckets(content)) {
       updated[bucket] = updated[bucket].modify(variation, content, hashed);
     }
-    return new Ibf(updated, spread, digester);
+    return new Ibf(updated, digester, spread);
   }
 
   private int[] destinationBuckets(byte[] content) {
@@ -111,6 +126,15 @@ class Ibf implements Summary {
     Bucket[] buckets = new Bucket[size];
     for (int i = 0; i < size; i++) {
       buckets[i] = Bucket.EMPTY_BUCKET;
+    }
+    return buckets;
+  }
+
+  private static Bucket[] bucketsFromJson(String jsonString) {
+    JSONArray deserialized = new JSONArray(jsonString);
+    Bucket[] buckets = new Bucket[deserialized.length()];
+    for (int i = 0; i < buckets.length; i++) {
+      buckets[i] = new Bucket(deserialized.getJSONObject(i));
     }
     return buckets;
   }

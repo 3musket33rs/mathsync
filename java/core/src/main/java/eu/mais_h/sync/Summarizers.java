@@ -1,11 +1,12 @@
 package eu.mais_h.sync;
 
-import java.lang.AssertionError;
 import java.util.Set;
 
 import eu.mais_h.sync.digest.Digesters;
 
 public class Summarizers {
+  
+  private static final byte SPREAD = 4;
 
   private Summarizers() {
     throw new AssertionError();
@@ -16,6 +17,10 @@ public class Summarizers {
   }
 
   public static Summarizer fromSerializedItems(Iterable<byte[]> items) {
-    return new SummarizerFromItems(items, Digesters.sha1(), (byte)4);
+    return new SummarizerFromItems(items, Digesters.sha1(), SPREAD);
+  }
+  
+  public static Summary fromJson(String jsonString) {
+    return new Ibf(jsonString, Digesters.sha1(), SPREAD);
   }
 }

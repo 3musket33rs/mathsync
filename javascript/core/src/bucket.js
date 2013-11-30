@@ -45,5 +45,12 @@
     };
   }
 
-  module.exports = bucket(0, [], []);
+  var emptyBucket = bucket(0, [], []);
+
+  function fromJson(json) {
+    return bucket(json.items, json.xored, json.hashed);
+  }
+  emptyBucket.fromJson = fromJson;
+
+  module.exports = emptyBucket;
 })();

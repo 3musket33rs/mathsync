@@ -23,9 +23,9 @@
   }
 
   function bucket(items, hashed, xored) {
-    var items = items || 0;
-    var hashed = hashed || [];
-    var xored = xored || [];
+    items = items || 0;
+    hashed = hashed || [];
+    xored = xored || [];
 
     function modify(variation, content, digested) {
       return bucket(items + variation, xorArrays(digested, hashed), xorArrays(content, xored));
@@ -38,7 +38,7 @@
     return {
       modify: modify,
       toJson: toJson
-    }
+    };
   }
 
   function bucketsOfSize(size) {
@@ -56,13 +56,12 @@
       var json = [];
       buckets.forEach(function (bucket) {
         json.push(bucket.toJson());
-      })
+      });
       return json;
     }
 
     function addItem(content) {
       var bucketId;
-      var bucket;
       var digested = digest(content);
       var copy = arrayCopy(content);
       copy.push(0);

@@ -32,10 +32,15 @@
       return bucket(count + variation, xorArrays(xor, content), xorArrays(hash, digest));
     }
 
+    function toJson() {
+      return { items: count, hashed: hash, xored: xor };
+    }
+
     return {
       items : items,
       xored : xored,
       hashed : hashed,
+      toJson : toJson,
       modify : modify
     };
   }

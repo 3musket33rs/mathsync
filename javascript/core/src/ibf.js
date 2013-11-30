@@ -22,33 +22,54 @@
     return xored;
   }
 
-  function initBuckets(size) {
+  function bucket(items, hashed, xored) {
+    var items = items || 0;
+    var hashed = hashed || [];
+    var xored = xored || [];
+
+    function modify(variation, content, digested) {
+      return bucket(items + variation, xorArrays(digested, hashed), xorArrays(content, xored));
+    }
+
+    function toJson() {
+      return { items: items, hashed: hashed, xored: xored };
+    }
+
+    return {
+      modify: modify,
+      toJson: toJson
+    }
+  }
+
+  function bucketsOfSize(size) {
     var buckets = [];
     for (var i = 0; i < size; i++) {
-      buckets.push({ items : 0, hashed : [], xored : [] });
+      buckets.push(bucket());
     }
     return buckets;
   }
 
   function ibf(size, spread, digest) {
-    var buckets = initBuckets(size);
+    var buckets = bucketsOfSize(size);
 
     function toJson() {
-      return buckets;
+      var json = [];
+      buckets.forEach(function (bucket) {
+        json.push(bucket.toJson());
+      })
+      return json;
     }
 
     function addItem(content) {
       var bucketId;
       var bucket;
+      var digested = digest(content);
       var copy = arrayCopy(content);
       copy.push(0);
       for (var i = 0; i < spread; i++) {
         copy[copy.length - 1] = i;
         bucketId = digest(copy)[0] % size;
-        bucket = buckets[bucketId];
-        bucket.items++;
-        bucket.xored = xorArrays(bucket.xored, content);
-        bucket.hashed = xorArrays(bucket.hashed, digest(content));
+        buckets[bucketId] = buckets[bucketId].modify(1, content, digested);
       }
     }
 

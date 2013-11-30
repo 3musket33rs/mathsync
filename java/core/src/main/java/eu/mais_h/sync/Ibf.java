@@ -184,7 +184,7 @@ class Ibf implements Summary {
               removed.add(verified);
               break;
             }
-            return filtered.modify(-b.items(), verified);
+            return filtered.modify(-items, verified);
           }
         }
       }

@@ -29,19 +29,19 @@ public class IbfTest {
 
   @Before
   public void prepareIbf() {
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)0 }))).thenReturn(new byte[] { (byte)1 });
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)1 }))).thenReturn(new byte[] { (byte)3 });
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)2 }))).thenReturn(new byte[] { (byte)4 });
+    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)0 }))).thenReturn(new byte[] { (byte)0, (byte)0, (byte)0, (byte)1 });
+    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)1 }))).thenReturn(new byte[] { (byte)0, (byte)0, (byte)0, (byte)3 });
+    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)2 }))).thenReturn(new byte[] { (byte)0, (byte)0, (byte)0, (byte)4 });
     Mockito.when(digester.digest(Matchers.eq(item1))).thenReturn(new byte[] { (byte)4 });
 
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)6, (byte)0 }))).thenReturn(new byte[] { (byte)2 });
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)6, (byte)1 }))).thenReturn(new byte[] { (byte)3 });
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)6, (byte)2 }))).thenReturn(new byte[] { (byte)4 });
+    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)6, (byte)0 }))).thenReturn(new byte[] { (byte)0, (byte)0, (byte)0, (byte)2 });
+    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)6, (byte)1 }))).thenReturn(new byte[] { (byte)0, (byte)0, (byte)0, (byte)3 });
+    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)6, (byte)2 }))).thenReturn(new byte[] { (byte)0, (byte)0, (byte)0, (byte)4 });
     Mockito.when(digester.digest(Matchers.eq(item2))).thenReturn(new byte[] { (byte)8 });
-    
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)7, (byte)8, (byte)9, (byte)0 }))).thenReturn(new byte[] { (byte)0 });
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)7, (byte)8, (byte)9, (byte)1 }))).thenReturn(new byte[] { (byte)1 });
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)7, (byte)8, (byte)9, (byte)2 }))).thenReturn(new byte[] { (byte)2 });
+
+    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)7, (byte)8, (byte)9, (byte)0 }))).thenReturn(new byte[] { (byte)0, (byte)0, (byte)0, (byte)0 });
+    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)7, (byte)8, (byte)9, (byte)1 }))).thenReturn(new byte[] { (byte)0, (byte)0, (byte)0, (byte)1 });
+    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)7, (byte)8, (byte)9, (byte)2 }))).thenReturn(new byte[] { (byte)0, (byte)0, (byte)0, (byte)2 });
     Mockito.when(digester.digest(Matchers.eq(item3))).thenReturn(new byte[] { (byte)12 });
 
     just1 = empty.addItem(item1);
@@ -73,7 +73,7 @@ public class IbfTest {
     difference = just2.asDifference();
     assertThatSetOfArrayEquals(difference.added(), item2);
     assertThat(difference.removed()).isEmpty();
-    
+
     difference = just3.asDifference();
     assertThatSetOfArrayEquals(difference.added(), item3);
     assertThat(difference.removed()).isEmpty();
@@ -92,7 +92,7 @@ public class IbfTest {
     difference = goThroughJson(just2).asDifference();
     assertThatSetOfArrayEquals(difference.added(), item2);
     assertThat(difference.removed()).isEmpty();
-    
+
     difference = goThroughJson(just3).asDifference();
     assertThatSetOfArrayEquals(difference.added(), item3);
     assertThat(difference.removed()).isEmpty();
@@ -111,7 +111,7 @@ public class IbfTest {
     difference = empty.substract(just2).asDifference();
     assertThat(difference.added()).isEmpty();
     assertThatSetOfArrayEquals(difference.removed(), item2);
-    
+
     difference = empty.substract(just3).asDifference();
     assertThat(difference.added()).isEmpty();
     assertThatSetOfArrayEquals(difference.removed(), item3);
@@ -130,7 +130,7 @@ public class IbfTest {
     difference = goThroughJson(empty.substract(just2)).asDifference();
     assertThat(difference.added()).isEmpty();
     assertThatSetOfArrayEquals(difference.removed(), item2);
-    
+
     difference = goThroughJson(empty.substract(just3)).asDifference();
     assertThat(difference.added()).isEmpty();
     assertThatSetOfArrayEquals(difference.removed(), item3);
@@ -158,7 +158,7 @@ public class IbfTest {
   public void unresolvable_difference_leads_to_null() {
     assertThat(just1.addItem(item1).asDifference()).isNull();
   }
-  
+
   private Ibf goThroughJson(Ibf origin) {
     return new Ibf(origin.toJson(), digester, spread);
   }

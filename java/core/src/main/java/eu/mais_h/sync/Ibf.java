@@ -13,7 +13,7 @@ class Ibf implements Summary {
   private final Bucket[] buckets;
   private final byte spread;
   private final Digester digester;
-  
+
   Ibf(String jsonString, Digester digester, byte spread) {
     this(bucketsFromJson(jsonString), digester, spread);
   }
@@ -37,7 +37,7 @@ class Ibf implements Summary {
     this.spread = spread;
     this.digester = digester;
   }
-  
+
   @Override
   public String toJson() {
     JSONArray array = new JSONArray();
@@ -74,7 +74,7 @@ class Ibf implements Summary {
   Difference<byte[]> asDifference() {
     return new DifferenceBuilder(this).difference;
   }
-  
+
   private boolean isEmpty() {
     for (Bucket b : buckets) {
       if (b.items() != 0) {
@@ -98,9 +98,16 @@ class Ibf implements Summary {
     byte[] paddedContent = Arrays.copyOf(content, content.length + 1);
     for (byte i = 0; i < spread; i++) {
       paddedContent[content.length] = i;
-      destinations[i] = digester.digest(paddedContent)[0] % buckets.length;
+      destinations[i] = destinationBucket(digester.digest(paddedContent));
     }
     return destinations;
+  }
+
+  private int destinationBucket(byte[] digested) {
+    if (digested.length < 4) {
+      throw new IllegalArgumentException("Digester " + digester + " does not produce long enough digests: " + digested.length);
+    }
+    return ((digested[0] << 24) | (digested[1] << 16) | (digested[2] << 8) | (digested[3])) % buckets.length;
   }
 
   @Override
@@ -138,13 +145,13 @@ class Ibf implements Summary {
     }
     return buckets;
   }
-  
+
   private final class DifferenceBuilder {
-    
+
     private final Set<byte[]> added = new HashSet<>();
     private final Set<byte[]> removed = new HashSet<>();
     private final Difference<byte[]> difference;
-    
+
     private DifferenceBuilder(Ibf original) {
       if (performOperations(original).isEmpty()) {
         difference = new SerializedDifference(added, removed);
@@ -152,7 +159,7 @@ class Ibf implements Summary {
         difference = null;
       }
     }
-    
+
     private Ibf performOperations(Ibf original) {
       Ibf previous = original;
       Ibf next = original;
@@ -162,7 +169,7 @@ class Ibf implements Summary {
       }
       return previous;
     }
-    
+
     private Ibf performNextOperation(Ibf filtered) {
       for (Bucket b : filtered.buckets) {
         int items = b.items();
@@ -183,7 +190,7 @@ class Ibf implements Summary {
       }
       return null;
     }
-    
+
     private byte[] verify(Bucket b) {
       byte[] content = b.xored();
       while (true) {

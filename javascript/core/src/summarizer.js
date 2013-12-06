@@ -5,8 +5,8 @@
   var ibfBuilder = require('./ibf');
  
   function fromItems(iterable, serialize, digest, spread) {
-    return q.async(function* generate(size) {
-      var ibf = ibfBuilder(size, digest, spread);
+    return q.async(function* generate(level) {
+      var ibf = ibfBuilder(Math.pow(2, level), digest, spread);
       var iterator = yield iterable();
 
       var n = yield iterator.next();

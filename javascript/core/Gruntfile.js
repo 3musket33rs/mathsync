@@ -24,6 +24,7 @@ module.exports = function(grunt) {
         unused : true,
         strict : true,
         trailing : true,
+        esnext : true,
         globals : {
           require : false,
           module : true,

@@ -10,33 +10,37 @@
   var item3 = [7, 8, 9];
   var spread = 3;
 
+  function intToBytes(i) {
+    return [(i >> 24) & 0xff, (i >> 16) & 0xff, (i >> 8) & 0xff, i & 0xff];
+  }
+
   function digester(content) {
     if (_.isEqual(content, [5, 0])) {
-      return [0, 0, 0, 1 ];
+      return intToBytes(-4);
     } else if (_.isEqual(content, [5, 1])) {
-      return [0, 0, 0, 3 ];
+      return intToBytes(3);
     } else if (_.isEqual(content, [5, 2])) {
-      return [0, 0, 0, 4 ];
+      return intToBytes(4);
     } else if (_.isEqual(content, item1)) {
       return [4];
     }
 
     if (_.isEqual(content, [6, 0])) {
-      return [0, 0, 0, 2 ];
+      return intToBytes(2);
     } else if (_.isEqual(content, [6, 1])) {
-      return [0, 0, 0, 3 ];
+      return intToBytes(3);
     } else if (_.isEqual(content, [6, 2])) {
-      return [0, 0, 0, 4 ];
+      return intToBytes(4);
     } else if (_.isEqual(content, item2)) {
       return [8];
     }
 
     if (_.isEqual(content, [7, 8, 9, 0])) {
-      return [0, 0, 0, 0 ];
+      return intToBytes(0);
     } else if (_.isEqual(content, [7, 8, 9, 1])) {
-      return [0, 0, 0, 1 ];
+      return intToBytes(1);
     } else if (_.isEqual(content, [7, 8, 9, 2])) {
-      return [0, 0, 0, 2 ];
+      return intToBytes(2);
     } else if (_.isEqual(content, item3)) {
       return [12];
     }

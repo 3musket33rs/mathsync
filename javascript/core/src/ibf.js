@@ -67,6 +67,9 @@
       for (var i = 0; i < spread; i++) {
         contentCopy[contentCopy.length - 1] = i;
         bucketId = intFromDigestedBytes(digest(contentCopy)) % buckets.length;
+        if (bucketId < 0) {
+          bucketId += buckets.length;
+        }
         bucketsCopy[bucketId] = bucketsCopy[bucketId].modify(variation, content, digested);
       }
 

@@ -107,7 +107,11 @@ class Ibf implements Summary {
     if (digested.length < 4) {
       throw new IllegalArgumentException("Digester " + digester + " does not produce long enough digests: " + digested.length);
     }
-    return ((digested[0] << 24) | (digested[1] << 16) | (digested[2] << 8) | (digested[3])) % buckets.length;
+    int id = ((digested[0] << 24) | (digested[1] << 16) | (digested[2] << 8) | (digested[3])) % buckets.length;
+    if (id < 0) {
+      id += buckets.length;
+    }
+    return id;
   }
 
   @Override

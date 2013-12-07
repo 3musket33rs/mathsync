@@ -161,10 +161,10 @@
       __buckets : buckets,
       __modify : modify,
       __isEmpty : isEmpty,
-      toJson : toJson,
-      substract : substract,
-      asDifference : asDifference,
-      addItem : addItem
+      _substract : substract,
+      _asDifference : asDifference,
+      _addItem : addItem,
+      toJson : toJson
     };
 
     return that;

@@ -3,7 +3,7 @@
 
   var q = require('q');
   var ibfBuilder = require('./ibf');
- 
+
   function fromItems(generator, serialize, digest, spread) {
     return q.async(function* generate(level) {
       var ibf = ibfBuilder(Math.pow(2, level), digest, spread);
@@ -11,7 +11,7 @@
 
       var n = yield iterator.next();
       while (!n.done) {
-        ibf = ibf.addItem(serialize(n.value));
+        ibf = ibf._addItem(serialize(n.value));
         n = yield iterator.next();
       }
 

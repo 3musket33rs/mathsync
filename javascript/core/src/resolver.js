@@ -2,7 +2,7 @@
   'use strict';
 
   var q = require('q');
- 
+
   function fromSummarizers(local, remote, deserialize) {
     return q.async(function* resolve() {
       var difference = null;
@@ -12,7 +12,7 @@
         level++;
         localSummary = yield local(level);
         remoteSummary = yield remote(level);
-        difference = remoteSummary.substract(localSummary).asDifference();
+        difference = remoteSummary._substract(localSummary)._asDifference();
       }
 
       var deserialized = { added : [], removed : [] };

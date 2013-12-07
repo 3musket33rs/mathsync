@@ -27,7 +27,7 @@
           return value;
         }
         summarizer.fromItems(generator, serialize, sha1, 4)(4).then(function (ibf) {
-          var diff = ibf.asDifference();
+          var diff = ibf._asDifference();
           assertThatSetOfArrayEquals(diff.added, [[1, 2], [2, 2], [3, 2]]);
           assert.equal(0, diff.removed.length);
           done();

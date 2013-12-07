@@ -6,10 +6,10 @@ import eu.mais_h.sync.serialize.Serializer;
 
 class SerializedItems<T> implements Iterable<byte[]> {
 
-  private final Iterable<T> items;
-  private final Serializer<T> serializer;
+  private final Iterable<? extends T> items;
+  private final Serializer<? super T> serializer;
   
-  SerializedItems(Iterable<T> items, Serializer<T> serializer) {
+  SerializedItems(Iterable<? extends T> items, Serializer<? super T> serializer) {
     this.items = items;
     this.serializer = serializer;
   }
@@ -21,7 +21,7 @@ class SerializedItems<T> implements Iterable<byte[]> {
   
   private class SerializedIterator implements Iterator<byte[]> {
     
-    private final Iterator<T> itemsIterator = items.iterator();
+    private final Iterator<? extends T> itemsIterator = items.iterator();
 
     @Override
     public boolean hasNext() {

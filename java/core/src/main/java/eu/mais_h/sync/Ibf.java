@@ -11,18 +11,18 @@ import eu.mais_h.sync.digest.Digester;
 class Ibf implements Summary {
 
   private final Bucket[] buckets;
-  private final byte spread;
+  private final int spread;
   private final Digester digester;
 
-  Ibf(String jsonString, Digester digester, byte spread) {
+  Ibf(String jsonString, Digester digester, int spread) {
     this(bucketsFromJson(jsonString), digester, spread);
   }
 
-  Ibf(int size, Digester digester, byte spread) {
+  Ibf(int size, Digester digester, int spread) {
     this(bucketsOfSize(size), digester, spread);
   }
 
-  private Ibf(Bucket[] buckets, Digester digester, byte spread) {
+  private Ibf(Bucket[] buckets, Digester digester, int spread) {
     if (buckets == null) {
       throw new IllegalArgumentException("Buckets cannot be null");
     }

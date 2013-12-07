@@ -45,7 +45,7 @@ public class ResolverFromSummarizersTest {
   public void returns_deserialized_difference_of_substraction() {
     mockSuccessFor(1);
 
-    Difference<String> deserialized = new ResolverFromSummarizers<String>(remote, local, deserializer).difference();
+    Difference<String> deserialized = new ResolverFromSummarizers<String>(local, remote, deserializer).difference();
 
     assertThat(deserialized.added()).containsOnly(remoteElement);
     assertThat(deserialized.removed()).containsOnly(localElement);
@@ -60,7 +60,7 @@ public class ResolverFromSummarizersTest {
     Mockito.when(remote.summarize(Matchers.eq(1))).thenReturn(remoteSummary);
 
     try {
-      new ResolverFromSummarizers<String>(remote, local, deserializer).difference();
+      new ResolverFromSummarizers<String>(local, remote, deserializer).difference();
       fail();
     }
     catch (IllegalStateException e) {
@@ -77,7 +77,7 @@ public class ResolverFromSummarizersTest {
     Mockito.when(local.summarize(Matchers.eq(1))).thenReturn(localSummary);
 
     try {
-      new ResolverFromSummarizers<String>(remote, local, deserializer).difference();
+      new ResolverFromSummarizers<String>(local, remote, deserializer).difference();
       fail();
     }
     catch (IllegalStateException e) {
@@ -92,7 +92,7 @@ public class ResolverFromSummarizersTest {
     mockFailureFor(3);
     mockSuccessFor(4);
 
-    Difference<String> deserialized = new ResolverFromSummarizers<String>(remote, local, deserializer).difference();
+    Difference<String> deserialized = new ResolverFromSummarizers<String>(local, remote, deserializer).difference();
 
     assertThat(deserialized.added()).containsOnly(remoteElement);
     assertThat(deserialized.removed()).containsOnly(localElement);

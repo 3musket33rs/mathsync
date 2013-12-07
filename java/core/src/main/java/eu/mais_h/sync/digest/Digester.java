@@ -2,8 +2,6 @@ package eu.mais_h.sync.digest;
 
 /**
  * Creates digests of items serialized as byte arrays.
- * 
- * @see Digesters
  */
 public interface Digester {
 

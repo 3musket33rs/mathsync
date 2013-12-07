@@ -1,5 +1,6 @@
 language:
   - java
+  - node_js
 jdk:
   - openjdk7
 node_js:

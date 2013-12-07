@@ -7,7 +7,7 @@ import org.junit.Test;
 
 public class Sha1DigesterTest {
 
-  Sha1Digester sha1 = new Sha1Digester();
+  Sha1Digester sha1 = Sha1Digester.get();
 
   @Test
   public void throws_exception_for_null_input() {

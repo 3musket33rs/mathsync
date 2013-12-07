@@ -2,7 +2,7 @@ package eu.mais_h.sync;
 
 import java.util.Set;
 
-import eu.mais_h.sync.digest.Digesters;
+import eu.mais_h.sync.digest.Sha1Digester;
 
 public class Summarizers {
   
@@ -17,10 +17,10 @@ public class Summarizers {
   }
 
   public static Summarizer fromSerializedItems(Iterable<byte[]> items) {
-    return new SummarizerFromItems(items, Digesters.sha1(), SPREAD);
+    return new SummarizerFromItems(items, Sha1Digester.get(), SPREAD);
   }
   
   public static Summary fromJson(String jsonString) {
-    return new Ibf(jsonString, Digesters.sha1(), SPREAD);
+    return new Ibf(jsonString, Sha1Digester.get(), SPREAD);
   }
 }

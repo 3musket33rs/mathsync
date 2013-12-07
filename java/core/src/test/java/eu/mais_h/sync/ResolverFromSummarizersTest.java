@@ -10,6 +10,8 @@ import org.junit.Test;
 import org.mockito.Matchers;
 import org.mockito.Mockito;
 
+import eu.mais_h.sync.serialize.Deserializer;
+
 public class ResolverFromSummarizersTest {
 
   private String localElement = "element1";

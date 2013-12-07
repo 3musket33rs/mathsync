@@ -2,6 +2,8 @@ package eu.mais_h.sync;
 
 import java.util.Iterator;
 
+import eu.mais_h.sync.serialize.Serializer;
+
 class SerializedItems<T> implements Iterable<byte[]> {
 
   private final Iterable<T> items;

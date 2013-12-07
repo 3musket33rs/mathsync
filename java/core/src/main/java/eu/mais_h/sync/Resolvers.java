@@ -2,6 +2,8 @@ package eu.mais_h.sync;
 
 import java.lang.AssertionError;
 
+import eu.mais_h.sync.serialize.Deserializer;
+
 public class Resolvers {
 
   private Resolvers() {

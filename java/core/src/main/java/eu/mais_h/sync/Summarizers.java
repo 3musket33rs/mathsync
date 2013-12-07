@@ -3,6 +3,7 @@ package eu.mais_h.sync;
 import java.util.Set;
 
 import eu.mais_h.sync.digest.Sha1Digester;
+import eu.mais_h.sync.serialize.Serializer;
 
 public class Summarizers {
   

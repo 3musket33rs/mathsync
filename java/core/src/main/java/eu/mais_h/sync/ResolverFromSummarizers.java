@@ -1,5 +1,7 @@
 package eu.mais_h.sync;
 
+import eu.mais_h.sync.serialize.Deserializer;
+
 
 class ResolverFromSummarizers<T> implements Resolver<T> {
 

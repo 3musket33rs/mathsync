@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
+import eu.mais_h.sync.serialize.Deserializer;
+
 class DeserializedDifference<T> implements Difference<T> {
 
   private final Set<T> added;

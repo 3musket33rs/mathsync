@@ -17,7 +17,7 @@
 
   describe('Summarizer', function() {
     describe('fromItems', function() {
-      it('generate ibf with serialized yielded items', function(done) {
+      it('generate summary with serialized yielded items', function(done) {
         function* generator() {
           yield [1, 2];
           yield [2, 2];
@@ -26,8 +26,8 @@
         function serialize(value) {
           return value;
         }
-        summarizer.fromItems(generator, serialize, sha1, 4)(4).then(function (ibf) {
-          var diff = ibf._asDifference();
+        summarizer.fromItems(generator, serialize, sha1, 4)(4).then(function (summary) {
+          var diff = summary._asDifference();
           assertThatSetOfArrayEquals(diff.added, [[1, 2], [2, 2], [3, 2]]);
           assert.equal(0, diff.removed.length);
           done();
@@ -38,7 +38,7 @@
     });
 
     describe('fromJson', function() {
-      it('generate ibf with identical content', function(done) {
+      it('generate summary with identical content', function(done) {
         function* generator() {
           yield [1, 2];
           yield [2, 2];
@@ -50,13 +50,13 @@
 
         var original = summarizer.fromItems(generator, serialize, sha1, 4);
         var throughJson = summarizer.fromJson(function (level) {
-          return original(level).then(function (ibf) {
-            return ibf.toJson();
+          return original(level).then(function (summary) {
+            return summary.toJson();
           });
         }, sha1, 4);
 
-        throughJson(4).then(function (ibf) {
-          var diff = ibf._asDifference();
+        throughJson(4).then(function (summary) {
+          var diff = summary._asDifference();
           assertThatSetOfArrayEquals(diff.added, [[1, 2], [2, 2], [3, 2]]);
           assert.equal(0, diff.removed.length);
           done();

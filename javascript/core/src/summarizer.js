@@ -19,7 +19,16 @@
     });
   }
 
+  function fromJson(producer, digest, spread) {
+    return function (level) {
+      return q(producer(level)).then(function (json) {
+        return ibfBuilder.fromJson(json, digest, spread);
+      });
+    };
+  }
+
   module.exports = {
-    fromItems : fromItems
+    fromItems : fromItems,
+    fromJson : fromJson
   };
 })();

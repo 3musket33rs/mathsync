@@ -36,5 +36,34 @@
         });
       });
     });
+
+    describe('fromJson', function() {
+      it('generate ibf with identical content', function(done) {
+        function* generator() {
+          yield [1, 2];
+          yield [2, 2];
+          yield [3, 2];
+        }
+        function serialize(value) {
+          return value;
+        }
+
+        var original = summarizer.fromItems(generator, serialize, sha1, 4);
+        var throughJson = summarizer.fromJson(function (level) {
+          return original(level).then(function (ibf) {
+            return ibf.toJson();
+          });
+        }, sha1, 4);
+
+        throughJson(4).then(function (ibf) {
+          var diff = ibf._asDifference();
+          assertThatSetOfArrayEquals(diff.added, [[1, 2], [2, 2], [3, 2]]);
+          assert.equal(0, diff.removed.length);
+          done();
+        }, function (err) {
+          done(err);
+        });
+      });
+    });
   });
 })();

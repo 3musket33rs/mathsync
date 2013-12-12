@@ -3,24 +3,23 @@
 
   var emptyBucket = require('./bucket');
 
-  function arrayCopy(array, length) {
+  function arrayCopy(array) {
     var copy = [];
-    for (var i = 0; i < length; i++) {
+    for (var i = 0; i < array.length; i++) {
       copy.push(array[i]);
     }
     return copy;
   }
 
   function arraysEqual(a, b) {
-    if (a === b) {
-      return true;
-    }
-    if (!a || !b) {
+    if (!a || !b) {
       return false;
     }
-    if (a.length !== b.length) {
+    if (a.byteLength !== b.byteLength) {
       return false;
     }
+    a = new Int8Array(a);
+    b = new Int8Array(b);
     for (var i = 0; i < a.length; i++) {
       if (a[i] !== b[i]) {
         return false;
@@ -30,7 +29,7 @@
   }
 
   function intFromDigestedBytes(digested) {
-    return (digested[0] << 24) | (digested[1] << 16) | (digested[2] << 8) | (digested[3]);
+    return new DataView(digested).getInt32(0);
   }
 
   function bucketsOfSize(size) {
@@ -61,12 +60,17 @@
 
       var digested = digest(content);
 
-      var contentCopy = arrayCopy(content, content.length);
-      contentCopy.push(0);
+      var inview = new Int8Array(content);
+      var copy = new ArrayBuffer(inview.length + 1);
+      var outview = new Int8Array(copy);
+      for (var i = 0; i < inview.length; i++) {
+        outview[i] = inview[i];
+      }
 
       for (var i = 0; i < spread; i++) {
-        contentCopy[contentCopy.length - 1] = i;
-        bucketId = intFromDigestedBytes(digest(contentCopy)) % buckets.length;
+        outview[outview.length - 1] = i;
+
+        bucketId = intFromDigestedBytes(digest(copy)) % buckets.length;
         if (bucketId < 0) {
           bucketId += buckets.length;
         }
@@ -127,22 +131,25 @@
     function reduce(toSize) {
       var b = bucketsOfSize(toSize);
       for (var i = 0; i < buckets.length; i++) {
-        b[i % toSize] = b[i % toSize]._group(buckets[i]);
+        b[i % toSize] = b[i % toSize].group(buckets[i]);
       }
       return ibfFromBuckets(b, digest, spread);
     }
 
     function verify(bucket) {
       var content = bucket.xored();
+      var view = new Int8Array(content);
+      var trim = 0;
       while (true) {
         if (arraysEqual(digest(content), bucket.hashed())) {
           return content;
         }
-        if (content.length > 0 && content[content.length - 1] === 0) {
-          content = arrayCopy(content, content.length - 1);
+        if (view.length > trim && view[view.length - trim - 1] === 0) {
+          content = content.slice(0, content.byteLength - 1);
         } else {
           return null;
         }
+        trim++;
       }
     }
 

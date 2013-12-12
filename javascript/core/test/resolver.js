@@ -20,23 +20,31 @@
     describe('fromSummarizers', function() {
       it('generate difference', function(done) {
         function serialize(value) {
-          return value;
+          return new Int8Array(value).buffer;
         }
-        
+        function deserialize(value) {
+          var view = new Int8Array(value);
+          var res = [];
+          for (var i = 0; i < view.length; i++) {
+            res.push(view[i]);
+          }
+          return res;
+        }
+
         function* localItems() {
           yield [1, 2];
           yield [2, 2];
           yield [3, 2];
         }
         var local = summarizer.fromItems(localItems, serialize, sha1, 4);
-        
+
         function* remoteItems() {
           yield [1, 2];
           yield [4, 2];
         }
         var remote = summarizer.fromItems(remoteItems, serialize, sha1, 4);
 
-        resolver.fromSummarizers(local, remote, serialize)().then(function (difference) {
+        resolver.fromSummarizers(local, remote, deserialize)().then(function (difference) {
           assertThatSetOfArrayEquals(difference.added, [[4, 2]]);
           assertThatSetOfArrayEquals(difference.removed, [[2, 2], [3, 2]]);
           done();

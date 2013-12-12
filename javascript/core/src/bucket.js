@@ -4,24 +4,23 @@
   var Buffer = require('buffer').Buffer;
 
   function xorArrays(array1, array2) {
-    var l = Math.max(array1.length, array2.length);
-    var v1;
-    var v2;
-    var xored = [];
-    for (var i = 0; i < l; i++) {
-      v1 = (array1[i] || 0) & 0xff;
-      v2 = (array2[i] || 0) & 0xff;
-      xored.push(v1 ^ v2);
+    array1 = new Int8Array(array1);
+    array2 = new Int8Array(array2);
+
+    var xored = new Int8Array(Math.max(array1.length, array2.length));
+    for (var i = 0; i < xored.length; i++) {
+      xored[i] = (array1[i] || 0) ^ (array2[i] || 0)
     }
-    return xored;
+
+    return xored.buffer;
   }
 
   function serializeArray(arr) {
-    return new Buffer(arr).toString('base64');
+    return new Buffer(new Int8Array(arr)).toString('base64');
   }
 
   function deserializeString(str) {
-    return new Buffer(str, 'base64').toJSON().data;
+    return new Int8Array(new Buffer(str, 'base64').toJSON().data).buffer;
   }
 
   function bucket(count, xor, hash) {
@@ -55,7 +54,7 @@
     }
 
     return {
-      _group : group,
+      group : group,
       items : items,
       xored : xored,
       hashed : hashed,
@@ -64,7 +63,7 @@
     };
   }
 
-  var emptyBucket = bucket(0, [], []);
+  var emptyBucket = bucket(0, new ArrayBuffer(0), new ArrayBuffer(0));
 
   function fromJSON(json) {
     return bucket(json.items, deserializeString(json.xored), deserializeString(json.hashed));

@@ -4,45 +4,42 @@
   var assert = require('assert');
   var _ = require('underscore');
   var ibf = require('../src/ibf');
+  var utils = require('./utils_typedarrays');
 
-  var item1 = [5];
-  var item2 = [6];
-  var item3 = [7, 8, 9];
+  var item1 = new Int8Array([5]).buffer;
+  var item2 = new Int8Array([6]).buffer;
+  var item3 = new Int8Array([7, 8, 9]).buffer;
   var spread = 3;
 
-  function intToBytes(i) {
-    return [(i >> 24) & 0xff, (i >> 16) & 0xff, (i >> 8) & 0xff, i & 0xff];
-  }
-
   function digester(content) {
-    if (_.isEqual(content, [5, 0])) {
-      return intToBytes(-4);
-    } else if (_.isEqual(content, [5, 1])) {
-      return intToBytes(3);
-    } else if (_.isEqual(content, [5, 2])) {
-      return intToBytes(4);
-    } else if (_.isEqual(content, item1)) {
-      return [4];
+    if (utils.isEqual(content, new Int8Array([5, 0]).buffer)) {
+      return new Int32Array([-4]).buffer;
+    } else if (utils.isEqual(content, new Int8Array([5, 1]).buffer)) {
+      return new Int32Array([3]).buffer;
+    } else if (utils.isEqual(content, new Int8Array([5, 2]).buffer)) {
+      return new Int32Array([4]).buffer;
+    } else if (utils.isEqual(content, item1)) {
+      return new Int8Array([4]).buffer;
     }
 
-    if (_.isEqual(content, [6, 0])) {
-      return intToBytes(2);
-    } else if (_.isEqual(content, [6, 1])) {
-      return intToBytes(3);
-    } else if (_.isEqual(content, [6, 2])) {
-      return intToBytes(4);
-    } else if (_.isEqual(content, item2)) {
-      return [8];
+    if (utils.isEqual(content, new Int8Array([6, 0]).buffer)) {
+      return new Int32Array([2]).buffer;
+    } else if (utils.isEqual(content, new Int8Array([6, 1]))) {
+      return new Int32Array([3]).buffer;
+    } else if (utils.isEqual(content, new Int8Array([6, 2]).buffer)) {
+      return new Int32Array([4]).buffer;
+    } else if (utils.isEqual(content, item2)) {
+      return new Int8Array([8]).buffer;
     }
 
-    if (_.isEqual(content, [7, 8, 9, 0])) {
-      return intToBytes(0);
-    } else if (_.isEqual(content, [7, 8, 9, 1])) {
-      return intToBytes(1);
-    } else if (_.isEqual(content, [7, 8, 9, 2])) {
-      return intToBytes(2);
-    } else if (_.isEqual(content, item3)) {
-      return [12];
+    if (utils.isEqual(content, new Int8Array([7, 8, 9, 0]).buffer)) {
+      return new Int32Array([0]).buffer;
+    } else if (utils.isEqual(content, new Int8Array([7, 8, 9, 1]).buffer)) {
+      return new Int32Array([1]).buffer;
+    } else if (utils.isEqual(content, new Int8Array([7, 8, 9, 2]).buffer)) {
+      return new Int32Array([2]).buffer;
+    } else if (utils.isEqual(content, item3)) {
+      return new Int8Array([12]).buffer;
     }
   }
 

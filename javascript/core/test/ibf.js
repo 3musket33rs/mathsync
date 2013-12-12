@@ -53,7 +53,7 @@
   var items1and2 = just1._addItem(item2);
 
   function goThroughJson(origin) {
-    return ibf.fromJson(origin.toJson(), digester, spread);
+    return ibf.fromJSON(origin.toJSON(), digester, spread);
   }
 
   function assertThatSetOfArrayEquals(arr1, arr2) {

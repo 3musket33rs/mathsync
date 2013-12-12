@@ -47,10 +47,10 @@
 
   function ibfFromBuckets(buckets, digest, spread) {
 
-    function toJson() {
+    function toJSON() {
       var json = [];
       buckets.forEach(function (bucket) {
-        json.push(bucket.toJson());
+        json.push(bucket.toJSON());
       });
       return json;
     }
@@ -173,20 +173,20 @@
       _asDifference : asDifference,
       _addItem : addItem,
       _reduce : reduce,
-      toJson : toJson
+      toJSON : toJSON
     };
 
     return that;
   }
 
-  function fromJson(json, digest, spread) {
+  function fromJSON(json, digest, spread) {
     var buckets = [];
     json.forEach(function (bucket) {
-      buckets.push(emptyBucket.fromJson(bucket));
+      buckets.push(emptyBucket.fromJSON(bucket));
     });
     return ibfFromBuckets(buckets, digest, spread);
   }
-  ibf.fromJson = fromJson;
+  ibf.fromJSON = fromJSON;
 
   module.exports = ibf;
 })();

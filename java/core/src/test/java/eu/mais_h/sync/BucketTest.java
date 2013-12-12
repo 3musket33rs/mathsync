@@ -27,7 +27,7 @@ public class BucketTest {
     assertThat(added1.items()).isEqualTo(1);
     assertThat(added2.items()).isEqualTo(2);
     assertThat(added1removed2.items()).isEqualTo(-1);
-    
+
     assertThat(goThroughJson(added1).items()).isEqualTo(1);
     assertThat(goThroughJson(added2).items()).isEqualTo(2);
     assertThat(goThroughJson(added1removed2).items()).isEqualTo(-1);
@@ -36,7 +36,7 @@ public class BucketTest {
   @Test
   public void xored_is_empty_by_default() {
     assertThat(empty.xored()).isEqualTo(emptyBytes);
-    
+
     assertThat(goThroughJson(empty).xored()).isEqualTo(emptyBytes);
   }
 
@@ -45,7 +45,7 @@ public class BucketTest {
     assertThat(added1.xored()).isEqualTo(content1);
     assertThat(added2.xored()).isEqualTo(content2);
     assertThat(added1removed2.xored()).isEqualTo(new byte[] { (byte)(1 ^ 5), (byte)(2 ^ 6) });
-    
+
     assertThat(goThroughJson(added1).xored()).isEqualTo(content1);
     assertThat(goThroughJson(added2).xored()).isEqualTo(content2);
     assertThat(goThroughJson(added1removed2).xored()).isEqualTo(new byte[] { (byte)(1 ^ 5), (byte)(2 ^ 6) });
@@ -54,7 +54,7 @@ public class BucketTest {
   @Test
   public void hashed_is_empty_by_default() {
     assertThat(empty.hashed()).isEqualTo(emptyBytes);
-    
+
     assertThat(goThroughJson(empty).hashed()).isEqualTo(emptyBytes);
   }
 
@@ -63,13 +63,13 @@ public class BucketTest {
     assertThat(added1.hashed()).isEqualTo(hash1);
     assertThat(added2.hashed()).isEqualTo(hash2);
     assertThat(added1removed2.hashed()).isEqualTo(new byte[] { (byte)(3 ^ 7), (byte)(4 ^ 8) });
-    
+
     assertThat(goThroughJson(added1).hashed()).isEqualTo(hash1);
     assertThat(goThroughJson(added2).hashed()).isEqualTo(hash2);
     assertThat(goThroughJson(added1removed2).hashed()).isEqualTo(new byte[] { (byte)(3 ^ 7), (byte)(4 ^ 8) });
   }
-  
+
   private Bucket goThroughJson(Bucket b) {
-    return new Bucket(b.toJson());
+    return new Bucket(b.toJSON());
   }
 }

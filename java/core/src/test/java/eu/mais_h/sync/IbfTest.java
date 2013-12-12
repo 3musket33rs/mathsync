@@ -160,7 +160,7 @@ public class IbfTest {
   }
 
   private Ibf goThroughJson(Ibf origin) {
-    return new Ibf(origin.toJson(), digester, spread);
+    return new Ibf(origin.toJSON(), digester, spread);
   }
 
   private byte[] intToBytes(int i) {

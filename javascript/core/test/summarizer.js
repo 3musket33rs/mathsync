@@ -37,7 +37,7 @@
       });
     });
 
-    describe('fromJson', function() {
+    describe('fromJSON', function() {
       it('generate summary with identical content', function(done) {
         function* generator() {
           yield [1, 2];
@@ -49,9 +49,9 @@
         }
 
         var original = summarizer.fromItems(generator, serialize, sha1, 4);
-        var throughJson = summarizer.fromJson(function (level) {
+        var throughJson = summarizer.fromJSON(function (level) {
           return original(level).then(function (summary) {
-            return summary.toJson();
+            return summary.toJSON();
           });
         }, sha1, 4);
 

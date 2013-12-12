@@ -46,7 +46,7 @@
       return modify(other.items(), other.xored(), other.hashed());
     }
 
-    function toJson() {
+    function toJSON() {
       return {
         items: count,
         hashed: serializeArray(hash),
@@ -59,18 +59,18 @@
       items : items,
       xored : xored,
       hashed : hashed,
-      toJson : toJson,
+      toJSON : toJSON,
       modify : modify
     };
   }
 
   var emptyBucket = bucket(0, [], []);
 
-  function fromJson(json) {
+  function fromJSON(json) {
     return bucket(json.items, deserializeString(json.xored), deserializeString(json.hashed));
   }
 
-  emptyBucket.fromJson = fromJson;
+  emptyBucket.fromJSON = fromJSON;
 
   module.exports = emptyBucket;
 })();

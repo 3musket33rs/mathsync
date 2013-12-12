@@ -39,8 +39,8 @@ class Bucket {
   byte[] xored() {
     return xored;
   }
-  
-  JSONObject toJson() {
+
+  JSONObject toJSON() {
     JSONObject object = new JSONObject();
     object.put(ITEMS_KEY, items);
     object.put(XORED_KEY, serialize(xored));
@@ -64,11 +64,11 @@ class Bucket {
   public final String toString() {
     return "Bucket holding " + items + " items, hashed=" + Hex.encodeHexString(hashed) + ", xored=" + Hex.encodeHexString(xored);
   }
-  
+
   private String serialize(byte[] array) {
     return Base64.encodeBase64String(array);
   }
-  
+
   private static byte[] deserialize(String base64) {
     return Base64.decodeBase64(base64);
   }

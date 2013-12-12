@@ -15,7 +15,7 @@ class Ibf implements Summary {
   private final Digester digester;
 
   Ibf(String jsonString, Digester digester, int spread) {
-    this(bucketsFromJson(jsonString), digester, spread);
+    this(bucketsFromJSON(jsonString), digester, spread);
   }
 
   Ibf(int size, Digester digester, int spread) {
@@ -39,10 +39,10 @@ class Ibf implements Summary {
   }
 
   @Override
-  public String toJson() {
+  public String toJSON() {
     JSONArray array = new JSONArray();
     for (Bucket b : buckets) {
-      array.put(b.toJson());
+      array.put(b.toJSON());
     }
     return array.toString();
   }
@@ -141,7 +141,7 @@ class Ibf implements Summary {
     return buckets;
   }
 
-  private static Bucket[] bucketsFromJson(String jsonString) {
+  private static Bucket[] bucketsFromJSON(String jsonString) {
     JSONArray deserialized = new JSONArray(jsonString);
     Bucket[] buckets = new Bucket[deserialized.length()];
     for (int i = 0; i < buckets.length; i++) {

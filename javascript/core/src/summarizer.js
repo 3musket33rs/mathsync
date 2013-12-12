@@ -23,10 +23,10 @@
     });
   }
 
-  function fromJson(producer, digest, spread) {
+  function fromJSON(producer, digest, spread) {
     return function (level) {
       return q(producer(level)).then(function (json) {
-        return ibfBuilder.fromJson(json, digest, spread);
+        return ibfBuilder.fromJSON(json, digest, spread);
       });
     };
   }
@@ -41,7 +41,7 @@
 
   module.exports = {
     fromItems : fromItems,
-    fromJson : fromJson,
+    fromJSON : fromJSON,
     fromLarge : fromLarge
   };
 })();

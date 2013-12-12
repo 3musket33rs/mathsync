@@ -124,6 +124,14 @@
       return null;
     }
 
+    function reduce(toSize) {
+      var b = bucketsOfSize(toSize);
+      for (var i = 0; i < buckets.length; i++) {
+        b[i % toSize] = b[i % toSize]._group(buckets[i]);
+      }
+      return ibfFromBuckets(b, digest, spread);
+    }
+
     function verify(bucket) {
       var content = bucket.xored();
       while (true) {
@@ -164,6 +172,7 @@
       _substract : substract,
       _asDifference : asDifference,
       _addItem : addItem,
+      _reduce : reduce,
       toJson : toJson
     };
 

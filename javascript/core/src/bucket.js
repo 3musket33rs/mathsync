@@ -42,6 +42,10 @@
       return bucket(count + variation, xorArrays(xor, content), xorArrays(hash, digest));
     }
 
+    function group(other) {
+      return modify(other.items(), other.xored(), other.hashed());
+    }
+
     function toJson() {
       return {
         items: count,
@@ -51,6 +55,7 @@
     }
 
     return {
+      _group : group,
       items : items,
       xored : xored,
       hashed : hashed,
@@ -64,6 +69,7 @@
   function fromJson(json) {
     return bucket(json.items, deserializeString(json.xored), deserializeString(json.hashed));
   }
+
   emptyBucket.fromJson = fromJson;
 
   module.exports = emptyBucket;

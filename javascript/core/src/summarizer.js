@@ -4,9 +4,13 @@
   var q = require('q');
   var ibfBuilder = require('./ibf');
 
+  function levelToSize(level) {
+    return Math.pow(2, level);
+  }
+
   function fromItems(generator, serialize, digest, spread) {
     return q.async(function* generate(level) {
-      var ibf = ibfBuilder(Math.pow(2, level), digest, spread);
+      var ibf = ibfBuilder(levelToSize(level), digest, spread);
       var iterator = yield generator();
 
       var n = yield iterator.next();
@@ -27,8 +31,17 @@
     };
   }
 
+  function fromLarge(producer) {
+    return function (level) {
+      return q(producer()).then(function (ibf) {
+        return ibf._reduce(levelToSize(level));
+      });
+    };
+  }
+
   module.exports = {
     fromItems : fromItems,
-    fromJson : fromJson
+    fromJson : fromJson,
+    fromLarge : fromLarge
   };
 })();

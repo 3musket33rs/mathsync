@@ -26,7 +26,7 @@
         function serialize(value) {
           return value;
         }
-        summarizer.fromItems(generator, serialize, sha1, 4)(4).then(function (summary) {
+        summarizer.fromItems(generator, serialize, sha1, 4)(3).then(function (summary) {
           var diff = summary._asDifference();
           assertThatSetOfArrayEquals(diff.added, [[1, 2], [2, 2], [3, 2]]);
           assert.equal(0, diff.removed.length);
@@ -55,7 +55,34 @@
           });
         }, sha1, 4);
 
-        throughJson(4).then(function (summary) {
+        throughJson(3).then(function (summary) {
+          var diff = summary._asDifference();
+          assertThatSetOfArrayEquals(diff.added, [[1, 2], [2, 2], [3, 2]]);
+          assert.equal(0, diff.removed.length);
+          done();
+        }, function (err) {
+          done(err);
+        });
+      });
+    });
+
+    describe('fromLarge', function() {
+      it('generate summary with identical content', function(done) {
+        function* generator() {
+          yield [1, 2];
+          yield [2, 2];
+          yield [3, 2];
+        }
+        function serialize(value) {
+          return value;
+        }
+
+        var large = summarizer.fromItems(generator, serialize, sha1, 4)(10);
+        var throughLarge = summarizer.fromLarge(function () {
+          return large;
+        }, sha1, 4);
+
+        throughLarge(3).then(function (summary) {
           var diff = summary._asDifference();
           assertThatSetOfArrayEquals(diff.added, [[1, 2], [2, 2], [3, 2]]);
           assert.equal(0, diff.removed.length);

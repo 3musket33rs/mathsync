@@ -9,7 +9,7 @@
 
     var xored = new Int8Array(Math.max(array1.length, array2.length));
     for (var i = 0; i < xored.length; i++) {
-      xored[i] = (array1[i] || 0) ^ (array2[i] || 0)
+      xored[i] = (array1[i] || 0) ^ (array2[i] || 0);
     }
 
     return xored.buffer;

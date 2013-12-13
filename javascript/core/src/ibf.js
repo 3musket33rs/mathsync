@@ -63,8 +63,8 @@
       var inview = new Int8Array(content);
       var copy = new ArrayBuffer(inview.length + 1);
       var outview = new Int8Array(copy);
-      for (var i = 0; i < inview.length; i++) {
-        outview[i] = inview[i];
+      for (var j = 0; j < inview.length; j++) {
+        outview[j] = inview[j];
       }
 
       for (var i = 0; i < spread; i++) {

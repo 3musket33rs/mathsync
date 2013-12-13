@@ -29,5 +29,5 @@
   module.exports = {
     assertEqual: assertEqual,
     isEqual : isEqual
-  }
+  };
 })();

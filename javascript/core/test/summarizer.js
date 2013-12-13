@@ -17,18 +17,12 @@
   }
 
   function testSummarizer(builder) {
-    it('generate summary with serialized yielded items', function(done) {
+    it('generate summary with input items', function(done) {
       function serialize(value) {
         return new Int8Array(value).buffer;
       }
 
-      function* generator() {
-        yield [1, 2];
-        yield [2, 2];
-        yield [3, 2];
-      }
-
-      builder(generator, serialize)(5).then(function (summary) {
+      builder([[1, 2], [2, 2], [3, 2]], serialize)(5).then(function (summary) {
         var diff = summary._asDifference();
         assertThatSetOfArrayEquals(diff.added, [[1, 2], [2, 2], [3, 2]]);
         assert.equal(0, diff.removed.length);
@@ -41,14 +35,25 @@
 
   describe('Summarizer', function() {
     describe('fromItems', function() {
-      testSummarizer(function (generator, serialize) {
-        return summarizer.fromItems(generator, serialize, sha1, 4);
+      testSummarizer(function (array, serialize) {
+        return summarizer.fromItems(array, serialize, sha1, 4);
+      });
+    });
+
+    describe('fromGenerator', function() {
+      testSummarizer(function (array, serialize) {
+        function* generator() {
+          for (var i = 0; i < array.length; i++) {
+            yield array[i];
+          }
+        }
+        return summarizer.fromGenerator(generator, serialize, sha1, 4);
       });
     });
 
     describe('fromJSON', function() {
-      testSummarizer(function (generator, serialize) {
-        var original = summarizer.fromItems(generator, serialize, sha1, 4);
+      testSummarizer(function (array, serialize) {
+        var original = summarizer.fromItems(array, serialize, sha1, 4);
         var throughJson = summarizer.fromJSON(function (level) {
           return original(level).then(function (summary) {
             return summary.toJSON();
@@ -59,8 +64,8 @@
     });
 
     describe('fromLarge', function() {
-      testSummarizer(function (generator, serialize) {
-        var large = summarizer.fromItems(generator, serialize, sha1, 4)(10);
+      testSummarizer(function (array, serialize) {
+        var large = summarizer.fromItems(array, serialize, sha1, 4)(10);
         var throughLarge = summarizer.fromLarge(function () {
           return large;
         }, sha1, 4);

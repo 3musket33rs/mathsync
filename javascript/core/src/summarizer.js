@@ -8,7 +8,17 @@
     return Math.pow(2, level);
   }
 
-  function fromItems(generator, serialize, digest, spread) {
+  function fromItems(array, serialize, digest, spread) {
+    return function (level) {
+      var ibf = ibfBuilder(levelToSize(level), digest, spread);
+      for (var i = 0; i < array.length; i++) {
+        ibf = ibf._addItem(serialize(array[i]));
+      }
+      return q(ibf);
+    };
+  }
+
+  function fromGenerator(generator, serialize, digest, spread) {
     return q.async(function* generate(level) {
       var ibf = ibfBuilder(levelToSize(level), digest, spread);
       var iterator = yield generator();
@@ -41,6 +51,7 @@
 
   module.exports = {
     fromItems : fromItems,
+    fromGenerator : fromGenerator,
     fromJSON : fromJSON,
     fromLarge : fromLarge
   };

@@ -60,17 +60,12 @@
 
       var digested = digest(content);
 
-      var inview = new Int8Array(content);
-      var copy = new ArrayBuffer(inview.length + 1);
-      var outview = new Int8Array(copy);
-      for (var j = 0; j < inview.length; j++) {
-        outview[j] = inview[j];
-      }
-
+      var copy = new Int8Array(content.byteLength + 1);
+      copy.set(new Int8Array(content));
       for (var i = 0; i < spread; i++) {
-        outview[outview.length - 1] = i;
+        copy[copy.length - 1] = i;
 
-        bucketId = intFromDigestedBytes(digest(copy)) % buckets.length;
+        bucketId = intFromDigestedBytes(digest(copy.buffer)) % buckets.length;
         if (bucketId < 0) {
           bucketId += buckets.length;
         }

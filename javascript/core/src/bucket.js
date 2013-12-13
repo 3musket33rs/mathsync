@@ -46,11 +46,7 @@
     }
 
     function toJSON() {
-      return {
-        items: count,
-        hashed: serializeArray(hash),
-        xored: serializeArray(xor)
-      };
+      return count + ':' + serializeArray(xor) + ':' + serializeArray(hash);
     }
 
     return {
@@ -66,7 +62,8 @@
   var emptyBucket = bucket(0, new ArrayBuffer(0), new ArrayBuffer(0));
 
   function fromJSON(json) {
-    return bucket(json.items, deserializeString(json.xored), deserializeString(json.hashed));
+    var arr = json.split(':');
+    return bucket(parseInt(arr[0], 10), deserializeString(arr[1]), deserializeString(arr[2]));
   }
 
   emptyBucket.fromJSON = fromJSON;

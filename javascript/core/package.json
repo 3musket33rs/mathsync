@@ -1,8 +1,7 @@
 {
-  "name": "sync",
+  "name": "dsync",
   "version": "0.1.0-alpha",
-  "description": "",
-  "main": "build/browser.js",
+  "description": "Data synchronization",
   "scripts": {
     "test": "mocha --harmony --reporter spec"
   },
@@ -15,6 +14,7 @@
   "devDependencies": {
     "grunt": "0.4.x",
     "grunt-contrib-jshint": "0.6.x",
+    "grunt-regenerator": "0.2.x",
     "mocha": "1.15.x",
     "grunt-browserify": "1.2.x",
     "underscore": "1.5.x"

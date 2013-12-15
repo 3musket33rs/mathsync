@@ -1,6 +1,8 @@
 module.exports = function(grunt) {
   'use strict';
 
+  var _ = require('underscore');
+
   // Project configuration.
   grunt.initConfig({
     pkg : grunt.file.readJSON('package.json'),
@@ -35,17 +37,26 @@ module.exports = function(grunt) {
       },
       all : [ 'Gruntfile.js', 'src/**/*.js', 'test/**/*.js' ]
     },
+    regenerator: {
+      options: {
+        includeRuntime: true
+      },
+      dist: {
+        files: _.indexBy(grunt.file.expand('src/**/*.js'), function (f) { return f.replace(/src/, 'es5'); })
+      }
+    },
     browserify : {
       dist  : {
         files: {
-          'build/browser.js': 'src/**/*.js'
+          'build/browser.js': 'es5/**/*.js'
         }
       }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-regenerator');
   grunt.loadNpmTasks('grunt-browserify');
 
-  grunt.registerTask('default', ['jshint']);
+  grunt.registerTask('default', ['jshint', 'regenerator', 'browserify']);
 };

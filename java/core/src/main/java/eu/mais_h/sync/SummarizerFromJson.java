@@ -4,7 +4,7 @@ import eu.mais_h.sync.digest.Digester;
 import eu.mais_h.sync.digest.Sha1Digester;
 
 /**
- * Summarizer which deserializes JSON payloads.
+ * Summarizer which deserializes JSON payloads from a remote source.
  */
 public class SummarizerFromJson implements Summarizer {
 

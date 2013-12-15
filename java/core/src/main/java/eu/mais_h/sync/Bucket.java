@@ -36,6 +36,10 @@ class Bucket {
     return xored;
   }
   
+  Bucket group(Bucket other) {
+    return modify(other.items, other.xored, other.hashed);
+  }
+  
   boolean isEmpty() {
     if (items != 0) {
       return false;

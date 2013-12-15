@@ -70,6 +70,14 @@ class Ibf implements Summary {
     }
     return new Ibf(updated, digester, spread);
   }
+  
+  Ibf reduce(int toSize) {
+    Bucket[] b = bucketsOfSize(toSize);
+    for (int i = 0; i < buckets.length; i++) {
+      b[i % toSize] = b[i % toSize].group(buckets[i]);
+    }
+    return new Ibf(buckets, digester, spread);
+  }
 
   Difference<byte[]> asDifference() {
     return new DifferenceBuilder(this).difference;

@@ -77,7 +77,7 @@ class Ibf implements Summary {
 
   private boolean isEmpty() {
     for (Bucket b : buckets) {
-      if (b.items() != 0) {
+      if (!b.isEmpty()) {
         return false;
       }
     }

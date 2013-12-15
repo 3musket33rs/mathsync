@@ -35,6 +35,18 @@ class Bucket {
   byte[] xored() {
     return xored;
   }
+  
+  boolean isEmpty() {
+    if (items != 0) {
+      return false;
+    }
+    for (int i = 0; i < hashed.length; i++) {
+      if (hashed[i] != 0) {
+        return false;
+      }
+    }
+    return true;
+  }
 
   JSONArray toJSON() {
     JSONArray json = new JSONArray();

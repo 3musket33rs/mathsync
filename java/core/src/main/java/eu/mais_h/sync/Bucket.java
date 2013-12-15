@@ -4,13 +4,9 @@ import java.util.Arrays;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
-import org.json.JSONObject;
+import org.json.JSONArray;
 
 class Bucket {
-
-  private static final String ITEMS_KEY = "items";
-  private static final String XORED_KEY = "content";
-  private static final String HASHED_KEY = "hash";
 
   static final Bucket EMPTY_BUCKET = new Bucket(0, new byte[0], new byte[0]);
 
@@ -18,8 +14,8 @@ class Bucket {
   private final byte[] xored;
   private final byte[] hashed;
 
-  Bucket(JSONObject json) {
-    this(json.getInt(ITEMS_KEY), deserialize(json.getString(XORED_KEY)), deserialize(json.getString(HASHED_KEY)));
+  Bucket(JSONArray json) {
+    this(json.getInt(0), deserialize(json.getString(1)), deserialize(json.getString(2)));
   }
 
   private Bucket(int items, byte[] xored, byte[] hashed) {
@@ -40,12 +36,12 @@ class Bucket {
     return xored;
   }
 
-  JSONObject toJSON() {
-    JSONObject object = new JSONObject();
-    object.put(ITEMS_KEY, items);
-    object.put(XORED_KEY, serialize(xored));
-    object.put(HASHED_KEY, serialize(hashed));
-    return object;
+  JSONArray toJSON() {
+    JSONArray json = new JSONArray();
+    json.put(items);
+    json.put(serialize(xored));
+    json.put(serialize(hashed));
+    return json;
   }
 
   Bucket modify(int variation, byte[] content, byte[] digested) {

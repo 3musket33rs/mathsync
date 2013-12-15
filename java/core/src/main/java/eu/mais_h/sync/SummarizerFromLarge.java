@@ -18,11 +18,7 @@ public class SummarizerFromLarge implements Summarizer {
     if (!(summary instanceof Ibf)) {
       throw new IllegalStateException("Invalid summary given, got: " + summary);
     }
-    return ((Ibf)summary).reduce(ibfSizeFromLevel(level));
-  }
-
-  private int ibfSizeFromLevel(int level) {
-    return (int)Math.pow(2, level);
+    return ((Ibf)summary).reduce(Defaults.ibfSizeFromLevel(level));
   }
 
   /**

@@ -8,7 +8,16 @@ node_modules
 # java
 target
 
+
 # eclipse
 .project
 .classpath
 .settings
+
+# Intellij
+.idea/
+*.iml
+*.iws
+
+# Mac
+.DS_Store

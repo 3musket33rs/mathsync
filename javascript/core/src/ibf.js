@@ -150,7 +150,7 @@
 
     function isEmpty() {
       for (var i = 0; i < buckets.length; i++) {
-        if (buckets[i].items() !== 0) {
+        if (!buckets[i].isEmpty()) {
           return false;
         }
       }

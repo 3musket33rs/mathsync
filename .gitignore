@@ -4,6 +4,7 @@ log
 components
 build
 node_modules
+es5
 
 # java
 target

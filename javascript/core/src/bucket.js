@@ -3,6 +3,16 @@
 
   var Buffer = require('buffer').Buffer;
 
+  function isArrayEmpty(array) {
+    array = new Int8Array(array);
+    for (var i = 0; i < array.length; i++) {
+      if (array[i] !== 0) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   function xorArrays(array1, array2) {
     array1 = new Int8Array(array1);
     array2 = new Int8Array(array2);
@@ -46,7 +56,11 @@
     }
 
     function toJSON() {
-      return count + ':' + serializeArray(xor) + ':' + serializeArray(hash);
+      return [count, serializeArray(xor), serializeArray(hash)];
+    }
+
+    function isEmpty() {
+      return (count === 0) && (isArrayEmpty(hash));
     }
 
     return {
@@ -54,6 +68,7 @@
       items : items,
       xored : xored,
       hashed : hashed,
+      isEmpty : isEmpty,
       toJSON : toJSON,
       modify : modify
     };
@@ -62,8 +77,7 @@
   var emptyBucket = bucket(0, new ArrayBuffer(0), new ArrayBuffer(0));
 
   function fromJSON(json) {
-    var arr = json.split(':');
-    return bucket(parseInt(arr[0], 10), deserializeString(arr[1]), deserializeString(arr[2]));
+    return bucket(json[0], deserializeString(json[1]), deserializeString(json[2]));
   }
 
   emptyBucket.fromJSON = fromJSON;

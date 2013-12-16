@@ -70,6 +70,17 @@ class Ibf implements Summary {
     }
     return new Ibf(updated, digester, spread);
   }
+  
+  Ibf reduce(int toSize) {
+    if (toSize > buckets.length) {
+      throw new IllegalArgumentException("IBF of size " + buckets.length + " cannot be used to generate an IBF of size " + toSize);
+    }
+    Bucket[] b = bucketsOfSize(toSize);
+    for (int i = 0; i < buckets.length; i++) {
+      b[i % toSize] = b[i % toSize].group(buckets[i]);
+    }
+    return new Ibf(buckets, digester, spread);
+  }
 
   Difference<byte[]> asDifference() {
     return new DifferenceBuilder(this).difference;
@@ -77,7 +88,7 @@ class Ibf implements Summary {
 
   private boolean isEmpty() {
     for (Bucket b : buckets) {
-      if (b.items() != 0) {
+      if (!b.isEmpty()) {
         return false;
       }
     }
@@ -145,7 +156,7 @@ class Ibf implements Summary {
     JSONArray deserialized = new JSONArray(jsonString);
     Bucket[] buckets = new Bucket[deserialized.length()];
     for (int i = 0; i < buckets.length; i++) {
-      buckets[i] = new Bucket(deserialized.getJSONObject(i));
+      buckets[i] = new Bucket(deserialized.getJSONArray(i));
     }
     return buckets;
   }

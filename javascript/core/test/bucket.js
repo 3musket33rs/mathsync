@@ -49,5 +49,19 @@
         utils.assertEqual([3 ^ 7, 4 ^ 8], added1removed2.hashed());
       });
     });
+    describe('isEmpty', function() {
+      it('should report empty bucket as being empty', function() {
+        assert.equal(true, emptyBucket.isEmpty());
+      });
+      it('with added item is not empty', function() {
+        assert.equal(false, added1.isEmpty());
+      });
+      it('with different added and removed item is not empty', function() {
+        assert.equal(false, added1.modify(-1, content2, hash2).isEmpty());
+      });
+      it('with same added and removed item is empty', function() {
+        assert.equal(true, added1.modify(-1, content1, hash1).isEmpty());
+      });
+    });
   });
 })();

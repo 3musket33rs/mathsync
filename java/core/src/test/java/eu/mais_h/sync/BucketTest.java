@@ -68,6 +68,26 @@ public class BucketTest {
     assertThat(goThroughJson(added2).hashed()).isEqualTo(hash2);
     assertThat(goThroughJson(added1removed2).hashed()).isEqualTo(new byte[] { (byte)(3 ^ 7), (byte)(4 ^ 8) });
   }
+  
+  @Test
+  public void empty_bucket_reports_being_empty() {
+    assertThat(empty.isEmpty()).isTrue();
+  }
+  
+  @Test
+  public void bucket_with_added_items_is_not_empty() {
+    assertThat(added1.isEmpty()).isFalse();
+  }
+  
+  @Test
+  public void bucket_with_different_added_and_removed_item_is_not_empty() {
+    assertThat(added1.modify(-1, content2, hash2).isEmpty()).isFalse();
+  }
+  
+  @Test
+  public void bucket_with_same_added_and_removed_item_is_empty() {
+    assertThat(added1.modify(-1, content1, hash1).isEmpty()).isTrue();
+  }
 
   private Bucket goThroughJson(Bucket b) {
     return new Bucket(b.toJSON());

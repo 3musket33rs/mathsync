@@ -16,6 +16,7 @@
 		4848BDA6185BC17400D47233 /* libcore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4848BD8E185BC17400D47233 /* libcore.a */; };
 		4848BDAC185BC17400D47233 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 4848BDAA185BC17400D47233 /* InfoPlist.strings */; };
 		4848BDAE185BC17400D47233 /* coreTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 4848BDAD185BC17400D47233 /* coreTests.m */; };
+		48B3A2C6185F97BB00F48217 /* DeserializedDifference.m in Sources */ = {isa = PBXBuildFile; fileRef = 48B3A2C5185F97BB00F48217 /* DeserializedDifference.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,10 @@
 		4848BDA9185BC17400D47233 /* coreTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "coreTests-Info.plist"; sourceTree = "<group>"; };
 		4848BDAB185BC17400D47233 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		4848BDAD185BC17400D47233 /* coreTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = coreTests.m; sourceTree = "<group>"; };
+		48B3A2C1185F95F600F48217 /* Difference.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Difference.h; sourceTree = "<group>"; };
+		48B3A2C4185F97BB00F48217 /* DeserializedDifference.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DeserializedDifference.h; sourceTree = "<group>"; };
+		48B3A2C5185F97BB00F48217 /* DeserializedDifference.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DeserializedDifference.m; sourceTree = "<group>"; };
+		48B3A2C7185F9B0F00F48217 /* Serialize.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Serialize.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -113,6 +118,10 @@
 				4848BD96185BC17400D47233 /* core.h */,
 				4848BD98185BC17400D47233 /* core.m */,
 				4848BD94185BC17400D47233 /* Supporting Files */,
+				48B3A2C1185F95F600F48217 /* Difference.h */,
+				48B3A2C4185F97BB00F48217 /* DeserializedDifference.h */,
+				48B3A2C5185F97BB00F48217 /* DeserializedDifference.m */,
+				48B3A2C7185F9B0F00F48217 /* Serialize.h */,
 			);
 			path = core;
 			sourceTree = "<group>";
@@ -225,6 +234,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4848BD99185BC17400D47233 /* core.m in Sources */,
+				48B3A2C6185F97BB00F48217 /* DeserializedDifference.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -409,6 +419,7 @@
 				4848BDB3185BC17400D47233 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		4848BDB4185BC17400D47233 /* Build configuration list for PBXNativeTarget "coreTests" */ = {
 			isa = XCConfigurationList;
@@ -417,6 +428,7 @@
 				4848BDB6185BC17400D47233 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

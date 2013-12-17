@@ -1,7 +1,7 @@
 {
-  "name": "dsync",
+  "name": "mathsync",
   "version": "0.1.0-alpha",
-  "description": "Data synchronization",
+  "description": "Data synchronization using a mathematical aproach",
   "scripts": {
     "test": "mocha --harmony --reporter spec"
   },

@@ -1,6 +1,6 @@
-# sync
+# mathsync
 
-__WORK IN PROGRESS__
+Data synchronization using a mathematical aproach.
 
 ## Features
 

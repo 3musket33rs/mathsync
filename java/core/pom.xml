@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
-    <groupId>eu.mais-h.sync</groupId>
+    <groupId>eu.mais-h.mathsync</groupId>
     <artifactId>parent</artifactId>
     <version>0.1.0-SNAPSHOT</version>
   </parent>

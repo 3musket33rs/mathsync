@@ -1,8 +1,6 @@
 module.exports = function(grunt) {
   'use strict';
 
-  var _ = require('underscore');
-
   // Project configuration.
   grunt.initConfig({
     pkg : grunt.file.readJSON('package.json'),

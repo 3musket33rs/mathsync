@@ -18,7 +18,7 @@ Nice features:
 
 ## Development
 
-[![Build Status](https://travis-ci.org/3musket33rs/sync.png?branch=master)](https://travis-ci.org/3musket33rs/sync)
+[![Build Status](https://travis-ci.org/3musket33rs/mathsync.png?branch=master)](https://travis-ci.org/3musket33rs/mathsync)
 
 ### Architecture
 

@@ -7,7 +7,7 @@ build: install
 	npm test
 
 deploy: build
-  npm publish .
+	npm publish .
 
 set-dev-version:
 	npm version $(VERSION)-alpha

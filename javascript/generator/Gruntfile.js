@@ -37,17 +37,25 @@ module.exports = function(grunt) {
       },
       all : [ 'Gruntfile.js', 'src/**/*.js', 'test/**/*.js' ]
     },
+    regenerator: {
+      dist: {
+        files: {
+          'es5/summarizer.js': 'src/summarizer.js'
+        }
+      }
+    },
     browserify : {
       dist  : {
         files: {
-          'build/browser.js': 'es5/**/*.js'
+          'browser/summarizer.js': 'es5/summarizer.js'
         }
       }
     }
   });
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
+  grunt.loadNpmTasks('grunt-regenerator');
   grunt.loadNpmTasks('grunt-browserify');
 
-  grunt.registerTask('default', ['jshint', 'browserify']);
+  grunt.registerTask('default', ['jshint', 'regenerator', 'browserify']);
 };

@@ -34,31 +34,15 @@
   }
 
   describe('Summarizer', function() {
-    describe('fromItems', function() {
-      testSummarizer(function (array, serialize) {
-        return summarizer.fromItems(array, serialize, sha1, 4);
-      });
-    });
 
-    describe('fromJSON', function() {
+    describe('fromGenerator', function() {
       testSummarizer(function (array, serialize) {
-        var original = summarizer.fromItems(array, serialize, sha1, 4);
-        var throughJson = summarizer.fromJSON(function (level) {
-          return original(level).then(function (summary) {
-            return summary.toJSON();
-          });
-        }, sha1, 4);
-        return throughJson;
-      });
-    });
-
-    describe('fromLarge', function() {
-      testSummarizer(function (array, serialize) {
-        var large = summarizer.fromItems(array, serialize, sha1, 4)(10);
-        var throughLarge = summarizer.fromLarge(function () {
-          return large;
-        }, sha1, 4);
-        return throughLarge;
+        function* generator() {
+          for (var i = 0; i < array.length; i++) {
+            yield array[i];
+          }
+        }
+        return summarizer.fromGenerator(generator, serialize, sha1, 4);
       });
     });
   });

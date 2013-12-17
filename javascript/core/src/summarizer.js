@@ -18,21 +18,6 @@
     };
   }
 
-  function fromGenerator(generator, serialize, digest, spread) {
-    return q.async(function* generate(level) {
-      var ibf = ibfBuilder(levelToSize(level), digest, spread);
-      var iterator = yield generator();
-
-      var n = yield iterator.next();
-      while (!n.done) {
-        ibf = ibf._addItem(serialize(n.value));
-        n = yield iterator.next();
-      }
-
-      return ibf;
-    });
-  }
-
   function fromJSON(producer, digest, spread) {
     return function (level) {
       return q(producer(level)).then(function (json) {
@@ -51,7 +36,6 @@
 
   module.exports = {
     fromItems : fromItems,
-    fromGenerator : fromGenerator,
     fromJSON : fromJSON,
     fromLarge : fromLarge
   };

@@ -4,7 +4,7 @@
   var assert = require('assert');
   var _ = require('underscore');
   var summarizer = require('../src/summarizer');
-  var sha1 = require('../src/sha1');
+  var sha1 = require('mathsync/src/sha1');
   var utils = require('./utils_typedarrays');
 
   function assertThatSetOfArrayEquals(arr1, arr2) {

@@ -1,6 +1,7 @@
 install:
 	npm install -g grunt-cli
 	npm install .
+	npm link ../core
 
 build: install
 	grunt

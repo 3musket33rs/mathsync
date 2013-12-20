@@ -9,6 +9,7 @@ test: build
 	echo "Not yet implemented - bundle exec cucumber"
 
 deploy:
+	make deploy -C java
 	make deploy -C javascript
 
 set-dev-version:

@@ -5,6 +5,8 @@ components
 build
 node_modules
 es5
+javascript/core/browser
+javascript/generator/browser
 
 # java
 target

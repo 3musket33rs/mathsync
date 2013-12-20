@@ -1,3 +1,8 @@
+init:
+	npm install -g grunt-cli
+	make init -C core
+	make init -C generator
+
 build:
 	make build -C core
 	make build -C generator

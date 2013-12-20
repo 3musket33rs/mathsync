@@ -1,9 +1,8 @@
-install:
-	npm install -g grunt-cli
+init:
 	npm install .
 	npm link ../core
 
-build: install
+build:
 	grunt
 	npm test
 

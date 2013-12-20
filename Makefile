@@ -1,3 +1,6 @@
+init:
+	make init -C javascript
+
 build:
 	make build -C java
 	make build -C javascript

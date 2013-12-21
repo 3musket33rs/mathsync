@@ -1,3 +1,8 @@
-install: ; npm install
+init:
+	npm link ../../../javascript/core
 
-start: install ; node index.js
+install:
+	npm install
+
+start: install
+	node index.js

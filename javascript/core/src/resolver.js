@@ -4,17 +4,20 @@
   var q = require('q');
 
   function fromSummarizers(local, remote, deserialize) {
-    return q.async(function* resolve() {
-      var difference = null;
-      var localSummary, remoteSummary;
-      var level = 0;
-      while (difference === null) {
-        level++;
-        localSummary = yield local(level);
-        remoteSummary = yield remote(level);
-        difference = remoteSummary._substract(localSummary)._asDifference();
-      }
 
+    function fetchDifference(level) {
+      return q.all([local(level), remote(level)]).then(function (arr) {
+        return arr[1]._substract(arr[0])._asDifference();
+      }).then(function (diff) {
+        if (diff === null) {
+          return fetchDifference(level + 1);
+        } else {
+          return diff;
+        }
+      });
+    }
+
+    function deserializeDifference(difference) {
       var deserialized = { added : [], removed : [] };
       var i;
       for (i = 0; i < difference.added.length; i++) {
@@ -23,9 +26,12 @@
       for (i = 0; i < difference.removed.length; i++) {
         deserialized.removed.push(deserialize(difference.removed[i]));
       }
-
       return deserialized;
-    });
+    }
+
+    return function () {
+      return fetchDifference(0).then(deserializeDifference);
+    };
   }
 
   module.exports = {

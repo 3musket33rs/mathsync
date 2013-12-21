@@ -38,7 +38,7 @@ module.exports = function(grunt) {
     browserify : {
       dist  : {
         files: {
-          'build/browser.js': 'es5/**/*.js'
+          'browser/browser.js': 'src/**/*.js'
         }
       }
     }

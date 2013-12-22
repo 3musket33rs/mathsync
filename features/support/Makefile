@@ -1,2 +1,2 @@
 init:
-	make init -C node
+	make init -C node-server

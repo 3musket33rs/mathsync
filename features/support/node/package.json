@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "mathsync": "0.0.1-alpha",
-    "express": "3.3.x"
-  }
-}

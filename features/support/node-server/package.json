@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "mathsync": "0.1.0-alpha",
+    "koa": "0.1.x",
+    "koa-route": "1.0.x"
+  }
+}

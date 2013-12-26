@@ -4,6 +4,7 @@ var fs = require('fs');
 var route = require('koa-route');
 
 var data = [];
+
 function serialize(item) {
   var buffer = new Buffer(item.key + ':' + item.value, 'utf-8');
   return new Uint8Array(buffer).buffer;

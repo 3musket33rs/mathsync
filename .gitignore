@@ -11,6 +11,8 @@ javascript/generator/browser
 # java
 target
 
+# vagrant
+.vagrant
 
 # eclipse
 .project

@@ -11,30 +11,30 @@ import eu.mais_h.mathsync.digest.Digester;
 class Ibf implements Summary {
 
   private final Bucket[] buckets;
-  private final int spread;
+  private final BucketSelector selector;
   private final Digester digester;
 
-  Ibf(String jsonString, Digester digester, int spread) {
-    this(bucketsFromJSON(jsonString), digester, spread);
+  Ibf(String jsonString, Digester digester, BucketSelector selector) {
+    this(bucketsFromJSON(jsonString), digester, selector);
   }
 
-  Ibf(int size, Digester digester, int spread) {
-    this(bucketsOfSize(size), digester, spread);
+  Ibf(int size, Digester digester, BucketSelector selector) {
+    this(bucketsOfSize(size), digester, selector);
   }
 
-  private Ibf(Bucket[] buckets, Digester digester, int spread) {
+  private Ibf(Bucket[] buckets, Digester digester, BucketSelector selector) {
     if (buckets == null) {
       throw new IllegalArgumentException("Buckets cannot be null");
     }
-    if (spread < 1) {
-      throw new IllegalArgumentException("Items must be stored in a strictly positive number of buckets, given: " + spread);
+    if (selector == null) {
+      throw new IllegalArgumentException("Bucket selector cannot be null");
     }
     if (digester == null) {
       throw new IllegalArgumentException("Digester cannot be null");
     }
 
     this.buckets = buckets;
-    this.spread = spread;
+    this.selector = selector;
     this.digester = digester;
   }
 
@@ -68,7 +68,7 @@ class Ibf implements Summary {
       Bucket otherBucket = other.buckets[i];
       updated[i] = buckets[i].modify(-otherBucket.items(), otherBucket.xored(), otherBucket.hashed());
     }
-    return new Ibf(updated, digester, spread);
+    return new Ibf(updated, digester, selector);
   }
 
   Ibf reduce(int toSize) {
@@ -79,7 +79,7 @@ class Ibf implements Summary {
     for (int i = 0; i < buckets.length; i++) {
       b[i % toSize] = b[i % toSize].group(buckets[i]);
     }
-    return new Ibf(buckets, digester, spread);
+    return new Ibf(buckets, digester, selector);
   }
 
   Difference<byte[]> asDifference() {
@@ -98,31 +98,10 @@ class Ibf implements Summary {
   private Ibf modify(int variation, byte[] content) {
     Bucket[] updated = Arrays.copyOf(buckets, buckets.length);
     byte[] hashed = digester.digest(content);
-    for (int bucket : destinationBuckets(content)) {
+    for (int bucket : selector.selectBuckets(buckets.length, content)) {
       updated[bucket] = updated[bucket].modify(variation, content, hashed);
     }
-    return new Ibf(updated, digester, spread);
-  }
-
-  private int[] destinationBuckets(byte[] content) {
-    int[] destinations = new int[spread];
-    byte[] paddedContent = Arrays.copyOf(content, content.length + 1);
-    for (byte i = 0; i < spread; i++) {
-      paddedContent[content.length] = i;
-      destinations[i] = destinationBucket(digester.digest(paddedContent));
-    }
-    return destinations;
-  }
-
-  private int destinationBucket(byte[] digested) {
-    if (digested.length < 4) {
-      throw new IllegalArgumentException("Digester " + digester + " does not produce long enough digests: " + digested.length);
-    }
-    int id = ((digested[0] << 24) | (digested[1] << 16) | (digested[2] << 8) | (digested[3])) % buckets.length;
-    if (id < 0) {
-      id += buckets.length;
-    }
-    return id;
+    return new Ibf(updated, digester, selector);
   }
 
   @Override

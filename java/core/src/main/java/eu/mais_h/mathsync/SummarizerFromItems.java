@@ -13,12 +13,12 @@ public class SummarizerFromItems implements Summarizer {
 
   private final Iterable<byte[]> items;
   private final Digester digester;
-  private final int spread;
+  private final BucketSelector selector;
 
-  SummarizerFromItems(Iterable<byte[]> items, Digester digester, int spread) {
+  SummarizerFromItems(Iterable<byte[]> items, Digester digester, BucketSelector selector) {
     this.items = items;
     this.digester = digester;
-    this.spread = spread;
+    this.selector = selector;
   }
 
   /**
@@ -28,7 +28,7 @@ public class SummarizerFromItems implements Summarizer {
    */
   @Override
   public Summary summarize(int level) {
-    Ibf ibf = new Ibf(Defaults.ibfSizeFromLevel(level), digester, spread);
+    Ibf ibf = new Ibf(Defaults.ibfSizeFromLevel(level), digester, selector);
     for (byte[] item : items) {
       ibf.addItem(item);
     }
@@ -43,7 +43,7 @@ public class SummarizerFromItems implements Summarizer {
    * @return a summarizer with {@link Sha1Digester SHA-1 digester} and default spread.
    */
   public static <T> Summarizer simple(Set<? extends T> items, Serializer<? super T> serializer) {
-    return custom(items, serializer, Sha1Digester.get(), 3);
+    return custom(items, serializer, Sha1Digester.get(), Defaults.defaultSelector());
   }
 
   /**
@@ -52,10 +52,10 @@ public class SummarizerFromItems implements Summarizer {
    * @param items the set of containing all items in the current state.
    * @param serializer the serializer to use to serialize items.
    * @param digester the custom digester to use.
-   * @param spread the number of buckets to store each item in, it is recommended using an odd number to prevent items falling twice in the same bucket to become invisible.
+   * @param selector the strategy to choose buckets to store items in.
    * @return a summarizer corresponding to the input.
    */
-  public static <T> Summarizer custom(Set<? extends T> items, Serializer<? super T> serializer, Digester digester, int spread) {
-    return new SummarizerFromItems(new SerializedItems<T>(items, serializer), digester, spread);
+  public static <T> Summarizer custom(Set<? extends T> items, Serializer<? super T> serializer, Digester digester, BucketSelector selector) {
+    return new SummarizerFromItems(new SerializedItems<T>(items, serializer), digester, selector);
   }
 }

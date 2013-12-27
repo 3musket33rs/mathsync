@@ -19,8 +19,8 @@ public class IbfTest {
   private byte[] item1 = new byte[] { (byte)5 };
   private byte[] item2 = new byte[] { (byte)6 };
   private byte[] item3 = new byte[] { (byte)7, (byte)8, (byte)9 };
-  private byte spread = 3;
-  private Ibf empty = new Ibf(5, digester, spread);
+  private BucketSelector selector = PadAndHashBucketSelector.newInstance(digester, 3);
+  private Ibf empty = new Ibf(5, digester, selector);
   private Ibf just1;
   private Ibf just2;
   private Ibf just3;
@@ -160,7 +160,7 @@ public class IbfTest {
   }
 
   private Ibf goThroughJson(Ibf origin) {
-    return new Ibf(origin.toJSON(), digester, spread);
+    return new Ibf(origin.toJSON(), digester, selector);
   }
 
   private byte[] intToBytes(int i) {

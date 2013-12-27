@@ -16,6 +16,11 @@ Nice features:
 * self-stabilizing algorithm (any error would be corrected at the next synchronization)
 * the server is neither required to record a log of changes nor to version items
 
+## Support
+
+* [Google Group](https://groups.google.com/forum/#!forum/mathsync) for any question
+* Github [pull requests](https://github.com/3musket33rs/mathsync/pulls) for suggestions and [issues](https://github.com/3musket33rs/mathsync/issues) for tickets
+
 ## Development
 
 [![Build Status](https://travis-ci.org/3musket33rs/mathsync.png?branch=master)](https://travis-ci.org/3musket33rs/mathsync)
@@ -59,17 +64,6 @@ make init
 
 * before development: `env VERSION=0.42.1 make set-dev-version`
 * right before releasing: `env VERSION=0.42.1 make set-release-version`
-
-### Support
-
-1. Go to the issues section of the sync repo
-   (https://github.com/3musket33rs/sync/issues) and search for an answer to your
-   question or problem.
-2. If no answer exists, file a new ticket!  Somebody will typically respond
-   within a few hours.
-
-It's that easy.
-
 
 ## License
 

@@ -19,7 +19,7 @@ public class IbfTest {
   private byte[] item1 = new byte[] { (byte)5 };
   private byte[] item2 = new byte[] { (byte)6 };
   private byte[] item3 = new byte[] { (byte)7, (byte)8, (byte)9 };
-  private BucketSelector selector = PadAndHashBucketSelector.newInstance(digester, 3);
+  private BucketSelector selector = Mockito.mock(BucketSelector.class);
   private Ibf empty = new Ibf(5, digester, selector);
   private Ibf just1;
   private Ibf just2;
@@ -29,19 +29,13 @@ public class IbfTest {
 
   @Before
   public void prepareIbf() {
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)0 }))).thenReturn(intToBytes(-4));
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)1 }))).thenReturn(intToBytes(3));
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)2 }))).thenReturn(intToBytes(4));
+    Mockito.when(selector.selectBuckets(Matchers.eq(5), Matchers.eq(item1))).thenReturn(new int[] { 1, 3, 4 });
     Mockito.when(digester.digest(Matchers.eq(item1))).thenReturn(new byte[] { (byte)4 });
 
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)6, (byte)0 }))).thenReturn(intToBytes(2));
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)6, (byte)1 }))).thenReturn(intToBytes(3));
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)6, (byte)2 }))).thenReturn(intToBytes(4));
+    Mockito.when(selector.selectBuckets(Matchers.eq(5), Matchers.eq(item2))).thenReturn(new int[] { 2, 3, 4 });
     Mockito.when(digester.digest(Matchers.eq(item2))).thenReturn(new byte[] { (byte)8 });
 
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)7, (byte)8, (byte)9, (byte)0 }))).thenReturn(intToBytes(0));
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)7, (byte)8, (byte)9, (byte)1 }))).thenReturn(intToBytes(1));
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)7, (byte)8, (byte)9, (byte)2 }))).thenReturn(intToBytes(2));
+    Mockito.when(selector.selectBuckets(Matchers.eq(5), Matchers.eq(item3))).thenReturn(new int[] { 0, 1, 2 });
     Mockito.when(digester.digest(Matchers.eq(item3))).thenReturn(new byte[] { (byte)12 });
 
     just1 = empty.addItem(item1);
@@ -161,15 +155,6 @@ public class IbfTest {
 
   private Ibf goThroughJson(Ibf origin) {
     return new Ibf(origin.toJSON(), digester, selector);
-  }
-
-  private byte[] intToBytes(int i) {
-    return new byte[] {
-      (byte)((i >> 24) & 0xff),
-      (byte)((i >> 16) & 0xff),
-      (byte)((i >> 8) & 0xff),
-      (byte)(i & 0xff)
-    };
   }
 
   private void assertThatSetOfArrayEquals(Set<byte[]> actual, byte[]... expected) {

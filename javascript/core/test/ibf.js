@@ -10,39 +10,29 @@
   var item2 = new Int8Array([6]).buffer;
   var item3 = new Int8Array([7, 8, 9]).buffer;
 
-  function digester(content) {
-    if (utils.isEqual(content, new Int8Array([5, 0]).buffer)) {
-      return new Int32Array([-4]).buffer;
-    } else if (utils.isEqual(content, new Int8Array([5, 1]).buffer)) {
-      return new Int32Array([3]).buffer;
-    } else if (utils.isEqual(content, new Int8Array([5, 2]).buffer)) {
-      return new Int32Array([4]).buffer;
-    } else if (utils.isEqual(content, item1)) {
-      return new Int8Array([4]).buffer;
+  function selector(buckets, content) {
+    if (buckets !== 5) {
+      return;
     }
+    if (utils.isEqual(content, item1)) {
+      return [1, 3, 4];
+    } else if (utils.isEqual(content, item2)) {
+      return [2, 3, 4];
+    }  else if (utils.isEqual(content, item3)) {
+      return [0, 1, 2];
+    }
+  }
 
-    if (utils.isEqual(content, new Int8Array([6, 0]).buffer)) {
-      return new Int32Array([2]).buffer;
-    } else if (utils.isEqual(content, new Int8Array([6, 1]))) {
-      return new Int32Array([3]).buffer;
-    } else if (utils.isEqual(content, new Int8Array([6, 2]).buffer)) {
-      return new Int32Array([4]).buffer;
+  function digester(content) {
+    if (utils.isEqual(content, item1)) {
+      return new Int8Array([4]).buffer;
     } else if (utils.isEqual(content, item2)) {
       return new Int8Array([8]).buffer;
-    }
-
-    if (utils.isEqual(content, new Int8Array([7, 8, 9, 0]).buffer)) {
-      return new Int32Array([0]).buffer;
-    } else if (utils.isEqual(content, new Int8Array([7, 8, 9, 1]).buffer)) {
-      return new Int32Array([1]).buffer;
-    } else if (utils.isEqual(content, new Int8Array([7, 8, 9, 2]).buffer)) {
-      return new Int32Array([2]).buffer;
     } else if (utils.isEqual(content, item3)) {
       return new Int8Array([12]).buffer;
     }
   }
 
-  var selector = require('../src/bucketSelector').padAndHash(digester, 3);
   var empty = ibf(5, digester, selector);
   var just1 = empty._addItem(item1);
   var just2 = empty._addItem(item2);

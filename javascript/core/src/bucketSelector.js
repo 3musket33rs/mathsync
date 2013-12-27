@@ -2,7 +2,7 @@
   'use strict';
 
   function intFromDigestedBytes(digested) {
-    return new DataView(digested).getInt32(0);
+    return new Int32Array(digested)[0];
   }
 
   function padAndHash(digest, spread) {

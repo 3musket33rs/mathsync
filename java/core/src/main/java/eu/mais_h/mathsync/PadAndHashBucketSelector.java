@@ -7,7 +7,7 @@ import eu.mais_h.mathsync.digest.Digester;
 /**
  * Pads content and hashes it to select buckets.
  */
-class PadAndHashBucketSelector implements BucketSelector {
+public class PadAndHashBucketSelector implements BucketSelector {
 
   private final int spread;
   private final Digester digester;

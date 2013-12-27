@@ -2,6 +2,9 @@ package eu.mais_h.mathsync;
 
 /**
  * Selects buckets to store items in.
+ *
+ * <p>This interface leaks internal details about summary structure. One can implement and use custom instances to
+ * customize settings but be ready for major changes in following versions.</p>
  */
 public interface BucketSelector {
 

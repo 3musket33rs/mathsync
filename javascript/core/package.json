@@ -7,6 +7,7 @@
   },
   "author": "Mathieu Bruyen <code@mais-h.eu>",
   "license": "Apache",
+  "main": "src/index.js",
   "dependencies": {
     "rusha": "0.7.x",
     "q": "0.9.x"

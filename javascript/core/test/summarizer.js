@@ -6,6 +6,7 @@
   var summarizer = require('../src/summarizer');
   var sha1 = require('../src/sha1');
   var utils = require('./utils_typedarrays');
+  var selector = require('../src/bucketSelector').padAndHash(sha1, 3);
 
   function assertThatSetOfArrayEquals(arr1, arr2) {
     assert.equal(arr1.lenght, arr2.lenght);
@@ -36,28 +37,28 @@
   describe('Summarizer', function() {
     describe('fromItems', function() {
       testSummarizer(function (array, serialize) {
-        return summarizer.fromItems(array, serialize, sha1, 4);
+        return summarizer.fromItems(array, serialize, sha1, selector);
       });
     });
 
     describe('fromJSON', function() {
       testSummarizer(function (array, serialize) {
-        var original = summarizer.fromItems(array, serialize, sha1, 4);
+        var original = summarizer.fromItems(array, serialize, sha1, selector);
         var throughJson = summarizer.fromJSON(function (level) {
           return original(level).then(function (summary) {
             return summary.toJSON();
           });
-        }, sha1, 4);
+        }, sha1, selector);
         return throughJson;
       });
     });
 
     describe('fromLarge', function() {
       testSummarizer(function (array, serialize) {
-        var large = summarizer.fromItems(array, serialize, sha1, 4)(10);
+        var large = summarizer.fromItems(array, serialize, sha1, selector)(10);
         var throughLarge = summarizer.fromLarge(function () {
           return large;
-        }, sha1, 4);
+        }, sha1, selector);
         return throughLarge;
       });
     });

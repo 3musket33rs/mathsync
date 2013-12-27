@@ -8,9 +8,9 @@
     return Math.pow(2, level);
   }
 
-  function fromItems(array, serialize, digest, spread) {
+  function fromItems(array, serialize, digest, selector) {
     return function (level) {
-      var ibf = ibfBuilder(levelToSize(level), digest, spread);
+      var ibf = ibfBuilder(levelToSize(level), digest, selector);
       for (var i = 0; i < array.length; i++) {
         ibf = ibf._addItem(serialize(array[i]));
       }
@@ -18,10 +18,10 @@
     };
   }
 
-  function fromJSON(producer, digest, spread) {
+  function fromJSON(producer, digest, selector) {
     return function (level) {
       return q(producer(level)).then(function (json) {
-        return ibfBuilder.fromJSON(json, digest, spread);
+        return ibfBuilder.fromJSON(json, digest, selector);
       });
     };
   }

@@ -28,10 +28,6 @@
     return true;
   }
 
-  function intFromDigestedBytes(digested) {
-    return new DataView(digested).getInt32(0);
-  }
-
   function bucketsOfSize(size) {
     var buckets = [];
     for (var i = 0; i < size; i++) {
@@ -40,11 +36,11 @@
     return buckets;
   }
 
-  function ibf(size, digest, spread) {
-    return ibfFromBuckets(bucketsOfSize(size), digest, spread);
+  function ibf(size, digest, selector) {
+    return ibfFromBuckets(bucketsOfSize(size), digest, selector);
   }
 
-  function ibfFromBuckets(buckets, digest, spread) {
+  function ibfFromBuckets(buckets, digest, selector) {
 
     function toJSON() {
       var json = [];
@@ -55,24 +51,13 @@
     }
 
     function modify(variation, content) {
-      var bucketId;
-      var bucketsCopy = arrayCopy(buckets, buckets.length);
-
       var digested = digest(content);
-
-      var copy = new Int8Array(content.byteLength + 1);
-      copy.set(new Int8Array(content));
-      for (var i = 0; i < spread; i++) {
-        copy[copy.length - 1] = i;
-
-        bucketId = intFromDigestedBytes(digest(copy.buffer)) % buckets.length;
-        if (bucketId < 0) {
-          bucketId += buckets.length;
-        }
-        bucketsCopy[bucketId] = bucketsCopy[bucketId].modify(variation, content, digested);
+      var selected = selector(buckets.length, content);
+      var bucketsCopy = arrayCopy(buckets, buckets.length);
+      for (var i = 0; i < selected.length; i++) {
+        bucketsCopy[selected[i]] = bucketsCopy[selected[i]].modify(variation, content, digested);
       }
-
-      return ibfFromBuckets(bucketsCopy, digest, spread);
+      return ibfFromBuckets(bucketsCopy, digest, selector);
     }
 
     function addItem(content) {
@@ -128,7 +113,7 @@
       for (var i = 0; i < buckets.length; i++) {
         b[i % toSize] = b[i % toSize].group(buckets[i]);
       }
-      return ibfFromBuckets(b, digest, spread);
+      return ibfFromBuckets(b, digest, selector);
     }
 
     function verify(bucket) {
@@ -164,7 +149,7 @@
         otherBucket = other.__buckets[i];
         updated.push(buckets[i].modify(-otherBucket.items(), otherBucket.xored(), otherBucket.hashed()));
       }
-      return ibfFromBuckets(updated, digest, spread);
+      return ibfFromBuckets(updated, digest, selector);
     }
 
     var that = {
@@ -181,12 +166,12 @@
     return that;
   }
 
-  function fromJSON(json, digest, spread) {
+  function fromJSON(json, digest, selector) {
     var buckets = [];
     json.forEach(function (bucket) {
       buckets.push(emptyBucket.fromJSON(bucket));
     });
-    return ibfFromBuckets(buckets, digest, spread);
+    return ibfFromBuckets(buckets, digest, selector);
   }
   ibf.fromJSON = fromJSON;
 

@@ -9,7 +9,6 @@
   var item1 = new Int8Array([5]).buffer;
   var item2 = new Int8Array([6]).buffer;
   var item3 = new Int8Array([7, 8, 9]).buffer;
-  var spread = 3;
 
   function digester(content) {
     if (utils.isEqual(content, new Int8Array([5, 0]).buffer)) {
@@ -43,14 +42,15 @@
     }
   }
 
-  var empty = ibf(5, digester, spread);
+  var selector = require('../src/bucketSelector').padAndHash(digester, 3);
+  var empty = ibf(5, digester, selector);
   var just1 = empty._addItem(item1);
   var just2 = empty._addItem(item2);
   var just3 = empty._addItem(item3);
   var items1and2 = just1._addItem(item2);
 
   function goThroughJson(origin) {
-    return ibf.fromJSON(origin.toJSON(), digester, spread);
+    return ibf.fromJSON(origin.toJSON(), digester, selector);
   }
 
   function assertThatSetOfArrayEquals(arr1, arr2) {

@@ -9,9 +9,9 @@
     return Math.pow(2, level);
   }
 
-  function fromGenerator(generator, serialize, digest, spread) {
+  function fromGenerator(generator, serialize, digest, selector) {
     return q.async(function* generate(level) {
-      var ibf = ibfBuilder(levelToSize(level), digest, spread);
+      var ibf = ibfBuilder(levelToSize(level), digest, selector);
       var iterator = yield generator();
 
       var n = yield iterator.next();

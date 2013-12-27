@@ -6,6 +6,7 @@
   var summarizer = require('../src/summarizer');
   var sha1 = require('mathsync/src/sha1');
   var utils = require('./utils_typedarrays');
+  var selector = require('mathsync/src/bucketSelector').padAndHash(sha1, 4);
 
   function assertThatSetOfArrayEquals(arr1, arr2) {
     assert.equal(arr1.lenght, arr2.lenght);
@@ -42,7 +43,7 @@
             yield array[i];
           }
         }
-        return summarizer.fromGenerator(generator, serialize, sha1, 4);
+        return summarizer.fromGenerator(generator, serialize, sha1, selector);
       });
     });
   });

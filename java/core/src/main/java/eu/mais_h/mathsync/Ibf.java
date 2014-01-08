@@ -98,7 +98,8 @@ class Ibf implements Summary {
   private Ibf modify(int variation, byte[] content) {
     Bucket[] updated = Arrays.copyOf(buckets, buckets.length);
     byte[] hashed = digester.digest(content);
-    for (int bucket : selector.selectBuckets(buckets.length, content)) {
+    for (int bucket : selector.selectBuckets(content)) {
+      bucket = bucket % buckets.length;
       updated[bucket] = updated[bucket].modify(variation, content, hashed);
     }
     return new Ibf(updated, digester, selector);

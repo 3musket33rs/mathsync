@@ -29,22 +29,22 @@
             return new Int32Array([4]).buffer;
           }
         }
-        var selected = selector.padAndHash(digester, 3)(10, new Int8Array([5]).buffer);
+        var selected = selector.padAndHash(digester, 3)(new Int8Array([5]).buffer);
         assertThatSetOfArrayEquals(selected, [2, 3, 4]);
       });
 
-      it('should return indexes taken from padded hash modulo size', function() {
+      it('should return absolute indexes taken from padded hash', function() {
         function digester(content) {
           if (utils.isEqual(content, new Int8Array([5, 0]).buffer)) {
             return new Int32Array([-1]).buffer;
           } else if (utils.isEqual(content, new Int8Array([5, 1]).buffer)) {
             return new Int32Array([3]).buffer;
           } else if (utils.isEqual(content, new Int8Array([5, 2]).buffer)) {
-            return new Int32Array([12]).buffer;
+            return new Int32Array([-5]).buffer;
           }
         }
-        var selected = selector.padAndHash(digester, 3)(10, new Int8Array([5]).buffer);
-        assertThatSetOfArrayEquals(selected, [9, 3, 2]);
+        var selected = selector.padAndHash(digester, 3)(new Int8Array([5]).buffer);
+        assertThatSetOfArrayEquals(selected, [1, 3, 5]);
       });
     });
   });

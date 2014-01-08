@@ -25,25 +25,22 @@ public class PadAndHashBucketSelector implements BucketSelector {
   }
 
   @Override
-  public int[] selectBuckets(int buckets, byte[] content) {
+  public int[] selectBuckets(byte[] content) {
     int[] destinations = new int[spread];
     byte[] paddedContent = Arrays.copyOf(content, content.length + 1);
     for (byte i = 0; i < spread; i++) {
       paddedContent[content.length] = i;
-      destinations[i] = destinationBucket(digester.digest(paddedContent), buckets);
+      destinations[i] = destinationBucket(digester.digest(paddedContent));
     }
     return destinations;
   }
 
-  private int destinationBucket(byte[] digested, int buckets) {
+  private int destinationBucket(byte[] digested) {
     if (digested.length < 4) {
       throw new IllegalArgumentException("Digester " + digester + " does not produce long enough digests: " + digested.length);
     }
-    int id = ((digested[0] << 24) | (digested[1] << 16) | (digested[2] << 8) | (digested[3])) % buckets;
-    if (id < 0) {
-      id += buckets;
-    }
-    return id;
+    int id = ((digested[0] << 24) | (digested[1] << 16) | (digested[2] << 8) | (digested[3]));
+    return Math.abs(id);
   }
 
   /**

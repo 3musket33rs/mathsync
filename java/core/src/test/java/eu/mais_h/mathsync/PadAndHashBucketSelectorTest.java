@@ -26,7 +26,7 @@ public class PadAndHashBucketSelectorTest {
       assertThat(e.getMessage()).contains("Digester").contains("null");
     }
   }
-  
+
   @Test
   public void refuses_non_strictly_positive_spread() {
     try {
@@ -36,29 +36,29 @@ public class PadAndHashBucketSelectorTest {
       assertThat(e.getMessage()).contains("0").contains("strictly positive number");
     }
   }
-  
+
   @Test
   public void returns_indexes_taken_from_padded_hash() {
     Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)0 }))).thenReturn(intToBytes(2));
     Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)1 }))).thenReturn(intToBytes(3));
     Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)2 }))).thenReturn(intToBytes(4));
-    
-    int[] selected = selector.selectBuckets(10, new byte[] { (byte)5 });
-    
+
+    int[] selected = selector.selectBuckets(new byte[] { (byte)5 });
+
     assertSelectedEquals(selected, 2, 3, 4);
   }
-  
+
   @Test
-  public void returns_indexes_taken_from_padded_hash_modulo_size() {
+  public void returns_absolute_indexes_taken_from_padded_hash() {
     Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)0 }))).thenReturn(intToBytes(-1));
     Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)1 }))).thenReturn(intToBytes(3));
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)2 }))).thenReturn(intToBytes(12));
-    
-    int[] selected = selector.selectBuckets(10, new byte[] { (byte)5 });
-    
-    assertSelectedEquals(selected, 9, 3, 2);
+    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)2 }))).thenReturn(intToBytes(-5));
+
+    int[] selected = selector.selectBuckets(new byte[] { (byte)5 });
+
+    assertSelectedEquals(selected, 1, 3, 5);
   }
-  
+
   private void assertSelectedEquals(int[] selected, int... expected) {
     assertThat(new HashSet<>(Arrays.asList(selected))).isEqualTo(new HashSet<>(Arrays.asList(selected)));
   }

@@ -10,12 +10,9 @@
   var item2 = new Int8Array([6]).buffer;
   var item3 = new Int8Array([7, 8, 9]).buffer;
 
-  function selector(buckets, content) {
-    if (buckets !== 5) {
-      return;
-    }
+  function selector(content) {
     if (utils.isEqual(content, item1)) {
-      return [1, 3, 4];
+      return [6, 3, 4];
     } else if (utils.isEqual(content, item2)) {
       return [2, 3, 4];
     }  else if (utils.isEqual(content, item3)) {

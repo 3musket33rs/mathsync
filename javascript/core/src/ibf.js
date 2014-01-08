@@ -52,10 +52,11 @@
 
     function modify(variation, content) {
       var digested = digest(content);
-      var selected = selector(buckets.length, content);
+      var selected = selector(content);
       var bucketsCopy = arrayCopy(buckets, buckets.length);
       for (var i = 0; i < selected.length; i++) {
-        bucketsCopy[selected[i]] = bucketsCopy[selected[i]].modify(variation, content, digested);
+        var b = selected[i] % buckets.length;
+        bucketsCopy[b] = bucketsCopy[b].modify(variation, content, digested);
       }
       return ibfFromBuckets(bucketsCopy, digest, selector);
     }

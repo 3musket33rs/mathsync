@@ -14,4 +14,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision "shell", path: "dev-machine/user.sh", privileged: false
 
   config.vm.synced_folder ".", "/home/vagrant/dev"
+
+  config.vm.provider "virtualbox" do |v|
+    v.name = "mathsync"
+  end
 end

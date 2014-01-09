@@ -1,8 +1,7 @@
 init:
 	make init -C javascript
 	make init -C features/support
-	test -d docsite || git clone $(git config --get remote.origin.url) doc
-	cd docsite && git checkout gh-pages
+	test -d docsite || git clone -b gh-pages $(git config --get remote.origin.url) docsite
 
 build:
 	make build -C java

@@ -7,5 +7,5 @@ before_install:
   - rm -rf ~/.nvm
   - curl https://raw.github.com/creationix/nvm/master/install.sh | sh
   - source ~/.nvm/nvm.sh
-  - nvm install v0.11.6
-  - nvm use v0.11.6
+  - nvm install 0.11
+  - nvm use 0.11

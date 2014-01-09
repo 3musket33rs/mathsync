@@ -20,6 +20,11 @@ Nice features:
 * self-stabilizing algorithm (an error is corrected at the next synchronization)
 * does not require the server to record all changes
 
+## Documentation
+
+* [Javadoc](javadoc)
+* [Google group](https://groups.google.com/forum/#!forum/mathsync)
+
 ## License
 
 [Apache License](http://www.apache.org/licenses/LICENSE-2.0)

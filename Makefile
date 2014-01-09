@@ -1,6 +1,8 @@
 init:
 	make init -C javascript
 	make init -C features/support
+	test -d docsite || git clone $(git config --get remote.origin.url) doc
+	cd docsite && git checkout gh-pages
 
 build:
 	make build -C java
@@ -12,6 +14,17 @@ test: build
 deploy:
 	make deploy -C java
 	make deploy -C javascript
+	cd docsite && git push
+
+build-doc:
+	cd docsite && git rm -r .
+	cp -R doc/* docsite
+	cp -R java/core/target/apidocs docsite/javadoc
+	cd docsite && git add .
+	cd docsite && git commit -m "Update documentation"
+
+push-doc:
+	cd docsite && git push
 
 set-dev-version:
 	make set-dev-version -C java

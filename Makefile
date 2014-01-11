@@ -1,10 +1,12 @@
 init:
 	make init -C javascript
 	make init -C features/support
+	make init -C doc
 
 build:
 	make build -C java
 	make build -C javascript
+	make build -C doc
 
 test: build
 	echo "Not yet implemented - bundle exec cucumber"
@@ -12,18 +14,7 @@ test: build
 deploy:
 	make deploy -C java
 	make deploy -C javascript
-	cd docsite && git push
-
-build-doc:
-	test -d docsite || git clone -b gh-pages $(git config --get remote.origin.url) docsite
-	cd docsite && git rm -r .
-	cp -R doc/* docsite
-	cp -R java/core/target/apidocs docsite/javadoc
-	cd docsite && git add .
-	cd docsite && git commit -m "Update documentation"
-
-push-doc:
-	cd docsite && git push
+	make deploy -C doc
 
 set-dev-version:
 	make set-dev-version -C java

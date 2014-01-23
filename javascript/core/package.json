@@ -1,6 +1,6 @@
 {
   "name": "mathsync",
-  "version": "0.1.0-alpha",
+  "version": "0.1.0",
   "description": "Data synchronization using a mathematical aproach",
   "scripts": {
     "test": "mocha --harmony --reporter spec"

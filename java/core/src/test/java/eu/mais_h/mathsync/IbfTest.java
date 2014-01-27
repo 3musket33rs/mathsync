@@ -20,11 +20,11 @@ public class IbfTest {
   private byte[] item2 = new byte[] { (byte)6 };
   private byte[] item3 = new byte[] { (byte)7, (byte)8, (byte)9 };
   private BucketSelector selector = Mockito.mock(BucketSelector.class);
-  private Ibf empty = new Ibf(5, digester, selector);
-  private Ibf just1;
-  private Ibf just2;
-  private Ibf just3;
-  private Ibf items1and2;
+  private Summary empty = new Ibf(5, digester, selector);
+  private Summary just1;
+  private Summary just2;
+  private Summary just3;
+  private Summary items1and2;
   private Difference<byte[]> difference;
 
   @Before
@@ -38,122 +38,122 @@ public class IbfTest {
     Mockito.when(selector.selectBuckets(Matchers.eq(item3))).thenReturn(new int[] { 0, 1, 2 });
     Mockito.when(digester.digest(Matchers.eq(item3))).thenReturn(new byte[] { (byte)12 });
 
-    just1 = empty.addItem(item1);
-    just2 = empty.addItem(item2);
-    just3 = empty.addItem(item3);
-    items1and2 = just1.addItem(item2);
+    just1 = empty.plus(item1);
+    just2 = empty.plus(item2);
+    just3 = empty.plus(item3);
+    items1and2 = just1.plus(item2);
   }
 
   @Test
   public void empty_ibf_leads_to_empty_difference() {
-    difference = empty.asDifference();
+    difference = empty.toDifference();
     assertThat(difference.added()).isEmpty();
     assertThat(difference.removed()).isEmpty();
   }
 
   @Test
   public void json_serialization_keeps_empty_ibf_empty() {
-    difference = goThroughJson(empty).asDifference();
+    difference = goThroughJson(empty).toDifference();
     assertThat(difference.added()).isEmpty();
     assertThat(difference.removed()).isEmpty();
   }
 
   @Test
   public void added_item_is_in_difference() {
-    difference = just1.asDifference();
+    difference = just1.toDifference();
     assertThatSetOfArrayEquals(difference.added(), item1);
     assertThat(difference.removed()).isEmpty();
 
-    difference = just2.asDifference();
+    difference = just2.toDifference();
     assertThatSetOfArrayEquals(difference.added(), item2);
     assertThat(difference.removed()).isEmpty();
 
-    difference = just3.asDifference();
+    difference = just3.toDifference();
     assertThatSetOfArrayEquals(difference.added(), item3);
     assertThat(difference.removed()).isEmpty();
 
-    difference = items1and2.asDifference();
+    difference = items1and2.toDifference();
     assertThatSetOfArrayEquals(difference.added(), item1, item2);
     assertThat(difference.removed()).isEmpty();
   }
 
   @Test
   public void json_serialization_keeps_added_item_in_difference() {
-    difference = goThroughJson(just1).asDifference();
+    difference = goThroughJson(just1).toDifference();
     assertThatSetOfArrayEquals(difference.added(), item1);
     assertThat(difference.removed()).isEmpty();
 
-    difference = goThroughJson(just2).asDifference();
+    difference = goThroughJson(just2).toDifference();
     assertThatSetOfArrayEquals(difference.added(), item2);
     assertThat(difference.removed()).isEmpty();
 
-    difference = goThroughJson(just3).asDifference();
+    difference = goThroughJson(just3).toDifference();
     assertThatSetOfArrayEquals(difference.added(), item3);
     assertThat(difference.removed()).isEmpty();
 
-    difference = goThroughJson(items1and2).asDifference();
+    difference = goThroughJson(items1and2).toDifference();
     assertThatSetOfArrayEquals(difference.added(), item1, item2);
     assertThat(difference.removed()).isEmpty();
   }
 
   @Test
   public void removed_item_is_in_difference() {
-    difference = empty.substract(just1).asDifference();
+    difference = empty.minus(just1).toDifference();
     assertThat(difference.added()).isEmpty();
     assertThatSetOfArrayEquals(difference.removed(), item1);
 
-    difference = empty.substract(just2).asDifference();
+    difference = empty.minus(just2).toDifference();
     assertThat(difference.added()).isEmpty();
     assertThatSetOfArrayEquals(difference.removed(), item2);
 
-    difference = empty.substract(just3).asDifference();
+    difference = empty.minus(just3).toDifference();
     assertThat(difference.added()).isEmpty();
     assertThatSetOfArrayEquals(difference.removed(), item3);
 
-    difference = empty.substract(items1and2).asDifference();
+    difference = empty.minus(items1and2).toDifference();
     assertThat(difference.added()).isEmpty();
     assertThatSetOfArrayEquals(difference.removed(), item1, item2);
   }
 
   @Test
   public void json_serialization_keeps_removed_item_in_difference() {
-    difference = goThroughJson(empty.substract(just1)).asDifference();
+    difference = goThroughJson(empty.minus(just1)).toDifference();
     assertThat(difference.added()).isEmpty();
     assertThatSetOfArrayEquals(difference.removed(), item1);
 
-    difference = goThroughJson(empty.substract(just2)).asDifference();
+    difference = goThroughJson(empty.minus(just2)).toDifference();
     assertThat(difference.added()).isEmpty();
     assertThatSetOfArrayEquals(difference.removed(), item2);
 
-    difference = goThroughJson(empty.substract(just3)).asDifference();
+    difference = goThroughJson(empty.minus(just3)).toDifference();
     assertThat(difference.added()).isEmpty();
     assertThatSetOfArrayEquals(difference.removed(), item3);
 
-    difference = goThroughJson(empty.substract(items1and2)).asDifference();
+    difference = goThroughJson(empty.minus(items1and2)).toDifference();
     assertThat(difference.added()).isEmpty();
     assertThatSetOfArrayEquals(difference.removed(), item1, item2);
   }
 
   @Test
   public void added_and_removed_item_are_in_difference() {
-    difference = just1.substract(just2).asDifference();
+    difference = just1.minus(just2).toDifference();
     assertThatSetOfArrayEquals(difference.added(), item1);
     assertThatSetOfArrayEquals(difference.removed(), item2);
   }
 
   @Test
   public void different_item_sizes_in_the_same_bucket_are_resolved() {
-    difference = just1.addItem(item2).substract(just3).asDifference();
+    difference = just1.plus(item2).minus(just3).toDifference();
     assertThatSetOfArrayEquals(difference.added(), item1, item2);
     assertThatSetOfArrayEquals(difference.removed(), item3);
   }
 
   @Test
   public void unresolvable_difference_leads_to_null() {
-    assertThat(just1.addItem(item1).asDifference()).isNull();
+    assertThat(just1.plus(item1).toDifference()).isNull();
   }
 
-  private Ibf goThroughJson(Ibf origin) {
+  private Summary goThroughJson(Summary origin) {
     return new Ibf(origin.toJSON(), digester, selector);
   }
 

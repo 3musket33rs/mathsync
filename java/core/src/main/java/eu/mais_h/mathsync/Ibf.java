@@ -1,6 +1,7 @@
 package eu.mais_h.mathsync;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -47,28 +48,37 @@ class Ibf implements Summary {
     return array.toString();
   }
 
-  Ibf addItem(byte[] content) {
+  @Override
+  public Difference<byte[]> toDifference() {
+    return new DifferenceBuilder(this).difference;
+  }
+
+  @Override
+  public Summary plus(byte[] content) {
     if (content == null) {
       throw new IllegalArgumentException("Cannot add a null item to an IBF");
     }
 
-    return modify(1, content);
+    return modifyWithItems(1, Collections.singleton(content));
   }
 
-  Ibf substract(Ibf other) {
+  @Override
+  public Summary minus(Summary other) {
     if (other == null) {
       throw new IllegalArgumentException("Cannot substract a null IBF");
     }
-    if (buckets.length != other.buckets.length) {
-      throw new IllegalArgumentException("Cannot substract IBFs of different sizes, tried to substract " + other + " from " + this);
+    Summary result;
+    if (other instanceof Ibf) {
+      result = modifyWithIbf(-1, (Ibf)other);
+    } else {
+      Difference<byte[]> asDifference = other.toDifference();
+      if (asDifference == null) {
+        throw new IllegalArgumentException("Summary cannot be viewed as a difference, it is likely the root cause is using an incompatible summary type");
+      }
+      Ibf added = modifyWithItems(1, asDifference.added());
+      result = added.modifyWithItems(-1, asDifference.removed());
     }
-
-    Bucket[] updated = new Bucket[buckets.length];
-    for (int i = 0; i < buckets.length; i++) {
-      Bucket otherBucket = other.buckets[i];
-      updated[i] = buckets[i].modify(-otherBucket.items(), otherBucket.xored(), otherBucket.hashed());
-    }
-    return new Ibf(updated, digester, selector);
+    return result;
   }
 
   Ibf reduce(int toSize) {
@@ -82,10 +92,6 @@ class Ibf implements Summary {
     return new Ibf(buckets, digester, selector);
   }
 
-  Difference<byte[]> asDifference() {
-    return new DifferenceBuilder(this).difference;
-  }
-
   private boolean isEmpty() {
     for (Bucket b : buckets) {
       if (!b.isEmpty()) {
@@ -95,12 +101,27 @@ class Ibf implements Summary {
     return true;
   }
 
-  private Ibf modify(int variation, byte[] content) {
+  private Ibf modifyWithItems(int variation, Iterable<byte[]> items) {
     Bucket[] updated = Arrays.copyOf(buckets, buckets.length);
-    byte[] hashed = digester.digest(content);
-    for (int bucket : selector.selectBuckets(content)) {
-      bucket = bucket % buckets.length;
-      updated[bucket] = updated[bucket].modify(variation, content, hashed);
+    for (byte[] item : items) {
+      byte[] hashed = digester.digest(item);
+      for (int bucket : selector.selectBuckets(item)) {
+        bucket = bucket % buckets.length;
+        updated[bucket] = updated[bucket].modify(variation, item, hashed);
+      }
+    }
+    return new Ibf(updated, digester, selector);
+  }
+
+  private Ibf modifyWithIbf(int variation, Ibf other) {
+    if (buckets.length != other.buckets.length) {
+      throw new IllegalArgumentException("Cannot substract IBFs of different sizes, tried to substract " + other + " from " + this);
+    }
+
+    Bucket[] updated = new Bucket[buckets.length];
+    for (int i = 0; i < buckets.length; i++) {
+      Bucket otherBucket = other.buckets[i];
+      updated[i] = buckets[i].modify(variation * otherBucket.items(), otherBucket.xored(), otherBucket.hashed());
     }
     return new Ibf(updated, digester, selector);
   }
@@ -179,7 +200,7 @@ class Ibf implements Summary {
               removed.add(verified);
               break;
             }
-            return filtered.modify(-items, verified);
+            return filtered.modifyWithItems(-items, Collections.singleton(verified));
           }
         }
       }

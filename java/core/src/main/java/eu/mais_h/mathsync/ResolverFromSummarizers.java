@@ -39,7 +39,7 @@ public class ResolverFromSummarizers<T> implements Resolver<T> {
     if (!(localIbf instanceof Ibf)) {
       throw new IllegalStateException("Local summary has an invalid type: " + localIbf);
     }
-    return ((Ibf)remoteIbf).substract((Ibf)localIbf).asDifference();
+    return ((Ibf)remoteIbf).minus((Ibf)localIbf).toDifference();
   }
 
   /**

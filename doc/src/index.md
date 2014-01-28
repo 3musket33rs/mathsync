@@ -23,6 +23,7 @@ Nice features:
 ## Documentation
 
 * [Javadoc](javadoc)
+* [Jsdoc](jsdoc)
 * [Google group](https://groups.google.com/forum/#!forum/mathsync)
 
 ## License

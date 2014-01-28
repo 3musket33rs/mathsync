@@ -7,6 +7,7 @@ build:
 	cd docsite && git rm -rf .
 	cp -R src/* docsite
 	cp -R ../java/core/target/apidocs docsite/javadoc
+	cp -R ../javascript/core/apidocs docsite/jsdoc
 	cd docsite && git add .
 
 deploy:

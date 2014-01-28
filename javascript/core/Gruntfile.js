@@ -35,6 +35,14 @@ module.exports = function(grunt) {
       },
       all : [ 'Gruntfile.js', 'src/**/*.js', 'test/**/*.js' ]
     },
+    jsdoc : {
+      dist : {
+        src: ['src/*.js', 'README.md'],
+        options: {
+          destination: 'apidocs'
+        }
+      }
+    },
     browserify : {
       dist  : {
         files: {
@@ -46,6 +54,7 @@ module.exports = function(grunt) {
 
   grunt.loadNpmTasks('grunt-contrib-jshint');
   grunt.loadNpmTasks('grunt-browserify');
+  grunt.loadNpmTasks('grunt-jsdoc');
 
-  grunt.registerTask('default', ['jshint', 'browserify']);
+  grunt.registerTask('default', ['jshint', 'jsdoc', 'browserify']);
 };

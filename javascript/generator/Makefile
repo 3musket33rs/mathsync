@@ -1,6 +1,6 @@
 init:
-	npm install .
 	npm link ../core
+	npm install .
 
 build:
 	grunt

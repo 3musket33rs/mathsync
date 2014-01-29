@@ -3,13 +3,18 @@ var app = koa();
 var fs = require('fs');
 var route = require('koa-route');
 
-var data = [];
+var data = {};
 
 function serialize(item) {
   var buffer = new Buffer(item.key + ':' + item.value, 'utf-8');
   return new Uint8Array(buffer).buffer;
 }
-var summarizer = require('mathsync').summarizer.fromItems(data, serialize);
+
+var summarizer = require('mathsync-generator').summarizer.fromGenerator(function* () {
+  for (var k in data) {
+    yield { key: k, value: data[k] };
+  }
+}, serialize);
 
 app.use(function *(next){
   var start = new Date;

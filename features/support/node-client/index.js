@@ -1,7 +1,7 @@
 var http = require('http');
 var q = require('q');
 
-var data = [];
+var data = {};
 
 function serialize(item) {
   var buffer = new Buffer(item.key + ':' + item.value, 'utf-8');
@@ -30,9 +30,16 @@ function fetchSummary(level) {
   return deferred.promise.then(Buffer.concat).then(JSON.parse);
 }
 
-var ms = require('mathsync');
-var local = ms.summarizer.fromItems(data, serialize);
+var ms = require('mathsync-generator');
+
+var local = ms.summarizer.fromGenerator(function* () {
+  for (var k in data) {
+    yield { key: k, value: data[k] };
+  }
+}, serialize);
+
 var remote = ms.summarizer.fromJSON(fetchSummary);
+
 var resolve = ms.resolver.fromSummarizers(local, remote, deserialize);
 
 resolve().done(function (difference) {

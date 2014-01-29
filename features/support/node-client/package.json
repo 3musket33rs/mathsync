@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "mathsync": "0.2.0-alpha",
+    "mathsync-generator": "0.2.0-alpha",
     "q": "0.9.x"
   }
 }

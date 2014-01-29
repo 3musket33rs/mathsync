@@ -6,6 +6,7 @@ build
 node_modules
 es5
 javascript/core/browser
+javascript/core/apidocs
 javascript/generator/browser
 
 # java

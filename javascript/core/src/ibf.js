@@ -61,11 +61,11 @@
       return ibfFromBuckets(bucketsCopy, digest, selector);
     }
 
-    function addItem(content) {
+    function plus(content) {
       return modify(1, content);
     }
 
-    function asDifference() {
+    function toDifference() {
       var added = [];
       var removed = [];
 
@@ -143,7 +143,7 @@
       return true;
     }
 
-    function substract(other) {
+    function minus(other) {
       var updated = [];
       var otherBucket;
       for (var i = 0; i < buckets.length; i++) {
@@ -157,9 +157,9 @@
       __buckets : buckets,
       __modify : modify,
       __isEmpty : isEmpty,
-      _substract : substract,
-      _asDifference : asDifference,
-      _addItem : addItem,
+      minus : minus,
+      toDifference : toDifference,
+      plus : plus,
       _reduce : reduce,
       toJSON : toJSON
     };
@@ -175,6 +175,6 @@
     return ibfFromBuckets(buckets, digest, selector);
   }
   ibf.fromJSON = fromJSON;
-
+  
   module.exports = ibf;
 })();

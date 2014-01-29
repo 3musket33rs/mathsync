@@ -16,7 +16,7 @@
 
       var n = yield iterator.next();
       while (!n.done) {
-        ibf = ibf._addItem(serialize(n.value));
+        ibf = ibf.plus(serialize(n.value));
         n = yield iterator.next();
       }
 

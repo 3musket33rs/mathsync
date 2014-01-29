@@ -24,7 +24,7 @@
       }
 
       builder([[1, 2], [2, 2], [3, 2]], serialize)(5).then(function (summary) {
-        var diff = summary._asDifference();
+        var diff = summary.toDifference();
         assertThatSetOfArrayEquals(diff.added, [[1, 2], [2, 2], [3, 2]]);
         assert.equal(0, diff.removed.length);
         done();

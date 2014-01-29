@@ -114,8 +114,8 @@ public class ResolverFromSummarizersTest {
     Mockito.when(remote.summarize(Matchers.eq(level))).thenReturn(remoteIbf);
 
     Ibf localMinusRemote = Mockito.mock(Ibf.class);
-    Mockito.when(remoteIbf.substract(Matchers.eq(localIbf))).thenReturn(localMinusRemote);
+    Mockito.when(remoteIbf.minus(Matchers.eq(localIbf))).thenReturn(localMinusRemote);
 
-    Mockito.when(localMinusRemote.asDifference()).thenReturn(difference);
+    Mockito.when(localMinusRemote.toDifference()).thenReturn(difference);
   }
 }

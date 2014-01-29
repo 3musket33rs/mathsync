@@ -32,6 +32,19 @@
  * @returns {external:Difference.<ArrayBuffer>} a difference view of the summary or <code>null</code> if it cannot be resolved with the information it contains.
  * @function external:Summary#toDifference
  */
+/**
+ * Substracts a summary from this one.
+ * 
+ * @param {external:Summary} summary - the summary to substract to this one.
+ * @returns {external:Summary} a new summary with the items substracted from this one.
+ * @function external:Summary#minus
+ */
+/**
+ * Retrieves a JSON view of the summary.
+ * 
+ * @returns {Object} a JSON view of the summary.
+ * @function external:Summary#toJSON
+ */
 
 /**
  * Represents the difference between two states.

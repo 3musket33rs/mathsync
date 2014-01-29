@@ -7,7 +7,7 @@
 
     function fetchDifference(level) {
       return q.all([local(level), remote(level)]).then(function (arr) {
-        return arr[1]._substract(arr[0]).toDifference();
+        return arr[1].minus(arr[0]).toDifference();
       }).then(function (diff) {
         if (diff === null) {
           return fetchDifference(level + 1);

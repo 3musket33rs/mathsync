@@ -143,7 +143,7 @@
       return true;
     }
 
-    function substract(other) {
+    function minus(other) {
       var updated = [];
       var otherBucket;
       for (var i = 0; i < buckets.length; i++) {
@@ -157,7 +157,7 @@
       __buckets : buckets,
       __modify : modify,
       __isEmpty : isEmpty,
-      _substract : substract,
+      minus : minus,
       toDifference : toDifference,
       plus : plus,
       _reduce : reduce,

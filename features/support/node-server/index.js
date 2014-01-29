@@ -9,7 +9,7 @@ function serialize(item) {
   var buffer = new Buffer(item.key + ':' + item.value, 'utf-8');
   return new Uint8Array(buffer).buffer;
 }
-var summarizer = require('mathsync/src/summarizer').fromItems(data, serialize, require('mathsync/src/sha1'), 3);
+var summarizer = require('mathsync').summarizer.fromItems(data, serialize);
 
 app.use(function *(next){
   var start = new Date;

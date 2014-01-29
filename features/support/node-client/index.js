@@ -30,11 +30,10 @@ function fetchSummary(level) {
   return deferred.promise.then(Buffer.concat).then(JSON.parse);
 }
 
-var summarizer = require('mathsync/src/summarizer');
-var sha1 = require('mathsync/src/sha1');
-var local = summarizer.fromItems(data, serialize, sha1, 3);
-var remote = summarizer.fromJSON(fetchSummary, sha1, 3);
-var resolve = require('mathsync/src/resolver').fromSummarizers(local, remote, deserialize);
+var ms = require('mathsync');
+var local = ms.summarizer.fromItems(data, serialize);
+var remote = ms.summarizer.fromJSON(fetchSummary);
+var resolve = ms.resolver.fromSummarizers(local, remote, deserialize);
 
 resolve().done(function (difference) {
   console.log(difference);

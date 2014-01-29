@@ -12,7 +12,7 @@
     return function (level) {
       var ibf = ibfBuilder(levelToSize(level), digest, selector);
       for (var i = 0; i < array.length; i++) {
-        ibf = ibf._addItem(serialize(array[i]));
+        ibf = ibf.plus(serialize(array[i]));
       }
       return q(ibf);
     };

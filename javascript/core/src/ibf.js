@@ -61,11 +61,11 @@
       return ibfFromBuckets(bucketsCopy, digest, selector);
     }
 
-    function addItem(content) {
+    function plus(content) {
       return modify(1, content);
     }
 
-    function asDifference() {
+    function toDifference() {
       var added = [];
       var removed = [];
 
@@ -158,8 +158,8 @@
       __modify : modify,
       __isEmpty : isEmpty,
       _substract : substract,
-      _asDifference : asDifference,
-      _addItem : addItem,
+      toDifference : toDifference,
+      plus : plus,
       _reduce : reduce,
       toJSON : toJSON
     };
@@ -175,6 +175,6 @@
     return ibfFromBuckets(buckets, digest, selector);
   }
   ibf.fromJSON = fromJSON;
-
+  
   module.exports = ibf;
 })();

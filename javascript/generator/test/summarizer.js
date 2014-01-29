@@ -3,7 +3,7 @@
 
   var assert = require('assert');
   var _ = require('underscore');
-  var summarizer = require('../src/summarizer');
+  var fromGenerator = require('../src/summarizer');
   var sha1 = require('mathsync/src/sha1');
   var utils = require('./utils_typedarrays');
   var selector = require('mathsync/src/bucketSelector').padAndHash(sha1, 4);
@@ -43,7 +43,7 @@
             yield array[i];
           }
         }
-        return summarizer.fromGenerator(generator, serialize, sha1, selector);
+        return fromGenerator(generator, serialize, sha1, selector);
       });
     });
   });

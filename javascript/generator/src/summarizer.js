@@ -3,7 +3,6 @@
 
   var q = require('q');
   var ibfBuilder = require('mathsync/src/ibf');
-  var parent = require('mathsync/src/summarizer');
 
   function levelToSize(level) {
     return Math.pow(2, level);
@@ -24,7 +23,5 @@
     });
   }
 
-  parent.fromGenerator = fromGenerator;
-
-  module.exports = parent;
+  module.exports = fromGenerator;
 })();

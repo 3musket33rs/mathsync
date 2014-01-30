@@ -1,5 +1,6 @@
 var http = require('http');
 var q = require('q');
+var net = require('net');
 
 var data = {};
 
@@ -42,8 +43,13 @@ var remote = ms.summarizer.fromJSON(fetchSummary);
 
 var resolve = ms.resolver.fromSummarizers(local, remote, deserialize);
 
-resolve().done(function (difference) {
+var client = net.connect({ port: process.env.LOOP });
+client.on('data', function(data) {
+  console.log(data.toString());
+});
+
+/*resolve().done(function (difference) {
   console.log(difference);
 }, function (err) {
   throw err;
-});
+});*/

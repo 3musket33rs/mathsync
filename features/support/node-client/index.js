@@ -43,13 +43,44 @@ var remote = ms.summarizer.fromJSON(fetchSummary);
 
 var resolve = ms.resolver.fromSummarizers(local, remote, deserialize);
 
-var client = net.connect({ port: process.env.LOOP });
-client.on('data', function(data) {
-  console.log(data.toString());
-});
+/* IPC with cucumber */
 
-/*resolve().done(function (difference) {
-  console.log(difference);
-}, function (err) {
-  throw err;
-});*/
+function handleLine(line) {
+  var tokens = line.split(' ');
+  if (tokens[0] === 'PUT') {
+    data[tokens[1]] = tokens[2];
+  } else if (tokens[0] === 'DELETE') {
+    delete data[tokens[1]];
+  } else if (tokens[0] === 'SYNC') {
+    resolve().then(function (difference) {
+      var i;
+      var removed = difference.removed;
+      for (i = 0; i < removed.length; i++) {
+        delete data[removed[i].key];
+      }
+      var added = difference.added;
+      for (i = 0; i < added.length; i++) {
+        data[added[i].key] = added[i].value;
+      }
+    }).then(function () {
+      var values = [];
+      for (var key in data) {
+        values.push(key + ':' + data[key]);
+      }
+      client.write(values.join(',') + '\n');
+    }, function (err) {
+      console.log(err);
+    });
+  }
+}
+var client = net.connect({ port: process.env.LOOP });
+client.setEncoding('UTF-8');
+var buff = '';
+client.on('data', function(data) {
+  buff += data;
+  var lines = buff.split('\n');
+  for (var i = 0; i < lines.length - 1; i++) {
+    handleLine(lines[i]);
+  }
+  buff = lines[lines.length - 1];
+});

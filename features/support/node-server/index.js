@@ -28,12 +28,5 @@ app.use(route.get('/summary/:level', function* (level) {
 }));
 
 app.listen(process.env.PORT, function(err) {
-  if (err) {
-    throw err;
-  }
-  fs.writeFile(process.env.PIDFILE, process.pid, function(err) {
-    if (err) {
-      throw err;
-    }
-  });
+  //TODO
 });

@@ -2,6 +2,7 @@ var koa = require('koa');
 var app = koa();
 var fs = require('fs');
 var route = require('koa-route');
+var net = require('net');
 
 var data = {};
 
@@ -28,5 +29,44 @@ app.use(route.get('/summary/:level', function* (level) {
 }));
 
 app.listen(process.env.PORT, function(err) {
-  //TODO
+  if (err) {
+    throw err;
+  }
+
+  /* IPC with cucumber */
+
+  var client = net.connect({ port: process.env.LOOP });
+  client.setEncoding('UTF-8');
+
+  function handlePut(key, value) {
+    data[key] = value;
+    handleGet();
+  }
+  function handleDelete(key) {
+    delete data[key];
+    handleGet();
+  }
+  function handleGet() {
+    var values = [];
+    for (var key in data) {
+      values.push(key + ':' + data[key]);
+    }
+    client.write(values.join(',') + '\n');
+  }
+
+  var conf = { PUT: handlePut, DELETE: handleDelete };
+  function handleLine(line) {
+    var tokens = line.split(' ');
+    conf[tokens[0]].apply(null, tokens.slice(1));
+  }
+
+  var buff = '';
+  client.on('data', function(data) {
+    buff += data;
+    var lines = buff.split('\n');
+    for (var i = 0; i < lines.length - 1; i++) {
+      handleLine(lines[i]);
+    }
+    buff = lines[lines.length - 1];
+  });
 });

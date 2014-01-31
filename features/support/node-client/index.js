@@ -45,36 +45,43 @@ var resolve = ms.resolver.fromSummarizers(local, remote, deserialize);
 
 /* IPC with cucumber */
 
-function handleLine(line) {
-  var tokens = line.split(' ');
-  if (tokens[0] === 'PUT') {
-    data[tokens[1]] = tokens[2];
-  } else if (tokens[0] === 'DELETE') {
-    delete data[tokens[1]];
-  } else if (tokens[0] === 'SYNC') {
-    resolve().then(function (difference) {
-      var i;
-      var removed = difference.removed;
-      for (i = 0; i < removed.length; i++) {
-        delete data[removed[i].key];
-      }
-      var added = difference.added;
-      for (i = 0; i < added.length; i++) {
-        data[added[i].key] = added[i].value;
-      }
-    }).then(function () {
-      var values = [];
-      for (var key in data) {
-        values.push(key + ':' + data[key]);
-      }
-      client.write(values.join(',') + '\n');
-    }, function (err) {
-      console.log(err);
-    });
-  }
-}
 var client = net.connect({ port: process.env.LOOP });
 client.setEncoding('UTF-8');
+
+function handlePut(key, value) {
+  data[key] = value;
+  handleGet();
+}
+function handleDelete(key) {
+  delete data[key];
+  handleGet();
+}
+function handleSync() {
+  return resolve().then(function (difference) {
+    difference.removed.forEach(function (i) {
+      delete data[i.key];
+    });
+    difference.added.forEach(function (i) {
+      data[i.key] = i.value;
+    });
+  }).then(handleGet, function (err) {
+    console.log('Error during synchronization: ', err);
+  });
+}
+function handleGet() {
+  var values = [];
+  for (var key in data) {
+    values.push(key + ':' + data[key]);
+  }
+  client.write(values.join(',') + '\n');
+}
+
+var conf = { GET: handleGet, PUT: handlePut, DELETE: handleDelete, SYNC: handleSync };
+function handleLine(line) {
+  var tokens = line.split(' ');
+  conf[tokens[0]].apply(null, tokens.slice(1));
+}
+
 var buff = '';
 client.on('data', function(data) {
   buff += data;

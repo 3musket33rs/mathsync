@@ -1,8 +1,5 @@
 Feature: Sync API
 
-  Background:
-    Given API test application is started
-
   Scenario: A value is added to my store
     Given the server stores contains items 1 to 10
       And I synced the server

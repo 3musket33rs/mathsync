@@ -1,4 +1,6 @@
 init:
+	gem install bundler
+	bundle install
 	make init -C javascript
 	make init -C features/support
 	make init -C doc
@@ -8,8 +10,10 @@ build:
 	make build -C javascript
 	make build -C doc
 
-test: build
-	echo "Not yet implemented - bundle exec cucumber"
+testonly:
+	env CLIENT=node-client SERVER=node-server bundle exec cucumber
+
+test: build, testonly
 
 deploy:
 	make deploy -C java

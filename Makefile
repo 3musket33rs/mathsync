@@ -1,19 +1,14 @@
 init:
-	gem install bundler
-	bundle install
 	make init -C javascript
 	make init -C features/support
 	make init -C doc
+	make init -C integration-test
 
 build:
 	make build -C java
 	make build -C javascript
 	make build -C doc
-
-testonly:
-	env CLIENT=node-client SERVER=node-server bundle exec cucumber
-
-test: build, testonly
+	make build -C integration-test
 
 deploy:
 	make deploy -C java

@@ -32,7 +32,6 @@ Per-language low levels libraries to be easily integrated anywhere plus higher l
 * [make](http://www.gnu.org/software/make/)
 * JDK7
 * [Node.js](http://nodejs.org/)
-* [Ruby](https://www.ruby-lang.org/)
 
 [Vagrant](http://www.vagrantup.com/) can be used to get a working virtual machine in minutes with all build requirements. Code can be edited directly in the host while compiling occurs in the VM (at `/home/vagrant/dev`). Windows users should ensure that the virtual machine is able to create symlinks on the host file system.
 
@@ -54,10 +53,10 @@ make build
 
 TODO
 
-Each module is unit tested during their own build. Modules are cross-tested using [Cucumber](http://cukes.info/), launched with:
+Each module is unit tested during their own build, and later on cross tester:
 
 ```
-make init
+make test
 ```
 
 ### Version bump

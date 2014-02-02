@@ -1,12 +1,14 @@
 (function () {
   'use strict';
 
-  var q = require('q');
+  if (typeof Promise === 'undefined') { 
+    throw new Error('No Promise implementation available, please add one with require("yourPreferedPromiseImplementation")'); 
+  }
 
   function fromSummarizers(local, remote, deserialize) {
 
     function fetchDifference(level) {
-      return q.all([local(level), remote(level)]).then(function (arr) {
+      return Promise.all([local(level), remote(level)]).then(function (arr) {
         return arr[1].minus(arr[0]).toDifference();
       }).then(function (diff) {
         if (diff === null) {

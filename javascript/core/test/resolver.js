@@ -3,6 +3,7 @@
 
   var assert = require('assert');
   var _ = require('underscore');
+  global.Promise = require('q');
   var resolver = require('../src/resolver');
   var summarizer = require('../src/summarizer');
   var sha1 = require('../src/sha1');

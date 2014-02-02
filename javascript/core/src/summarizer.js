@@ -1,7 +1,10 @@
 (function () {
   'use strict';
 
-  var q = require('q');
+  if (typeof Promise === 'undefined') { 
+    throw new Error('No Promise implementation available, please add one with require("yourPreferedPromiseImplementation")'); 
+  }
+
   var ibfBuilder = require('./ibf');
 
   function levelToSize(level) {
@@ -14,13 +17,13 @@
       for (var i = 0; i < array.length; i++) {
         ibf = ibf.plus(serialize(array[i]));
       }
-      return q(ibf);
+      return new Promise(ibf);
     };
   }
 
   function fromJSON(producer, digest, selector) {
     return function (level) {
-      return q(producer(level)).then(function (json) {
+      return new Promise(producer(level)).then(function (json) {
         return ibfBuilder.fromJSON(json, digest, selector);
       });
     };
@@ -28,7 +31,7 @@
 
   function fromLarge(producer) {
     return function (level) {
-      return q(producer()).then(function (ibf) {
+      return new Promise(producer()).then(function (ibf) {
         return ibf._reduce(levelToSize(level));
       });
     };

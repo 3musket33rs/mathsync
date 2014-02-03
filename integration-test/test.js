@@ -4,12 +4,12 @@
   var assert = require('assert');
   var startClient = require('./' + process.env.CLIENT + '/client');
   var startServer = require('./' + process.env.SERVER + '/server');
-  
+
   var client;
   var server;
 
   before(function (done) {
-    var port = 12003
+    var port = 12003;
     startServer(port).then(function (s) {
       server = s;
       return startClient(port);
@@ -21,11 +21,11 @@
   beforeEach(function (done) {
     server.clear().then(client.clear).then(function () {}).then(done, done);
   });
-  
+
   after(function (done) {
     client.stop().then(server.stop).then(done, done);
   });
-  
+
   describe('Synchronization', function() {
 
     it('should handle added item', function(done) {

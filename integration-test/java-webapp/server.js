@@ -30,6 +30,11 @@
       return read();
     }
 
+    function del(key, value) {
+      connection.write('DELETE ' + key + '\r\n');
+      return read();
+    }
+
     function read() {
       var d = q.defer();
       connection.once('line', function (line) {
@@ -63,6 +68,7 @@
       deferred.resolve({
         clear: clear,
         put: put,
+        del: del,
         stop: stop
       });
     });

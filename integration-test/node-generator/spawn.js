@@ -29,6 +29,11 @@
       return read();
     }
 
+    function del(key, value) {
+      connection.write('DELETE ' + key + '\r\n');
+      return read();
+    }
+
     function get() {
       connection.write('GET\r\n');
       return read();
@@ -71,6 +76,7 @@
         clear: clear,
         get: get,
         put: put,
+        del: del,
         sync: sync,
         stop: stop
       });

@@ -78,6 +78,9 @@ public class SummaryServlet extends HttpServlet {
           case "PUT":
             content.put(tokens[1], tokens[2]);
             break;
+          case "DELETE":
+            content.remove(tokens[1]);
+            break;
           }
 
           List<String> items = new ArrayList<>();

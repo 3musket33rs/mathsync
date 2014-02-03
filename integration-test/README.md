@@ -17,7 +17,7 @@ The actual server has methods:
 * `stop()`: stops the server
 * `clear()`: clears the dataset
 * `put(key, value)`: sets a key to a value in the dataset
-* `delete(key)`: unsets a key from the dataset
+* `del(key)`: unsets a key from the dataset
 
 All method return a promise fullfilled when the action is actually performed.
 
@@ -34,7 +34,7 @@ The actual client has methods:
 * `stop()`: stops the client
 * `clear()`: clears the dataset
 * `put(key, value)`: sets a key to a value in the dataset
-* `delete(key)`: unsets a key from the dataset
+* `del(key)`: unsets a key from the dataset
 * `sync()`: syncs with the server
 * `get()`: retrieves the client state
 

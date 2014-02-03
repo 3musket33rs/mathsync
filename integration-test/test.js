@@ -35,7 +35,9 @@
     });
 
     it('should handle removed item', function(done) {
-      client.put('key', 'value').then(client.sync).then(client.get).then(function (state) {
+      server.put('key', 'value').then(client.sync).then(function () {
+        return server.del('key');
+      }).then(client.sync).then(client.get).then(function (state) {
         assert.equal(undefined, state.key);
       }).then(done, done);
     });

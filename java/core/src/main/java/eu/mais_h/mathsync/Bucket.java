@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.codec.binary.StringUtils;
 import org.json.JSONArray;
 
 class Bucket {
@@ -78,7 +79,7 @@ class Bucket {
   }
 
   private String serialize(byte[] array) {
-    return Base64.encodeBase64String(array);
+    return StringUtils.newStringUtf8(Base64.encodeBase64(array, false));
   }
 
   private static byte[] deserialize(String base64) {

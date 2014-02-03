@@ -1,6 +1,5 @@
 init:
 	make init -C javascript
-	make init -C features/support
 	make init -C doc
 	make init -C integration-test
 

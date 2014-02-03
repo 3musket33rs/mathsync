@@ -7,7 +7,7 @@ In your `package.json`:
 ```
 {
   "dependencies": {
-    "mathsync": "0.2.x"
+    "mathsync": "0.2.x-alpha"
   }
 }
 ```

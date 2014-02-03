@@ -66,14 +66,18 @@
         stop: stop
       });
     });
+
+    var env = {};
+    for (var prop in process.env) {
+      env[prop] = process.env[prop];
+    }
+    env.LOOP = loop;
+
     server.listen(loop, function() {
       child = spawn('mvn', ['clean', 'package', 'jetty:run', '-Djetty.port=' + listenport], {
         cwd: __dirname,
         stdio: 'inherit',
-        env: {
-          LOOP: loop,
-          PATH: process.env.PATH
-        }
+        env: env
       });
     });
 

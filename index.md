@@ -1,4 +1,5 @@
 ---
+layout: default
 title: MathSync
 ---
 
@@ -19,11 +20,6 @@ Nice features:
 * underlying structure can be computed ahead of time
 * self-stabilizing algorithm (an error is corrected at the next synchronization)
 * does not require the server to record all changes
-
-## Documentation
-
-* [Javadoc](javadoc)
-* [Google group](https://groups.google.com/forum/#!forum/mathsync)
 
 ## License
 

@@ -2,7 +2,8 @@
   'use strict';
 
   function intFromDigestedBytes(digested) {
-    return new Int32Array(digested)[0];
+    var int8arr = new Int8Array(digested);
+    return ((int8arr[0] << 24) | (int8arr[1] << 16) | (int8arr[2] << 8) | (int8arr[3]));
   }
 
   function padAndHash(digest, spread) {

@@ -22,7 +22,9 @@ Nice features:
 
 ## Documentation
 
+* [Code on Github](https://github.com/3musket33rs/mathsync)
 * [Javadoc](javadoc)
+* [Jsdoc](jsdoc)
 * [Google group](https://groups.google.com/forum/#!forum/mathsync)
 
 ## License

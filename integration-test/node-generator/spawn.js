@@ -50,9 +50,11 @@
         var data = {};
         var elements = line.split(',');
         elements.forEach(function (element) {
-          var a = element.split(':');
-          data[a[0]] = a[1];
-        })
+          if (element.length > 0) {
+            var a = element.split(':');
+            data[a[0]] = a[1];
+          }
+        });
         d.resolve(data);
       });
       return d.promise;

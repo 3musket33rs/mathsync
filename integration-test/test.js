@@ -41,5 +41,13 @@
         assert.equal(undefined, state.key);
       }).then(done, done);
     });
+
+    it('should handle modified item', function(done) {
+      server.put('key', 'value1').then(client.sync).then(function () {
+        return server.put('key', 'value2');
+      }).then(client.sync).then(client.get).then(function (state) {
+        assert.equal('value2', state.key);
+      }).then(done, done);
+    });
   });
 })();

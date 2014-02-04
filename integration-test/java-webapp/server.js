@@ -45,7 +45,7 @@
             var a = element.split(':');
             data[a[0]] = a[1];
           }
-        })
+        });
         d.resolve(data);
       });
       return d.promise;

@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "test": "mocha --harmony --reporter spec -t 40s"
+  },
+  "dependencies": {
+    "mocha": "1.15.x"
+  }
+}

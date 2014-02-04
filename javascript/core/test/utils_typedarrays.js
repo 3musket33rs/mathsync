@@ -8,7 +8,7 @@
     var v2 = new Int8Array(array2);
     assert.strictEqual(v1.length, v2.length, 'Arrays do not have the same length');
     for (var i = 0; i < v1.length; i++) {
-      assert.strictEqual(v1.length, v2.length, 'Item at ' + i + ' differs');
+      assert.strictEqual(v1[i], v2[i], 'Item at ' + i + ' differs: ' + v1[i] + ' vs ' + v2[i]);
     }
   }
 

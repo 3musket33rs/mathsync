@@ -49,15 +49,7 @@ And builds are launched with:
 make build
 ```
 
-### Testing
-
-TODO
-
-Each module is unit tested during their own build, and later on cross tester:
-
-```
-make test
-```
+Each module is unit tested during its own build and later on cross tested as part of the standard build.
 
 ### Version bump
 

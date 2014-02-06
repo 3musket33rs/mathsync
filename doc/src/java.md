@@ -9,7 +9,7 @@ title: MathSync
 
 ## Server
 
-A a dependency towards the library:
+Add a dependency towards the library:
 
 ```
 <dependency>

@@ -2,43 +2,40 @@ package eu.mais_h.mathsync.serialize;
 
 import java.io.UnsupportedEncodingException;
 
+import eu.mais_h.mathsync.util.Function;
+
 /**
- * Serializer and deserializer using string representation of items.
- *
- * <p>The UTF-8 encoding of strings is used to cary them on the network.</p>
+ * Serializer going through a string representation of items.
+ * 
+ * <p>{@link StringDeserializer} should be used as the corresponding {@link Deserializer}.</p>
  */
-public class StringSerializer implements Serializer<String>, Deserializer<String> {
+public class StringSerializer<T> implements Serializer<T> {
 
-  private static final String ENCODING = "UTF-8";
-  private static final StringSerializer INSTANCE = new StringSerializer();
-
-  private StringSerializer() {
+  private final Function<T, String> toString;
+  
+  private StringSerializer(Function<T, String> toString) {
+    this.toString = toString;
   }
 
   @Override
-  public byte[] serialize(String item) {
-    try {
-      return item.getBytes(ENCODING);
+  public byte[] serialize(T item) {
+    String stringified = toString.apply(item);
+    byte[] result;
+    try { 
+      result = stringified.getBytes("UTF-8");
     } catch (UnsupportedEncodingException e) {
-      throw new AssertionError("JVM does not support " + ENCODING + " encoding");
+      throw new AssertionError("JVM does not support UTF-8 encoding");
     }
-  }
-
-  @Override
-  public String deserialize(byte[] item) {
-    try {
-      return new String(item, ENCODING);
-    } catch (UnsupportedEncodingException e) {
-      throw new AssertionError("JVM does not support " + ENCODING + " encoding");
-    }
+    return result;
   }
 
   /**
-   * Retrieves an instance of this serializer/deserializer kind.
+   * Retrieves an instance of this serializer.
    *
-   * @return an instance of this serializer/deserializer kind.
+   * @param toString the function to convert items to string as an intermediate representation.
+   * @return an instance of this serializer kind.
    */
-  public static StringSerializer get() {
-    return INSTANCE;
+  public static <T> Serializer<T> create(Function<T, String> toString) {
+    return new StringSerializer<>(toString);
   }
 }

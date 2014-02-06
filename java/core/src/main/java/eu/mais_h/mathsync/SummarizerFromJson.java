@@ -2,6 +2,7 @@ package eu.mais_h.mathsync;
 
 import eu.mais_h.mathsync.digest.Digester;
 import eu.mais_h.mathsync.digest.Sha1Digester;
+import eu.mais_h.mathsync.util.Function;
 
 /**
  * Summarizer which deserializes JSON payloads from a remote source.

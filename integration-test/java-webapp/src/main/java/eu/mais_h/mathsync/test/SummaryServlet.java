@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,24 +21,21 @@ import org.apache.commons.lang3.StringUtils;
 
 import eu.mais_h.mathsync.Summarizer;
 import eu.mais_h.mathsync.SummarizerFromItems;
-import eu.mais_h.mathsync.serialize.Serializer;
+import eu.mais_h.mathsync.serialize.StringSerializer;
+import eu.mais_h.mathsync.util.Function;
 
 public class SummaryServlet extends HttpServlet {
 
   private static final long serialVersionUID = 8629863338196207094L;
 
   private final Map<String, String> content = Collections.synchronizedMap(new HashMap<String, String>());
-  private final Summarizer summarizer = SummarizerFromItems.simple(content.entrySet(), new Serializer<Entry<String, String>>() {
+  private final Summarizer summarizer = SummarizerFromItems.simple(content.entrySet(), StringSerializer.create(new Function<Entry<String, String>, String>() {
 
     @Override
-    public byte[] serialize(Entry<String, String> item) {
-      try {
-        return (item.getKey() + ':' + item.getValue()).getBytes("UTF-8");
-      } catch (UnsupportedEncodingException e) {
-        throw new AssertionError("JVM does not support UTF-8 encoding");
-      }
+    public String apply(Entry<String, String> t) {
+      return t.getKey() + ':' + t.getValue();
     }
-  });
+  }));
 
   public SummaryServlet() {
     new Listener().start();

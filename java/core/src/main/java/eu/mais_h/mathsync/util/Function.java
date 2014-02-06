@@ -1,4 +1,4 @@
-package eu.mais_h.mathsync;
+package eu.mais_h.mathsync.util;
 
 /**
  * Simplified backport of <a href="http://download.java.net/jdk8/docs/api/java/util/function/Function.html">java.util.function.Function</a>.

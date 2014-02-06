@@ -8,11 +8,11 @@ import eu.mais_h.mathsync.digest.Sha1Digester;
  */
 public class SummarizerFromJson implements Summarizer {
 
-  private final Function producer;
+  private final Function<Integer, String> producer;
   private final Digester digester;
   private final BucketSelector selector;
 
-  SummarizerFromJson(Function producer, Digester digester, BucketSelector selector) {
+  SummarizerFromJson(Function<Integer, String> producer, Digester digester, BucketSelector selector) {
     this.producer = producer;
     this.digester = digester;
     this.selector = selector;
@@ -29,7 +29,7 @@ public class SummarizerFromJson implements Summarizer {
    * @param producer function which fetches the JSON payload corresponding to a given level.
    * @return a summarizer with {@link Sha1Digester SHA-1 digester} and default bucket selector.
    */
-  public static <T> Summarizer simple(Function producer) {
+  public static <T> Summarizer simple(Function<Integer, String> producer) {
     return custom(producer, Sha1Digester.get(), Defaults.defaultSelector());
   }
 
@@ -41,21 +41,7 @@ public class SummarizerFromJson implements Summarizer {
    * @param selector the strategy to choose buckets to store items in.
    * @return a summarizer corresponding to the input.
    */
-  public static <T> Summarizer custom(Function producer, Digester digester, BucketSelector selector) {
+  public static <T> Summarizer custom(Function<Integer, String> producer, Digester digester, BucketSelector selector) {
     return new SummarizerFromJson(producer, digester, selector);
-  }
-
-  /**
-   * De-generified/simplified backport of <a href="http://download.java.net/jdk8/docs/api/java/util/function/Function.html">java.util.function.Function</a>.
-   */
-  public static interface Function {
-
-    /**
-     * Produces the JSON payload corresponding to the given level.
-     *
-     * @param level the level to fetch the JSON payload of.
-     * @return the JSON payload corresponding to the given level.
-     */
-    String apply(int level);
   }
 }

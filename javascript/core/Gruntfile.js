@@ -37,7 +37,7 @@ module.exports = function(grunt) {
     },
     jsdoc : {
       dist : {
-        src: ['src/*.js', 'README.md', 'definitions.js'],
+        src: [ 'src/*.js', 'README.md' ],
         options: {
           destination: 'apidocs'
         }

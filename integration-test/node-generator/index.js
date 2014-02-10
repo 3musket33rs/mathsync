@@ -5,13 +5,12 @@ var ms = require('mathsync-generator');
 /* Local data */
 var data = {};
 
-function serialize(item) {
-  var buffer = new Buffer(item.key + ':' + item.value, 'utf-8');
-  return new Uint8Array(buffer).buffer;
-}
+var serialize = ms.serialize.fromString();
+var deserialize = ms.serialize.toString();
+
 var local = ms.summarizer.fromGenerator(function* () {
   for (var k in data) {
-    yield { key: k, value: data[k] };
+    yield (k + ':' + data[k]);
   }
 }, serialize);
 
@@ -20,7 +19,7 @@ var resolve;
 var start = q().then(function () {
 
   /* Upstream data view and synchronization */
-  
+
   if (process.env.UPSTREAM) {
     var http = require('http');
 
@@ -42,15 +41,10 @@ var start = q().then(function () {
     }
     var remote = ms.summarizer.fromJSON(fetchSummary);
 
-    function deserialize(buffer) {
-      var str = new Buffer(new Uint8Array(buffer)).toString('utf-8');
-      var arr = str.split(':');
-      return { key: arr[0], value: arr[1] };
-    }
     resolve = ms.resolver.fromSummarizers(local, remote, deserialize);
   }
 }).then(function (api) {
-  
+
   /* HTTP server */
 
   if (process.env.LISTEN) {
@@ -79,7 +73,7 @@ var start = q().then(function () {
     return deferred.promise;
   }
 }).then(function () {
-  
+
   /* Inter process communication */
 
   var client = net.connect({ port: process.env.LOOP });
@@ -107,10 +101,12 @@ var start = q().then(function () {
   function handleSync() {
     return resolve().then(function (difference) {
       difference.removed.forEach(function (i) {
-        delete data[i.key];
+        var item = i.split(':');
+        delete data[item[0]];
       });
       difference.added.forEach(function (i) {
-        data[i.key] = i.value;
+        var item = i.split(':');
+        data[item[0]] = item[1];
       });
     }).then(replyGet, function (err) {
       console.log('Error during synchronization: ', err);

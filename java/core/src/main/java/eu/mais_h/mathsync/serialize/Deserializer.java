@@ -11,7 +11,7 @@ public interface Deserializer<T> {
    * Deserializes an array of bytes back to an object.
    *
    * <p>Any array of bytes should lead to either a non <code>null</code> value or throw an
-   * {@link IllegalArgumentException}.
+   * {@link IllegalArgumentException}.</p>
    *
    * <p>The output must be consistent, an identical output should be returned if called twice
    * on the identical arrays: for any valid <code>a1</code> and <code>a2</code>,

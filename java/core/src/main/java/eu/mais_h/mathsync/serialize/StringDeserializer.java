@@ -6,17 +6,17 @@ import eu.mais_h.mathsync.util.Function;
 
 /**
  * Deserializer going through a string representation of items.
- * 
+ *
  * <p>{@link StringSerializer} should be used as the corresponding {@link Serializer}.</p>
  */
 public class StringDeserializer<T> implements Deserializer<T> {
 
   private Function<String, T> toObject;
-  
+
   private StringDeserializer(Function<String, T> toObject) {
     this.toObject = toObject;
   }
-  
+
   @Override
   public T deserialize(byte[] item) {
     String stringified;
@@ -37,5 +37,14 @@ public class StringDeserializer<T> implements Deserializer<T> {
    */
   public static <T> Deserializer<T> create(Function<String, T> toObject) {
     return new StringDeserializer<>(toObject);
+  }
+  public static Deserializer<String> create() {
+    return create(new Function<String, String>() {
+
+      @Override
+      public String apply(String t) {
+        return t;
+      }
+    });
   }
 }

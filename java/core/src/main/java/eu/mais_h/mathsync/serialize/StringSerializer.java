@@ -6,13 +6,13 @@ import eu.mais_h.mathsync.util.Function;
 
 /**
  * Serializer going through a string representation of items.
- * 
+ *
  * <p>{@link StringDeserializer} should be used as the corresponding {@link Deserializer}.</p>
  */
 public class StringSerializer<T> implements Serializer<T> {
 
   private final Function<T, String> toString;
-  
+
   private StringSerializer(Function<T, String> toString) {
     this.toString = toString;
   }
@@ -21,7 +21,7 @@ public class StringSerializer<T> implements Serializer<T> {
   public byte[] serialize(T item) {
     String stringified = toString.apply(item);
     byte[] result;
-    try { 
+    try {
       result = stringified.getBytes("UTF-8");
     } catch (UnsupportedEncodingException e) {
       throw new AssertionError("JVM does not support UTF-8 encoding");
@@ -37,5 +37,20 @@ public class StringSerializer<T> implements Serializer<T> {
    */
   public static <T> Serializer<T> create(Function<T, String> toString) {
     return new StringSerializer<>(toString);
+  }
+
+  /**
+   * Retrieves an instance of this serializer directly serializing strings.
+   *
+   * @return an instance of this serializer kind.
+   */
+  public static Serializer<String> create() {
+    return create(new Function<String, String>() {
+
+      @Override
+      public String apply(String t) {
+        return t;
+      }
+    });
   }
 }

@@ -25,7 +25,7 @@ This library works differently by being able to create a compressed data structu
 
 The library only deals with the third item so that it lets the application choosing how to record offline changes and handle conflicts because those are business specific. When fetching changes the library can simply take everything coming from the server. For that to work one only needs to provide the source of items, how to serialize/deserialize them, and how to fetch the data structure on the server.
 
-Get started on [javascript](/jsdoc) or in [java](/javadoc).
+Get started on [javascript](/jsdoc) or in [java](/java.html).
 
 ## Performances
 

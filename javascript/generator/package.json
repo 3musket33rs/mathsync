@@ -1,6 +1,6 @@
 {
   "name": "mathsync-generator",
-  "version": "0.2.0",
+  "version": "0.3.0-alpha",
   "description": "Generator-based API for mathsync",
   "scripts": {
     "test": "mocha --harmony --reporter spec"
@@ -9,7 +9,7 @@
   "license": "Apache",
   "main": "src/index.js",
   "dependencies": {
-    "mathsync": "0.2.0",
+    "mathsync": "0.3.0-alpha",
     "q": "0.9.x"
   },
   "devDependencies": {

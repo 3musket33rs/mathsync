@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "mathsync-generator": "0.2.0-alpha",
+    "mathsync-generator": "0.2.0",
     "koa": "0.1.x",
     "koa-route": "1.0.x",
     "q": "0.9.x"

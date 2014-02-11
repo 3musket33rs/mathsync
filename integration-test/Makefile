@@ -6,3 +6,9 @@ init:
 build:
 	env CLIENT=node-generator SERVER=node-generator npm test
 	env CLIENT=node-generator SERVER=java-webapp npm test
+
+set-dev-version:
+	make set-dev-version -C java-webapp
+
+set-release-version:
+	make set-release-version -C java-webapp

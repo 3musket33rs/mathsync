@@ -9,13 +9,13 @@ title: MathSync
 
 ## Server
 
-A a dependency towards the library:
+Add a dependency towards the library:
 
 ```
 <dependency>
   <groupId>eu.mais-h.mathsync</groupId>
   <artifactId>core</artifactId>
-  <version>0.2.0-SNAPSHOT</version>
+  <version>0.2.0</version>
 </dependency>
 ```
 

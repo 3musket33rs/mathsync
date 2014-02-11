@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: External: Difference</title>
+    <title>JSDoc: Module: serialize</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">External: Difference</h1>
+    <h1 class="page-title">Module: serialize</h1>
     
     
 
@@ -27,7 +27,7 @@
     
 <header>
     <h2>
-    Difference
+    serialize
     </h2>
     
 </header>  
@@ -37,8 +37,6 @@
     
     
     
-        
-            <div class="description">Represents the difference between two states.</div>
         
         
         
@@ -64,7 +62,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line12">line 12</a>
+        <a href="serialize.js.html">serialize.js</a>, <a href="serialize.js.html#line55">line 55</a>
     </li></ul></dd>
     
     
@@ -98,7 +96,7 @@
         <dl>
             
 <dt>
-    <h4 class="name" id="added"><span class="type-signature"></span>added<span class="signature">()</span><span class="type-signature"> &rarr; {Array.&lt;T>}</span></h4>
+    <h4 class="name" id="fromString"><span class="type-signature">&lt;static> </span>fromString<span class="signature">(func)</span><span class="type-signature"> &rarr; {<a href="global.html#serialize">serialize</a>}</span></h4>
     
     
 </dt>
@@ -106,7 +104,7 @@
     
     
     <div class="description">
-        Represents the set of items added on the remote side compared to the local state.
+        Serializes string view of objects to bytes.
     </div>
     
 
@@ -114,6 +112,54 @@
     
     
     
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>func</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">translates objects to string before serializing them, can be skipped if the item is already a string.</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
@@ -139,7 +185,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line13">line 13</a>
+        <a href="serialize.js.html">serialize.js</a>, <a href="serialize.js.html#line67">line 67</a>
     </li></ul></dd>
     
     
@@ -164,7 +210,7 @@
     
             
 <div class="param-desc">
-    the array of items added on the remote side compared to the local state.
+    a serializer function which converts objects to string and take the bytes out of the string.
 </div>
 
 
@@ -175,7 +221,7 @@
 	</dt>
 	<dd>
 		
-<span class="param-type">Array.&lt;T></span>
+<span class="param-type"><a href="global.html#serialize">serialize</a></span>
 
 
 	</dd>
@@ -189,7 +235,7 @@
         
             
 <dt>
-    <h4 class="name" id="removed"><span class="type-signature"></span>removed<span class="signature">()</span><span class="type-signature"> &rarr; {Array.&lt;T>}</span></h4>
+    <h4 class="name" id="toString"><span class="type-signature">&lt;static> </span>toString<span class="signature">(func)</span><span class="type-signature"> &rarr; {<a href="global.html#deserialize">deserialize</a>}</span></h4>
     
     
 </dt>
@@ -197,7 +243,7 @@
     
     
     <div class="description">
-        Represents the set of items removed on the remote side compared to the local state.
+        Deserializes objects from bytes to a string view.
     </div>
     
 
@@ -205,6 +251,54 @@
     
     
     
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>func</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">retrieves an object corresponding to the input string view, can be skipped if target type is string.</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
     
     
     
@@ -230,7 +324,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line14">line 14</a>
+        <a href="serialize.js.html">serialize.js</a>, <a href="serialize.js.html#line76">line 76</a>
     </li></ul></dd>
     
     
@@ -255,7 +349,7 @@
     
             
 <div class="param-desc">
-    the array of items removed on the remote side compared to the local state.
+    a deserializer function which reads strings from byte arrays and converts them to objects.
 </div>
 
 
@@ -266,7 +360,7 @@
 	</dt>
 	<dd>
 		
-<span class="param-type">Array.&lt;T></span>
+<span class="param-type"><a href="global.html#deserialize">deserialize</a></span>
 
 
 	</dd>

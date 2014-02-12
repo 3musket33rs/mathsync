@@ -9,7 +9,7 @@
   "license": "Apache",
   "main": "src/index.js",
   "dependencies": {
-    "rusha": "0.7.x",
+    "rusha": ">=0.7.3",
     "q": "0.9.x"
   },
   "devDependencies": {

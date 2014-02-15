@@ -3,6 +3,10 @@ layout: default
 title: MathSync
 ---
 
+# On the road to 0.3.0
+
+* performance improvements by batching summary updates
+
 # 0.2.0
 
 * String serialization

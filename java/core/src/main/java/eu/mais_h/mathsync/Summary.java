@@ -1,5 +1,7 @@
 package eu.mais_h.mathsync;
 
+import java.util.Iterator;
+
 /**
  * Represents summarized data.
  * 
@@ -22,6 +24,17 @@ public interface Summary {
    * @return a new summary with the item being included.
    */
   Summary plus(byte[] item);
+
+  /**
+   * Adds several items to the summary.
+   * 
+   * <p>Equivalent to repeatedly calling {@link #plus(byte[])} for each element, but this
+   * method can do optimizations for batch updates.</p>
+   * 
+   * @param items the items to add.
+   * @return a new summary with the items being included.
+   */
+  Summary plus(Iterator<byte[]> items);
 
   /**
    * Substracts a summary from this one.

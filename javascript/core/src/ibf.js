@@ -3,14 +3,6 @@
 
   var emptyBucket = require('./bucket');
 
-  function arrayCopy(array) {
-    var copy = [];
-    for (var i = 0; i < array.length; i++) {
-      copy.push(array[i]);
-    }
-    return copy;
-  }
-
   function arraysEqual(a, b) {
     if (!a || !b) {
       return false;
@@ -50,63 +42,83 @@
       return json;
     }
 
-    function modify(variation, content) {
+    function copyBuckets() {
+      var copy = [];
+      for (var i = 0; i < buckets.length; i++) {
+        copy.push(buckets[i]);
+      }
+      return copy;
+    }
+
+    function modifyWithSideEffect(bucketsCopy, variation, content) {
       var digested = digest(content);
       var selected = selector(content);
-      var bucketsCopy = arrayCopy(buckets, buckets.length);
       for (var i = 0; i < selected.length; i++) {
         var b = selected[i] % buckets.length;
         bucketsCopy[b] = bucketsCopy[b].modify(variation, content, digested);
       }
-      return ibfFromBuckets(bucketsCopy, digest, selector);
+    }
+
+    function modifyManyWithSideEffect(bucketsCopy, variation, items) {
+      var n = items.next();
+      while (!n.done) {
+        modifyWithSideEffect(bucketsCopy, variation, n.value);
+        n = items.next();
+      }
     }
 
     function plus(content) {
-      return modify(1, content);
+      var bucketsCopy = copyBuckets();
+      if (content instanceof ArrayBuffer) {
+        modifyWithSideEffect(bucketsCopy, 1, content);
+        return ibfFromBuckets(bucketsCopy, digest, selector);
+      } else if (content.next) {
+        modifyManyWithSideEffect(bucketsCopy, 1, content);
+        return ibfFromBuckets(bucketsCopy, digest, selector);
+      } else {
+        throw new TypeError('Ibf#plus takes either an ArrayBuffer or an iterator, given ' + content);
+      }
     }
 
     function toDifference() {
+      var bucketsCopy = copyBuckets();
+      var l = bucketsCopy.length;
+
       var added = [];
       var removed = [];
 
-      var previous = that;
-      var next = that;
-      while (next !== null) {
-        previous = next;
-        next = performNextOperation(previous, added, removed);
-      }
-
-      if (previous.__isEmpty()) {
-        return { added: added, removed: removed };
-      } else {
-        return null;
-      }
-    }
-
-    function performNextOperation(filtered, added, removed) {
-      var buckets = filtered.__buckets;
-      var bucket;
-      var items;
-      var verified;
-      for (var i = 0; i < buckets.length; i++) {
-        bucket = buckets[i];
-        items = bucket.items();
-        if (items === 1 || items === -1) {
-          verified = verify(bucket);
-          if (verified !== null) {
-            switch (items) {
-            case 1:
-              added.push(verified);
-              break;
-            case -1:
-              removed.push(verified);
-              break;
+      // Search for unary buckets until there is nothing to do
+      var i, items, b, verified, found = true;
+      while (found) {
+        found = false;
+        for (i = 0; i < l; i++) {
+          b = bucketsCopy[i];
+          items = b.items();
+          if (items === 1 || items === -1) {
+            verified = verify(b);
+            if (verified !== null) {
+              switch (items) {
+              case 1:
+                added.push(verified);
+                break;
+              case -1:
+                removed.push(verified);
+                break;
+              }
+              modifyWithSideEffect(bucketsCopy, -items, verified);
+              found = true;
             }
-            return filtered.__modify(-items, verified);
           }
         }
       }
-      return null;
+
+      // If some buckets are not empty, there was not enough information to deserialize
+      for (i = 0; i < l; i++) {
+        if (!bucketsCopy[i].isEmpty()) {
+          return null;
+        }
+      }
+      return { added: added, removed: removed };
     }
 
     function reduce(toSize) {
@@ -134,15 +146,6 @@
       }
     }
 
-    function isEmpty() {
-      for (var i = 0; i < buckets.length; i++) {
-        if (!buckets[i].isEmpty()) {
-          return false;
-        }
-      }
-      return true;
-    }
-
     function minus(other) {
       var updated = [];
       var otherBucket;
@@ -155,8 +158,6 @@
 
     var that = {
       __buckets : buckets,
-      __modify : modify,
-      __isEmpty : isEmpty,
       minus : minus,
       toDifference : toDifference,
       plus : plus,
@@ -175,6 +176,6 @@
     return ibfFromBuckets(buckets, digest, selector);
   }
   ibf.fromJSON = fromJSON;
-  
+
   module.exports = ibf;
 })();

@@ -10,11 +10,22 @@
 
   function fromItems(array, serialize, digest, selector) {
     return function (level) {
-      var ibf = ibfBuilder(levelToSize(level), digest, selector);
-      for (var i = 0; i < array.length; i++) {
-        ibf = ibf.plus(serialize(array[i]));
-      }
-      return q(ibf);
+      var empty = ibfBuilder(levelToSize(level), digest, selector);
+      var l = array.length;
+      var i = 0;
+      var filled = empty.plus({
+        next: function () {
+          var res;
+          if (i < l) {
+            res = { done: false, value: serialize(array[i]) };
+            i++;
+          } else {
+            res = { done: true, value: undefined };
+          }
+          return res;
+        }
+      });
+      return q(filled);
     };
   }
 

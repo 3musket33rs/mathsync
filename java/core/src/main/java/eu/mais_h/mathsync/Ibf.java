@@ -51,12 +51,14 @@ class Ibf implements Summary {
   @Override
   public Difference<byte[]> toDifference() {
     Bucket[] copy = copyBuckets();
-    
+
     Set<byte[]> added = new HashSet<>();
     Set<byte[]> removed = new HashSet<>();
-    
+
     // Search for unary buckets until there is nothing to do
-    while (true) {
+    boolean found = true;
+    while (found) {
+      found = false;
       for (Bucket b : copy) {
         int items = b.items();
         if (items == 1 || items == -1) {
@@ -71,11 +73,10 @@ class Ibf implements Summary {
               break;
             }
             modifyWithSideEffect(copy, -items, verified);
-            continue;
+            found = true;
           }
         }
       }
-      break;
     }
 
     // If some buckets are not empty, there was not enough information to deserialize
@@ -84,7 +85,7 @@ class Ibf implements Summary {
         return null;
       }
     }
-    
+
     return new SerializedDifference(added, removed);
   }
 
@@ -107,7 +108,7 @@ class Ibf implements Summary {
     if (content == null) {
       throw new IllegalArgumentException("Cannot add a null item to an IBF");
     }
-    
+
     Bucket[] updated = copyBuckets();
     modifyWithSideEffect(updated, 1, content);
     return new Ibf(updated, digester, selector);
@@ -169,19 +170,19 @@ class Ibf implements Summary {
     }
     return new Ibf(updated, digester, selector);
   }
-  
+
   private void modifyManyWithSideEffect(Bucket[] buckets, int variation, Iterator<byte[]> items) {
     while (items.hasNext()) {
       modifyWithSideEffect(buckets, variation, items.next());
     }
   }
-  
+
   /**
    * Modifies an array of buckets.
-   * 
+   *
    * <p>This method has side effects on the given array so {@link #buckets} must never ever
    * be passed to this method, only copies of it obtained through {@link #copyBuckets()}.</p>
-   * 
+   *
    * @param buckets the array of buckets to modify.
    * @param variation the variation to apply.
    * @param item the item to add or remove from buckets.
@@ -193,7 +194,7 @@ class Ibf implements Summary {
       buckets[bucket] = buckets[bucket].modify(variation, item, hashed);
     }
   }
-  
+
   private Bucket[] copyBuckets() {
     return Arrays.copyOf(buckets, buckets.length);
   }

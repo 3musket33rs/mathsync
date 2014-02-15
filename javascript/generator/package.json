@@ -5,6 +5,10 @@
   "scripts": {
     "test": "mocha --harmony --reporter spec"
   },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:3musket33rs/mathsync.git"
+  },
   "author": "Mathieu Bruyen <code@mais-h.eu>",
   "license": "Apache",
   "main": "src/index.js",

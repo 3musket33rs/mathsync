@@ -1,4 +1,5 @@
 {
+  "private": true,
   "dependencies": {
     "mathsync-generator": "0.3.0-alpha",
     "koa": "0.1.x",

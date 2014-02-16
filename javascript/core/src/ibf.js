@@ -2,6 +2,7 @@
   'use strict';
 
   var emptyBucket = require('./bucket');
+  var q = require('q');
 
   function arraysEqual(a, b) {
     if (!a || !b) {
@@ -59,25 +60,31 @@
       }
     }
 
-    function modifyManyWithSideEffect(bucketsCopy, variation, items) {
-      var n = items.next();
-      while (!n.done) {
-        modifyWithSideEffect(bucketsCopy, variation, n.value);
-        n = items.next();
+    function plus(content) {
+      if (!(content instanceof ArrayBuffer)) {
+        throw new TypeError('Ibf#plus takes an ArrayBuffer, given ' + content);
       }
+      var bucketsCopy = copyBuckets();
+      modifyWithSideEffect(bucketsCopy, 1, content);
+      return ibfFromBuckets(bucketsCopy, digest, selector);
     }
 
-    function plus(content) {
+    function plusAsync(iterator) {
       var bucketsCopy = copyBuckets();
-      if (content instanceof ArrayBuffer) {
-        modifyWithSideEffect(bucketsCopy, 1, content);
-        return ibfFromBuckets(bucketsCopy, digest, selector);
-      } else if (content.next) {
-        modifyManyWithSideEffect(bucketsCopy, 1, content);
-        return ibfFromBuckets(bucketsCopy, digest, selector);
-      } else {
-        throw new TypeError('Ibf#plus takes either an ArrayBuffer or an iterator, given ' + content);
+      function next() {
+        var result = iterator.next();
+        if (result.done) {
+          return ibfFromBuckets(bucketsCopy, digest, selector);
+        } else if (q.isPromiseAlike(result.value)) {
+          return result.value.then(function (res) {
+            modifyWithSideEffect(bucketsCopy, 1, res);
+          }).then(next);
+        } else {
+          modifyWithSideEffect(bucketsCopy, 1, result.value);
+          return next();
+        }
       }
+      return q().then(next);
     }
 
     function toDifference() {
@@ -161,6 +168,7 @@
       minus : minus,
       toDifference : toDifference,
       plus : plus,
+      plusAsync : plusAsync,
       _reduce : reduce,
       toJSON : toJSON
     };

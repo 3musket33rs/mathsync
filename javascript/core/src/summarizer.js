@@ -13,7 +13,7 @@
       var empty = ibfBuilder(levelToSize(level), digest, selector);
       var l = array.length;
       var i = 0;
-      var filled = empty.plus({
+      var filled = empty.plusAsync({
         next: function () {
           var res;
           if (i < l) {
@@ -25,7 +25,7 @@
           return res;
         }
       });
-      return q(filled);
+      return filled;
     };
   }
 

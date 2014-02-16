@@ -5,6 +5,7 @@
   var _ = require('underscore');
   var ibf = require('../src/ibf');
   var utils = require('./utils_typedarrays');
+  var q = require('q');
 
   var item1 = new Int8Array([5]).buffer;
   var item2 = new Int8Array([6]).buffer;
@@ -35,19 +36,23 @@
   var just2 = empty.plus(item2);
   var just3 = empty.plus(item3);
   var items1and2 = just1.plus(item2);
-  var items2and3 = (function() {
+  var items2and3;
+
+  before(function(done) {
     var i = 0;
-    return empty.plus({ next: function () {
+    empty.plusAsync({ next: function () {
       i++;
       if (i === 1) {
         return { done: false, value: item2 };
       } else if (i === 2) {
-        return { done: false, value: item3 };
+        return { done: false, value: q(item3) };
       } else {
         return { done: true, value: undefined };
       }
-    }});
-  })();
+    }}).then(function (ibf) {
+      items2and3 = ibf;
+    }).then(done, done);
+  });
 
   function goThroughJson(origin) {
     return ibf.fromJSON(origin.toJSON(), digester, selector);

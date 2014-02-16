@@ -1,6 +1,6 @@
 {
   "name": "mathsync-generator",
-  "version": "0.3.0-alpha",
+  "version": "0.3.0",
   "description": "Generator-based API for mathsync",
   "scripts": {
     "test": "mocha --harmony --reporter spec"

@@ -3,9 +3,12 @@ layout: default
 title: MathSync
 ---
 
-# On the road to 0.3.0
+# On the road to 0.4.0
+
+# 0.3.0
 
 * performance improvements by batching summary updates
+* handle version `0.7.3` of [Rusha](https://github.com/srijs/rusha)
 
 # 0.2.0
 

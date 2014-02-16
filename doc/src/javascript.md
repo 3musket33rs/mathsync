@@ -13,16 +13,14 @@ title: MathSync
 
 Add a dependency towards the library:
 
-```
-"dependencies": {
+```"dependencies": {
   "mathsync": "0.3.x"
 }
 ```
 
 Create a endpoint fetching your items, serializing them and sending the summary over the wire (here done using [Koa](http://koajs.com/)):
 
-```
-var ms = require('mathsync');
+```var ms = require('mathsync');
 
 var data = [/* where do your items come from? */];
 
@@ -47,8 +45,7 @@ It is currently recommended to use [Browserify](http://browserify.org/) to use t
 
 Add a dependency towards the library and to a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) provider (here using [Q](https://github.com/kriskowal/q) but any would comply):
 
-```
-"dependencies": {
+```"dependencies": {
   "mathsync": "0.3.x",
   "q": "0.9.x"
 }
@@ -56,8 +53,7 @@ Add a dependency towards the library and to a [Promise](https://developer.mozill
 
 Fetch the data structure from the endpoint, returning a promise:
 
-```
-var ms = require('mathsync');
+```var ms = require('mathsync');
 var http = require('http');
 var q = require('q');
 
@@ -93,8 +89,7 @@ var resolve = ms.resolver.fromSummarizers(local, remote, deserialize);
 
 and then call it whenever you want to synchronize wit the server:
 
-```
-resolve().then(function (difference) {
+```resolve().then(function (difference) {
   difference.removed.forEach(function (i) {
     /* remove deleted item locally! */
   });
@@ -110,16 +105,14 @@ resolve().then(function (difference) {
 
 An extended version of the library allows to use [generator functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators#Generators.3A_a_better_way_to_build_Iterators):
 
-```
-"dependencies": {
+```"dependencies": {
   "mathsync-generator": "0.3.x"
 }
 ```
 
 and `yield` all you items inside the generator function:
 
-```
-var ms = require('mathsync-generator');
+```var ms = require('mathsync-generator');
 
 var data = {};
 

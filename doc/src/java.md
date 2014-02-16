@@ -14,7 +14,7 @@ Add a dependency towards the library:
 ```<dependency>
   <groupId>eu.mais-h.mathsync</groupId>
   <artifactId>core</artifactId>
-  <version>0.3.0</version>
+  <version>0.4.0-SNAPSHOT</version>
 </dependency>
 ```
 

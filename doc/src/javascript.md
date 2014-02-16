@@ -14,7 +14,7 @@ title: MathSync
 Add a dependency towards the library:
 
 ```"dependencies": {
-  "mathsync": "0.3.x"
+  "mathsync": "0.4.x"
 }
 ```
 
@@ -46,7 +46,7 @@ It is currently recommended to use [Browserify](http://browserify.org/) to use t
 Add a dependency towards the library and to a [Promise](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise) provider (here using [Q](https://github.com/kriskowal/q) but any would comply):
 
 ```"dependencies": {
-  "mathsync": "0.3.x",
+  "mathsync": "0.4.x",
   "q": "0.9.x"
 }
 ```
@@ -106,7 +106,7 @@ and then call it whenever you want to synchronize wit the server:
 An extended version of the library allows to use [generator functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators#Generators.3A_a_better_way_to_build_Iterators):
 
 ```"dependencies": {
-  "mathsync-generator": "0.3.x"
+  "mathsync-generator": "0.4.x"
 }
 ```
 

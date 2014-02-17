@@ -89,6 +89,15 @@ public class BucketTest {
     assertThat(added1.modify(-1, content1, hash1).isEmpty()).isTrue();
   }
 
+  @Test
+  public void xor_of_different_bucket_size() {
+    byte[] content3 = new byte[] { (byte)1, (byte)2, (byte)3 };
+    byte[] hash3 = new byte[] { (byte)7, (byte)8, (byte)9};
+
+    Bucket added3 = empty.modify(1, content3, hash3);
+    assertThat(added1.group(added3).xored()).isEqualTo(new byte[] { (byte)0, (byte)0, (byte)3 });
+  }
+
   private Bucket goThroughJson(Bucket b) {
     return new Bucket(b.toJSON());
   }

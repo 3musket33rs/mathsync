@@ -1,4 +1,5 @@
 {
+  "private": true,
   "scripts": {
     "test": "mocha --harmony --reporter spec -t 40s"
   },

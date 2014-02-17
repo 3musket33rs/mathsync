@@ -25,6 +25,7 @@ public class IbfTest {
   private Summary just2;
   private Summary just3;
   private Summary items1and2;
+  private Summary items2and3;
   private Difference<byte[]> difference;
 
   @Before
@@ -42,6 +43,7 @@ public class IbfTest {
     just2 = empty.plus(item2);
     just3 = empty.plus(item3);
     items1and2 = just1.plus(item2);
+    items2and3 = empty.plus(Arrays.asList(item2, item3).iterator());
   }
 
   @Test
@@ -75,6 +77,10 @@ public class IbfTest {
     difference = items1and2.toDifference();
     assertThatSetOfArrayEquals(difference.added(), item1, item2);
     assertThat(difference.removed()).isEmpty();
+    
+    difference = items2and3.toDifference();
+    assertThatSetOfArrayEquals(difference.added(), item2, item3);
+    assertThat(difference.removed()).isEmpty();
   }
 
   @Test
@@ -93,6 +99,10 @@ public class IbfTest {
 
     difference = goThroughJson(items1and2).toDifference();
     assertThatSetOfArrayEquals(difference.added(), item1, item2);
+    assertThat(difference.removed()).isEmpty();
+
+    difference = goThroughJson(items2and3).toDifference();
+    assertThatSetOfArrayEquals(difference.added(), item2, item3);
     assertThat(difference.removed()).isEmpty();
   }
 
@@ -113,6 +123,10 @@ public class IbfTest {
     difference = empty.minus(items1and2).toDifference();
     assertThat(difference.added()).isEmpty();
     assertThatSetOfArrayEquals(difference.removed(), item1, item2);
+
+    difference = empty.minus(items2and3).toDifference();
+    assertThat(difference.added()).isEmpty();
+    assertThatSetOfArrayEquals(difference.removed(), item2, item3);
   }
 
   @Test
@@ -132,6 +146,10 @@ public class IbfTest {
     difference = goThroughJson(empty.minus(items1and2)).toDifference();
     assertThat(difference.added()).isEmpty();
     assertThatSetOfArrayEquals(difference.removed(), item1, item2);
+
+    difference = goThroughJson(empty.minus(items2and3)).toDifference();
+    assertThat(difference.added()).isEmpty();
+    assertThatSetOfArrayEquals(difference.removed(), item2, item3);
   }
 
   @Test

@@ -1,8 +1,8 @@
 package eu.mais_h.mathsync;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import org.json.JSONArray;
@@ -50,7 +50,57 @@ class Ibf implements Summary {
 
   @Override
   public Difference<byte[]> toDifference() {
-    return new DifferenceBuilder(this).difference;
+    Bucket[] copy = copyBuckets();
+
+    Set<byte[]> added = new HashSet<>();
+    Set<byte[]> removed = new HashSet<>();
+
+    // Search for unary buckets until there is nothing to do
+    boolean found = true;
+    while (found) {
+      found = false;
+      for (Bucket b : copy) {
+        int items = b.items();
+        if (items == 1 || items == -1) {
+          byte[] verified = verify(b);
+          if (verified != null) {
+            switch (items) {
+            case 1:
+              added.add(verified);
+              break;
+            case -1:
+              removed.add(verified);
+              break;
+            }
+            modifyWithSideEffect(copy, -items, verified);
+            found = true;
+          }
+        }
+      }
+    }
+
+    // If some buckets are not empty, there was not enough information to deserialize
+    for (Bucket b : copy) {
+      if (!b.isEmpty()) {
+        return null;
+      }
+    }
+
+    return new SerializedDifference(added, removed);
+  }
+
+  private byte[] verify(Bucket b) {
+    byte[] content = b.xored();
+    while (true) {
+      if (Arrays.equals(digester.digest(content), b.hashed())) {
+        return content;
+      }
+      if (content.length > 0 && content[content.length - 1] == (byte)0) {
+        content = Arrays.copyOf(content, content.length - 1);
+      } else {
+        return null;
+      }
+    }
   }
 
   @Override
@@ -59,7 +109,20 @@ class Ibf implements Summary {
       throw new IllegalArgumentException("Cannot add a null item to an IBF");
     }
 
-    return modifyWithItems(1, Collections.singleton(content));
+    Bucket[] updated = copyBuckets();
+    modifyWithSideEffect(updated, 1, content);
+    return new Ibf(updated, digester, selector);
+  }
+
+  @Override
+  public Summary plus(Iterator<byte[]> items) {
+    if (items == null) {
+      throw new IllegalArgumentException("Cannot add a null iterator of items to an IBF");
+    }
+
+    Bucket[] updated = copyBuckets();
+    modifyManyWithSideEffect(updated, 1, items);
+    return new Ibf(updated, digester, selector);
   }
 
   @Override
@@ -75,8 +138,11 @@ class Ibf implements Summary {
       if (asDifference == null) {
         throw new IllegalArgumentException("Summary cannot be viewed as a difference, it is likely the root cause is using an incompatible summary type");
       }
-      Ibf added = modifyWithItems(1, asDifference.added());
-      result = added.modifyWithItems(-1, asDifference.removed());
+
+      Bucket[] updated = copyBuckets();
+      modifyManyWithSideEffect(updated, 1, asDifference.added().iterator());
+      modifyManyWithSideEffect(updated, -1, asDifference.removed().iterator());
+      result = new Ibf(updated, digester, selector);
     }
     return result;
   }
@@ -92,27 +158,6 @@ class Ibf implements Summary {
     return new Ibf(buckets, digester, selector);
   }
 
-  private boolean isEmpty() {
-    for (Bucket b : buckets) {
-      if (!b.isEmpty()) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  private Ibf modifyWithItems(int variation, Iterable<byte[]> items) {
-    Bucket[] updated = Arrays.copyOf(buckets, buckets.length);
-    for (byte[] item : items) {
-      byte[] hashed = digester.digest(item);
-      for (int bucket : selector.selectBuckets(item)) {
-        bucket = bucket % buckets.length;
-        updated[bucket] = updated[bucket].modify(variation, item, hashed);
-      }
-    }
-    return new Ibf(updated, digester, selector);
-  }
-
   private Ibf modifyWithIbf(int variation, Ibf other) {
     if (buckets.length != other.buckets.length) {
       throw new IllegalArgumentException("Cannot substract IBFs of different sizes, tried to substract " + other + " from " + this);
@@ -124,6 +169,34 @@ class Ibf implements Summary {
       updated[i] = buckets[i].modify(variation * otherBucket.items(), otherBucket.xored(), otherBucket.hashed());
     }
     return new Ibf(updated, digester, selector);
+  }
+
+  private void modifyManyWithSideEffect(Bucket[] buckets, int variation, Iterator<byte[]> items) {
+    while (items.hasNext()) {
+      modifyWithSideEffect(buckets, variation, items.next());
+    }
+  }
+
+  /**
+   * Modifies an array of buckets.
+   *
+   * <p>This method has side effects on the given array so {@link #buckets} must never ever
+   * be passed to this method, only copies of it obtained through {@link #copyBuckets()}.</p>
+   *
+   * @param buckets the array of buckets to modify.
+   * @param variation the variation to apply.
+   * @param item the item to add or remove from buckets.
+   */
+  private void modifyWithSideEffect(Bucket[] buckets, int variation, byte[] item) {
+    byte[] hashed = digester.digest(item);
+    for (int bucket : selector.selectBuckets(item)) {
+      bucket = bucket % buckets.length;
+      buckets[bucket] = buckets[bucket].modify(variation, item, hashed);
+    }
+  }
+
+  private Bucket[] copyBuckets() {
+    return Arrays.copyOf(buckets, buckets.length);
   }
 
   @Override
@@ -160,65 +233,5 @@ class Ibf implements Summary {
       buckets[i] = new Bucket(deserialized.getJSONArray(i));
     }
     return buckets;
-  }
-
-  private final class DifferenceBuilder {
-
-    private final Set<byte[]> added = new HashSet<>();
-    private final Set<byte[]> removed = new HashSet<>();
-    private final Difference<byte[]> difference;
-
-    private DifferenceBuilder(Ibf original) {
-      if (performOperations(original).isEmpty()) {
-        difference = new SerializedDifference(added, removed);
-      } else {
-        difference = null;
-      }
-    }
-
-    private Ibf performOperations(Ibf original) {
-      Ibf previous = original;
-      Ibf next = original;
-      while (next != null) {
-        previous = next;
-        next = performNextOperation(previous);
-      }
-      return previous;
-    }
-
-    private Ibf performNextOperation(Ibf filtered) {
-      for (Bucket b : filtered.buckets) {
-        int items = b.items();
-        if (items == 1 || items == -1) {
-          byte[] verified = verify(b);
-          if (verified != null) {
-            switch (items) {
-            case 1:
-              added.add(verified);
-              break;
-            case -1:
-              removed.add(verified);
-              break;
-            }
-            return filtered.modifyWithItems(-items, Collections.singleton(verified));
-          }
-        }
-      }
-      return null;
-    }
-
-    private byte[] verify(Bucket b) {
-      byte[] content = b.xored();
-      while (true) {
-        if (Arrays.equals(digester.digest(content), b.hashed())) {
-          return content;
-        }
-        if (content.length > 0 && content[content.length - 1] == (byte)0) {
-          content = Arrays.copyOf(content, content.length - 1);
-        } else {
-          return null;
-        }
-      }
-    }
   }
 }

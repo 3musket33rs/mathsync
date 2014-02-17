@@ -1,16 +1,20 @@
 {
   "name": "mathsync-generator",
-  "version": "0.2.0-alpha",
+  "version": "0.4.0-alpha",
   "description": "Generator-based API for mathsync",
   "scripts": {
     "test": "mocha --harmony --reporter spec"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:3musket33rs/mathsync.git"
   },
   "author": "Mathieu Bruyen <code@mais-h.eu>",
   "license": "Apache",
   "main": "src/index.js",
   "dependencies": {
-    "mathsync": "0.2.0-alpha",
-    "q": "0.9.x"
+    "mathsync": "0.4.0-alpha",
+    "q": "1.0.x"
   },
   "devDependencies": {
     "grunt": "0.4.x",

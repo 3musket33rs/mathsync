@@ -52,9 +52,9 @@ var start = q().then(function () {
     var route = require('koa-route');
 
     app.use(function *(next){
-      var start = new Date;
+      var start = new Date();
       yield next;
-      var ms = new Date - start;
+      var ms = new Date() - start;
       //console.log('%s %s - %s', this.method, this.url, ms);
     });
 

@@ -9,18 +9,23 @@
   }
 
   function fromGenerator(generator, serialize, digest, selector) {
-    return q.async(function* generate(level) {
-      var ibf = ibfBuilder(levelToSize(level), digest, selector);
-      var iterator = yield generator();
-
-      var n = yield iterator.next();
+    function* transformed() {
+      var iterator = generator();
+      var n = iterator.next();
       while (!n.done) {
-        ibf = ibf.plus(serialize(n.value));
-        n = yield iterator.next();
+        if (q.isPromiseAlike(n.value)) {
+          yield n.value.then(serialize);
+        } else {
+          yield serialize(n.value);
+        }
+        n = iterator.next();
       }
-
-      return ibf;
-    });
+    }
+    return function generate(level) {
+      var empty = ibfBuilder(levelToSize(level), digest, selector);
+      var promise = empty.plusAsync(transformed());
+      return promise;
+    };
   }
 
   module.exports = fromGenerator;

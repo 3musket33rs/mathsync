@@ -5,7 +5,7 @@
   var _ = require('underscore');
   var summarizer = require('../src/summarizer');
   var sha1 = require('../src/sha1');
-  var utils = require('./utils_typedarrays');
+  var utils = require('./utils');
   var selector = require('../src/bucketSelector').padAndHash(sha1, 3);
 
   function assertThatSetOfArrayEquals(arr1, arr2) {

@@ -3,7 +3,7 @@
 
   var assert = require('assert');
   var _ = require('underscore');
-  var utils = require('./utils_typedarrays');
+  var utils = require('./utils');
 
   var selector = require('../src/bucketSelector');
 

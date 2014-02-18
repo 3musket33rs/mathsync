@@ -3,7 +3,7 @@
 
   var assert = require('assert');
   var serialize = require('../src/serialize');
-  var utils = require('./utils_typedarrays');
+  var utils = require('./utils');
 
   describe('Serialize', function() {
     describe('fromString', function() {

@@ -2,9 +2,8 @@
   'use strict';
 
   var assert = require('assert');
-  var _ = require('underscore');
   var ibf = require('../src/ibf');
-  var utils = require('./utils_typedarrays');
+  var utils = require('./utils');
   var q = require('q');
 
   var item1 = new Int8Array([5]).buffer;
@@ -58,15 +57,6 @@
     return ibf.fromJSON(origin.toJSON(), digester, selector);
   }
 
-  function assertThatSetOfArrayEquals(arr1, arr2) {
-    assert.equal(arr1.lenght, arr2.lenght);
-    assert.ok(_(arr1).every(function (item1) {
-      return _(arr2).some(function (item2) {
-        return _.isEqual(item1, item2);
-      });
-    }));
-  }
-
   describe('Ibf', function() {
     describe('empty', function() {
 
@@ -87,45 +77,45 @@
 
       it('should have added items in difference', function() {
         var difference = just1.toDifference();
-        assertThatSetOfArrayEquals(difference.added, [item1]);
+        utils.assertThatSetOfArrayEquals(difference.added, [item1]);
         assert.deepEqual([], difference.removed);
 
         difference = just2.toDifference();
-        assertThatSetOfArrayEquals(difference.added, [item2]);
+        utils.assertThatSetOfArrayEquals(difference.added, [item2]);
         assert.deepEqual([], difference.removed);
 
         difference = just3.toDifference();
-        assertThatSetOfArrayEquals(difference.added, [item3]);
+        utils.assertThatSetOfArrayEquals(difference.added, [item3]);
         assert.deepEqual([], difference.removed);
 
         difference = items1and2.toDifference();
-        assertThatSetOfArrayEquals(difference.added, [item1, item2]);
+        utils.assertThatSetOfArrayEquals(difference.added, [item1, item2]);
         assert.deepEqual([], difference.removed);
 
         difference = items2and3.toDifference();
-        assertThatSetOfArrayEquals(difference.added, [item2, item3]);
+        utils.assertThatSetOfArrayEquals(difference.added, [item2, item3]);
         assert.deepEqual([], difference.removed);
       });
 
       it('should have added item in difference after json serialization', function() {
         var difference = goThroughJson(just1).toDifference();
-        assertThatSetOfArrayEquals(difference.added, [item1]);
+        utils.assertThatSetOfArrayEquals(difference.added, [item1]);
         assert.deepEqual([], difference.removed);
 
         difference = goThroughJson(just2).toDifference();
-        assertThatSetOfArrayEquals(difference.added, [item2]);
+        utils.assertThatSetOfArrayEquals(difference.added, [item2]);
         assert.deepEqual([], difference.removed);
 
         difference = goThroughJson(just3).toDifference();
-        assertThatSetOfArrayEquals(difference.added, [item3]);
+        utils.assertThatSetOfArrayEquals(difference.added, [item3]);
         assert.deepEqual([], difference.removed);
 
         difference = goThroughJson(items1and2).toDifference();
-        assertThatSetOfArrayEquals(difference.added, [item1, item2]);
+        utils.assertThatSetOfArrayEquals(difference.added, [item1, item2]);
         assert.deepEqual([], difference.removed);
 
         difference = goThroughJson(items2and3).toDifference();
-        assertThatSetOfArrayEquals(difference.added, [item2, item3]);
+        utils.assertThatSetOfArrayEquals(difference.added, [item2, item3]);
         assert.deepEqual([], difference.removed);
       });
     });
@@ -135,45 +125,45 @@
       it('should have removed items in difference', function() {
         var difference = empty.minus(just1).toDifference();
         assert.deepEqual([], difference.added);
-        assertThatSetOfArrayEquals(difference.removed, [item1]);
+        utils.assertThatSetOfArrayEquals(difference.removed, [item1]);
 
         difference = empty.minus(just2).toDifference();
         assert.deepEqual([], difference.added);
-        assertThatSetOfArrayEquals(difference.removed, [item2]);
+        utils.assertThatSetOfArrayEquals(difference.removed, [item2]);
 
         difference = empty.minus(just3).toDifference();
         assert.deepEqual([], difference.added);
-        assertThatSetOfArrayEquals(difference.removed, [item3]);
+        utils.assertThatSetOfArrayEquals(difference.removed, [item3]);
 
         difference = empty.minus(items1and2).toDifference();
         assert.deepEqual([], difference.added);
-        assertThatSetOfArrayEquals(difference.removed, [item1, item2]);
+        utils.assertThatSetOfArrayEquals(difference.removed, [item1, item2]);
 
         difference = empty.minus(items2and3).toDifference();
         assert.deepEqual([], difference.added);
-        assertThatSetOfArrayEquals(difference.removed, [item2, item3]);
+        utils.assertThatSetOfArrayEquals(difference.removed, [item2, item3]);
       });
 
       it('should have removed item in difference after json serialization', function() {
         var difference = goThroughJson(empty.minus(just1)).toDifference();
         assert.deepEqual([], difference.added);
-        assertThatSetOfArrayEquals(difference.removed, [item1]);
+        utils.assertThatSetOfArrayEquals(difference.removed, [item1]);
 
         difference = goThroughJson(empty.minus(just2)).toDifference();
         assert.deepEqual([], difference.added);
-        assertThatSetOfArrayEquals(difference.removed, [item2]);
+        utils.assertThatSetOfArrayEquals(difference.removed, [item2]);
 
         difference = goThroughJson(empty.minus(just3)).toDifference();
         assert.deepEqual([], difference.added);
-        assertThatSetOfArrayEquals(difference.removed, [item3]);
+        utils.assertThatSetOfArrayEquals(difference.removed, [item3]);
 
         difference = goThroughJson(empty.minus(items1and2)).toDifference();
         assert.deepEqual([], difference.added);
-        assertThatSetOfArrayEquals(difference.removed, [item1, item2]);
+        utils.assertThatSetOfArrayEquals(difference.removed, [item1, item2]);
 
         difference = goThroughJson(empty.minus(items2and3)).toDifference();
         assert.deepEqual([], difference.added);
-        assertThatSetOfArrayEquals(difference.removed, [item2, item3]);
+        utils.assertThatSetOfArrayEquals(difference.removed, [item2, item3]);
       });
     });
 
@@ -181,14 +171,14 @@
 
       it('should have added and removed items in difference', function() {
         var difference = just1.minus(just2).toDifference();
-        assertThatSetOfArrayEquals(difference.added, [item1]);
-        assertThatSetOfArrayEquals(difference.removed, [item2]);
+        utils.assertThatSetOfArrayEquals(difference.added, [item1]);
+        utils.assertThatSetOfArrayEquals(difference.removed, [item2]);
       });
 
       it('should resolve different item sizes in bucket', function() {
         var difference = just1.plus(item2).minus(just3).toDifference();
-        assertThatSetOfArrayEquals(difference.added, [item1, item2]);
-        assertThatSetOfArrayEquals(difference.removed, [item3]);
+        utils.assertThatSetOfArrayEquals(difference.added, [item1, item2]);
+        utils.assertThatSetOfArrayEquals(difference.removed, [item3]);
       });
 
       it('should return null difference when unresolvable', function() {

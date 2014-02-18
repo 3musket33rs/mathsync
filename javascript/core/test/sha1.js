@@ -3,7 +3,7 @@
 
   var assert = require('assert');
   var sha1 = require('../src/sha1');
-  var utils = require('./utils_typedarrays');
+  var utils = require('./utils');
 
   describe('SHA-1', function() {
     describe('digest', function() {

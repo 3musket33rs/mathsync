@@ -12,7 +12,7 @@
   }
 
   function insertOrRemove(mayInsert, mayRemove, item) {
-    var i, d, modified;
+    var i, d;
     for (i = 0; i < mayRemove.length; i++) {
       if (byteArrayComparator(mayRemove[i], item) === 0) {
         mayRemove.splice(i, 1);

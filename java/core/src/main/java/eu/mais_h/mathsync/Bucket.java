@@ -2,9 +2,7 @@ package eu.mais_h.mathsync;
 
 import java.util.Arrays;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.binary.Hex;
-import org.apache.commons.codec.binary.StringUtils;
 import org.json.JSONArray;
 
 class Bucket {
@@ -16,7 +14,7 @@ class Bucket {
   private final byte[] hashed;
 
   Bucket(JSONArray json) {
-    this(json.getInt(0), deserialize(json.getString(1)), deserialize(json.getString(2)));
+    this(json.getInt(0), Defaults.deserialize(json.getString(1)), Defaults.deserialize(json.getString(2)));
   }
 
   private Bucket(int items, byte[] xored, byte[] hashed) {
@@ -56,8 +54,8 @@ class Bucket {
   JSONArray toJSON() {
     JSONArray json = new JSONArray();
     json.put(items);
-    json.put(serialize(xored));
-    json.put(serialize(hashed));
+    json.put(Defaults.serialize(xored));
+    json.put(Defaults.serialize(hashed));
     return json;
   }
 
@@ -76,13 +74,5 @@ class Bucket {
   @Override
   public final String toString() {
     return "Bucket holding " + items + " items, hashed=" + Hex.encodeHexString(hashed) + ", xored=" + Hex.encodeHexString(xored);
-  }
-
-  private String serialize(byte[] array) {
-    return StringUtils.newStringUtf8(Base64.encodeBase64(array, false));
-  }
-
-  private static byte[] deserialize(String base64) {
-    return Base64.decodeBase64(base64);
   }
 }

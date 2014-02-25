@@ -1,5 +1,8 @@
 package eu.mais_h.mathsync;
 
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.binary.StringUtils;
+
 import eu.mais_h.mathsync.digest.Sha1Digester;
 
 class Defaults {
@@ -12,5 +15,13 @@ class Defaults {
 
   static BucketSelector defaultSelector() {
     return DEFAULT_SELECTOR;
+  }
+
+  static String serialize(byte[] array) {
+    return StringUtils.newStringUtf8(Base64.encodeBase64(array, false));
+  }
+
+  static byte[] deserialize(String serialized) {
+    return Base64.decodeBase64(serialized);
   }
 }

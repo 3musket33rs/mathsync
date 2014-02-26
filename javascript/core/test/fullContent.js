@@ -5,15 +5,19 @@
 
   var emptyContent = require('../src/fullContent');
 
+  function goThroughJson(origin) {
+    return emptyContent.fromJSON(origin.toJSON());
+  }
+
   describe('Full content', function() {
     describe('empty', function() {
       it('has no added element', function() {
         utils.assertThatSetOfArrayEquals(emptyContent.toDifference().added, []);
-        utils.assertThatSetOfArrayEquals(emptyContent.toJSON().added, []);
+        utils.assertThatSetOfArrayEquals(goThroughJson(emptyContent).toDifference().added, []);
       });
       it('has no removed element', function() {
         utils.assertThatSetOfArrayEquals(emptyContent.toDifference().removed, []);
-        utils.assertThatSetOfArrayEquals(emptyContent.toJSON().removed, []);
+        utils.assertThatSetOfArrayEquals(goThroughJson(emptyContent).toDifference().removed, []);
       });
     });
     describe('with one added item', function() {
@@ -22,11 +26,11 @@
 
       it('has one added element', function() {
         utils.assertThatSetOfArrayEquals(oneItem.toDifference().added, [item]);
-        utils.assertThatSetOfArrayEquals(oneItem.toJSON().added, [item]);
+        utils.assertThatSetOfArrayEquals(goThroughJson(oneItem).toDifference().added, [item]);
       });
       it('has no removed element', function() {
         utils.assertThatSetOfArrayEquals(oneItem.toDifference().removed, []);
-        utils.assertThatSetOfArrayEquals(oneItem.toJSON().removed, []);
+        utils.assertThatSetOfArrayEquals(goThroughJson(oneItem).toDifference().removed, []);
       });
     });
     describe('with one removed item', function() {
@@ -35,11 +39,11 @@
 
       it('has no added element', function() {
         utils.assertThatSetOfArrayEquals(oneItem.toDifference().added, []);
-        utils.assertThatSetOfArrayEquals(oneItem.toJSON().added, []);
+        utils.assertThatSetOfArrayEquals(goThroughJson(oneItem).toDifference().added, []);
       });
       it('has one removed element', function() {
         utils.assertThatSetOfArrayEquals(oneItem.toDifference().removed, [item]);
-        utils.assertThatSetOfArrayEquals(oneItem.toJSON().removed, [item]);
+        utils.assertThatSetOfArrayEquals(goThroughJson(oneItem).toDifference().removed, [item]);
       });
     });
     describe('with added then removed item', function() {
@@ -48,11 +52,11 @@
 
       it('has no added element', function() {
         utils.assertThatSetOfArrayEquals(oneItem.toDifference().added, []);
-        utils.assertThatSetOfArrayEquals(oneItem.toJSON().added, []);
+        utils.assertThatSetOfArrayEquals(goThroughJson(oneItem).toDifference().added, []);
       });
       it('has no removed element', function() {
         utils.assertThatSetOfArrayEquals(oneItem.toDifference().removed, []);
-        utils.assertThatSetOfArrayEquals(oneItem.toJSON().removed, []);
+        utils.assertThatSetOfArrayEquals(goThroughJson(oneItem).toDifference().removed, []);
       });
     });
     describe('with removed then added item', function() {
@@ -61,11 +65,11 @@
 
       it('has no added element', function() {
         utils.assertThatSetOfArrayEquals(oneItem.toDifference().added, []);
-        utils.assertThatSetOfArrayEquals(oneItem.toJSON().added, []);
+        utils.assertThatSetOfArrayEquals(goThroughJson(oneItem).toDifference().added, []);
       });
       it('has no removed element', function() {
         utils.assertThatSetOfArrayEquals(oneItem.toDifference().removed, []);
-        utils.assertThatSetOfArrayEquals(oneItem.toJSON().removed, []);
+        utils.assertThatSetOfArrayEquals(goThroughJson(oneItem).toDifference().removed, []);
       });
     });
     describe('with async added items', function() {
@@ -86,11 +90,11 @@
 
       it('has two added elements', function() {
         utils.assertThatSetOfArrayEquals(asyncAdded.toDifference().added, [item1, item2]);
-        utils.assertThatSetOfArrayEquals(asyncAdded.toJSON().added, [item1, item2]);
+        utils.assertThatSetOfArrayEquals(goThroughJson(asyncAdded).toDifference().added, [item1, item2]);
       });
       it('has no removed element', function() {
         utils.assertThatSetOfArrayEquals(asyncAdded.toDifference().removed, []);
-        utils.assertThatSetOfArrayEquals(asyncAdded.toJSON().removed, []);
+        utils.assertThatSetOfArrayEquals(goThroughJson(asyncAdded).toDifference().removed, []);
       });
     });
   });

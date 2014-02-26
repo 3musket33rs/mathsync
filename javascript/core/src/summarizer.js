@@ -16,10 +16,8 @@
 
   var q = require('q');
   var ibfBuilder = require('./ibf');
-
-  function levelToSize(level) {
-    return Math.pow(2, level);
-  }
+  var emptyFullContent = require('./fullContent');
+  var levelToSize = require('./defaults').levelToSize;
 
   function fromItems(array, serialize, digest, selector) {
     return function (level) {
@@ -45,7 +43,11 @@
   function fromJSON(producer, digest, selector) {
     return function (level) {
       return q().then(producer.bind(null, level)).then(function (json) {
-        return ibfBuilder.fromJSON(json, digest, selector);
+        if (Array.isArray(json)) {
+          return ibfBuilder.fromJSON(json, digest, selector);
+        } else {
+          return emptyFullContent.fromJSON(json);
+        }
       });
     };
   }

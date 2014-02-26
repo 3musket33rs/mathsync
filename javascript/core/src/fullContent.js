@@ -2,6 +2,7 @@
   'use strict';
 
   var q = require('q');
+  var defaults = require('./defaults');
 
   function copyArray(array) {
     var copy = [];
@@ -9,6 +10,14 @@
       copy.push(array[i]);
     }
     return copy;
+  }
+
+  function serializeItems(array) {
+    var serialized = [];
+    array.forEach(function (item) {
+      serialized.push(defaults.serializeArray(item));
+    });
+    return serialized;
   }
 
   function insertOrRemove(mayInsert, mayRemove, item) {
@@ -92,14 +101,33 @@
       return { added: added, removed: removed };
     }
 
+    function toJSON() {
+      return { added: serializeItems(added), removed: serializeItems(removed) };
+    }
+
     return {
       plus: plus,
       plusAsync: plusAsync,
       minus: minus,
       toDifference: toDifference,
-      toJSON: toDifference
+      toJSON: toJSON
     };
   }
 
-  module.exports = fullContent([], []);
+  function fromJSON(json) {
+    var added = [];
+    var removed = [];
+    json.added.forEach(function (a) {
+      added.push(defaults.deserializeString(a));
+    });
+    json.removed.forEach(function (r) {
+      removed.push(defaults.deserializeString(r));
+    });
+    return fullContent(added, removed);
+  }
+
+  var emptyContent = fullContent([], []);
+  emptyContent.fromJSON = fromJSON;
+
+  module.exports = emptyContent;
 })();

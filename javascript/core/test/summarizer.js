@@ -52,15 +52,5 @@
         return throughJson;
       });
     });
-
-    describe('fromLarge', function() {
-      testSummarizer(function (array, serialize) {
-        var large = summarizer.fromItems(array, serialize, sha1, selector)(10);
-        var throughLarge = summarizer.fromLarge(function () {
-          return large;
-        }, sha1, selector);
-        return throughLarge;
-      });
-    });
   });
 })();

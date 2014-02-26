@@ -128,14 +128,6 @@
       return { added: added, removed: removed };
     }
 
-    function reduce(toSize) {
-      var b = bucketsOfSize(toSize);
-      for (var i = 0; i < buckets.length; i++) {
-        b[i % toSize] = b[i % toSize].group(buckets[i]);
-      }
-      return ibfFromBuckets(b, digest, selector);
-    }
-
     function verify(bucket) {
       var content = bucket.xored();
       var view = new Int8Array(content);
@@ -169,7 +161,6 @@
       toDifference : toDifference,
       plus : plus,
       plusAsync : plusAsync,
-      _reduce : reduce,
       toJSON : toJSON
     };
 

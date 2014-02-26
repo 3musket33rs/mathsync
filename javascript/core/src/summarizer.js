@@ -50,14 +50,6 @@
     };
   }
 
-  function fromLarge(producer) {
-    return function (level) {
-      return q().then(producer).then(function (ibf) {
-        return ibf._reduce(levelToSize(level));
-      });
-    };
-  }
-
   /**
    * @module summarizer
    */
@@ -84,8 +76,6 @@
      * @param {bucketSelector} selector - the bucket selector to build summaries.
      * @return {summarizer} a summarizer returning deserialized summaries.
      */
-    fromJSON : fromJSON,
-
-    fromLarge : fromLarge
+    fromJSON : fromJSON
   };
 })();

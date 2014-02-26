@@ -147,17 +147,6 @@ class Ibf implements Summary {
     return result;
   }
 
-  Ibf reduce(int toSize) {
-    if (toSize > buckets.length) {
-      throw new IllegalArgumentException("IBF of size " + buckets.length + " cannot be used to generate an IBF of size " + toSize);
-    }
-    Bucket[] b = bucketsOfSize(toSize);
-    for (int i = 0; i < buckets.length; i++) {
-      b[i % toSize] = b[i % toSize].group(buckets[i]);
-    }
-    return new Ibf(buckets, digester, selector);
-  }
-
   private Ibf modifyWithIbf(int variation, Ibf other) {
     if (buckets.length != other.buckets.length) {
       throw new IllegalArgumentException("Cannot substract IBFs of different sizes, tried to substract " + other + " from " + this);

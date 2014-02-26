@@ -5,6 +5,8 @@ title: MathSync
 
 # On the road to 0.4.0
 
+* remove small summary generation from larger ones (concept is too weak)
+
 # 0.3.0
 
 * performance improvements by batching summary updates

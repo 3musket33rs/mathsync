@@ -32,6 +32,11 @@
         utils.assertThatSetOfArrayEquals(oneItem.toDifference().removed, []);
         utils.assertThatSetOfArrayEquals(goThroughJson(oneItem).toDifference().removed, []);
       });
+      it('does not accept duplicates', function() {
+        var duplicated = oneItem.plus(item);
+        utils.assertThatSetOfArrayEquals(duplicated.toDifference().added, [item]);
+        utils.assertThatSetOfArrayEquals(goThroughJson(duplicated).toDifference().added, [item]);
+      });
     });
     describe('with one removed item', function() {
       var item = new Int8Array([5]).buffer;
@@ -44,6 +49,11 @@
       it('has one removed element', function() {
         utils.assertThatSetOfArrayEquals(oneItem.toDifference().removed, [item]);
         utils.assertThatSetOfArrayEquals(goThroughJson(oneItem).toDifference().removed, [item]);
+      });
+      it('does not accept duplicates', function() {
+        var duplicated = oneItem.minus(emptyContent.plus(item));
+        utils.assertThatSetOfArrayEquals(duplicated.toDifference().removed, [item]);
+        utils.assertThatSetOfArrayEquals(goThroughJson(duplicated).toDifference().removed, [item]);
       });
     });
     describe('with added then removed item', function() {

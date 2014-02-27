@@ -29,7 +29,7 @@
       }
     }
     for (i = 0; i < mayInsert.length; i++) {
-      d = byteArrayComparator(mayRemove[i], item);
+      d = byteArrayComparator(mayInsert[i], item);
       if (d === 0) {
         return;
       } else if (d > 0) {

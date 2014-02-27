@@ -40,17 +40,25 @@
   }
 
   function byteArrayComparator(a, b) {
-    var aview = new Int8Array(a);
-    var bview = new Int8Array(b);
-    var l = Math.min(aview.length, bview.length);
-    var d;
-    for (var i = 0; i < l; i++) {
+    var
+      al = a.byteLength,
+      bl = b.byteLength,
+      aview,
+      bview,
+      d,
+      i;
+    if (al !== bl) {
+      return al - bl;
+    }
+    aview = new Int8Array(a);
+    bview = new Int8Array(b);
+    for (i = 0; i < al; i++) {
       d = aview[i] - bview[i];
       if (d !== 0) {
         return d;
       }
     }
-    return aview.length - bview.length;
+    return 0;
   }
 
   function fullContent(added, removed) {

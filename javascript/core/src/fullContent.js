@@ -20,23 +20,29 @@
     return serialized;
   }
 
-  function insertOrRemove(mayInsert, mayRemove, item) {
-    var i, d;
-    for (i = 0; i < mayRemove.length; i++) {
-      if (byteArrayComparator(mayRemove[i], item) === 0) {
-        mayRemove.splice(i, 1);
-        return;
-      }
-    }
-    for (i = 0; i < mayInsert.length; i++) {
-      d = byteArrayComparator(mayInsert[i], item);
+  function insert(into, item) {
+    var
+      i,
+      d;
+    for (i = 0; i < into.length; i++) {
+      d = byteArrayComparator(into[i], item);
       if (d === 0) {
         return;
       } else if (d > 0) {
         break;
       }
     }
-    mayInsert.splice(i, 0, item);
+    into.splice(i, 0, item);
+  }
+
+  function insertOrRemove(mayInsert, mayRemove, item) {
+    for (var i = 0; i < mayRemove.length; i++) {
+      if (byteArrayComparator(mayRemove[i], item) === 0) {
+        mayRemove.splice(i, 1);
+        return;
+      }
+    }
+    insert(mayInsert, item);
   }
 
   function byteArrayComparator(a, b) {
@@ -126,10 +132,10 @@
     var added = [];
     var removed = [];
     json.added.forEach(function (a) {
-      added.push(arrayBufferSerialization.fromString(a));
+      insert(added, arrayBufferSerialization.fromString(a));
     });
     json.removed.forEach(function (r) {
-      removed.push(arrayBufferSerialization.fromString(r));
+      insert(removed, arrayBufferSerialization.fromString(r));
     });
     return fullContent(added, removed);
   }

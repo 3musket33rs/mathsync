@@ -31,7 +31,7 @@
     assert.equal(arr1.length, arr2.length);
     assert.ok(_(arr1).every(function (item1) {
       return _(arr2).some(function (item2) {
-        return _.isEqual(item1, item2);
+        return isEqual(item1, item2);
       });
     }));
   }

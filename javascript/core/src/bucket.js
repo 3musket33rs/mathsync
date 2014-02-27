@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  var defaults = require('./defaults');
+  var arrayBufferSerialization = require('./arrayBufferSerialization');
 
   function isArrayEmpty(array) {
     array = new Int8Array(array);
@@ -48,7 +48,7 @@
     }
 
     function toJSON() {
-      return [count, defaults.serializeArray(xor), defaults.serializeArray(hash)];
+      return [count, arrayBufferSerialization.toString(xor), arrayBufferSerialization.toString(hash)];
     }
 
     function isEmpty() {
@@ -69,7 +69,7 @@
   var emptyBucket = bucket(0, new ArrayBuffer(0), new ArrayBuffer(0));
 
   function fromJSON(json) {
-    return bucket(json[0], defaults.deserializeString(json[1]), defaults.deserializeString(json[2]));
+    return bucket(json[0], arrayBufferSerialization.fromString(json[1]), arrayBufferSerialization.fromString(json[2]));
   }
 
   emptyBucket.fromJSON = fromJSON;

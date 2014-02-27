@@ -2,7 +2,7 @@
   'use strict';
 
   var q = require('q');
-  var defaults = require('./defaults');
+  var arrayBufferSerialization = require('./arrayBufferSerialization');
 
   function copyArray(array) {
     var copy = [];
@@ -15,7 +15,7 @@
   function serializeItems(array) {
     var serialized = [];
     array.forEach(function (item) {
-      serialized.push(defaults.serializeArray(item));
+      serialized.push(arrayBufferSerialization.toString(item));
     });
     return serialized;
   }
@@ -118,10 +118,10 @@
     var added = [];
     var removed = [];
     json.added.forEach(function (a) {
-      added.push(defaults.deserializeString(a));
+      added.push(arrayBufferSerialization.fromString(a));
     });
     json.removed.forEach(function (r) {
-      removed.push(defaults.deserializeString(r));
+      removed.push(arrayBufferSerialization.fromString(r));
     });
     return fullContent(added, removed);
   }

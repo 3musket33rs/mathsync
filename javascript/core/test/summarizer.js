@@ -2,22 +2,12 @@
   'use strict';
 
   var assert = require('assert');
-  var _ = require('underscore');
   var summarizer = require('../src/summarizer');
   var ibfBuilder = require('../src/ibf');
   var empty = require('../src/fullContent');
   var sha1 = require('../src/sha1');
   var utils = require('./utils');
   var selector = require('../src/bucketSelector').padAndHash(sha1, 3);
-
-  function assertThatSetOfArrayEquals(arr1, arr2) {
-    assert.equal(arr1.lenght, arr2.lenght);
-    assert.ok(_(arr1).every(function (item1) {
-      return _(arr2).some(function (item2) {
-        return utils.isEqual(item1, item2);
-      });
-    }));
-  }
 
   describe('Summarizer', function() {
 
@@ -30,7 +20,7 @@
 
         fromItems(5).then(function (summary) {
           var diff = summary.toDifference();
-          assertThatSetOfArrayEquals(diff.added, [[1, 2], [2, 2], [3, 2]]);
+          utils.assertThatSetOfArrayEquals(diff.added, [[1, 2], [2, 2], [3, 2]]);
           assert.equal(0, diff.removed.length);
           done();
         }, function (err) {
@@ -53,7 +43,7 @@
 
         throughJson(5).then(function (summary) {
           var diff = summary.toDifference();
-          assertThatSetOfArrayEquals(diff.added, [[1, 2], [2, 2], [3, 2]]);
+          utils.assertThatSetOfArrayEquals(diff.added, [[1, 2], [2, 2], [3, 2]]);
           assert.equal(0, diff.removed.length);
           done();
         }, function (err) {
@@ -74,7 +64,7 @@
 
         throughJson(5).then(function (summary) {
           var diff = summary.toDifference();
-          assertThatSetOfArrayEquals(diff.added, [[1, 2], [2, 2], [3, 2]]);
+          utils.assertThatSetOfArrayEquals(diff.added, [[1, 2], [2, 2], [3, 2]]);
           assert.equal(0, diff.removed.length);
           done();
         }, function (err) {

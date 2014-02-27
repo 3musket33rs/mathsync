@@ -17,7 +17,7 @@
   var q = require('q');
   var ibfBuilder = require('./ibf');
   var emptyFullContent = require('./fullContent');
-  var levelToSize = require('./defaults').levelToSize;
+  var levelToSize = require('./levelToSize');
 
   function fromItems(array, serialize, digest, selector) {
     return function (level) {

@@ -3,7 +3,7 @@
 
   var q = require('q');
   var ibfBuilder = require('mathsync/src/ibf');
-  var levelToSize = require('mathsync/src/defaults').levelToSize;
+  var levelToSize = require('mathsync/src/levelToSize');
 
   function fromGenerator(generator, serialize, digest, selector) {
     function* transformed() {

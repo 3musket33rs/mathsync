@@ -92,7 +92,7 @@
       return fullContent(addedCopy, removedCopy);
     }
 
-    function plusAsync(iterator) {
+    function plusIterator(iterator) {
       var addedCopy = copyArray(added);
       var removedCopy = copyArray(removed);
       function next() {
@@ -121,7 +121,7 @@
 
     return {
       plus: plus,
-      plusAsync: plusAsync,
+      plusIterator: plusIterator,
       minus: minus,
       toDifference: toDifference,
       toJSON: toJSON

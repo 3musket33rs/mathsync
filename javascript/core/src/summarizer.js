@@ -24,7 +24,7 @@
       var empty = ibfBuilder(levelToSize(level), digest, selector);
       var l = array.length;
       var i = 0;
-      var filled = empty.plusAsync({
+      var filled = empty.plusIterator({
         next: function () {
           var res;
           if (i < l) {

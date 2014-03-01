@@ -99,7 +99,7 @@
    *
    * @param {external:Iterator} iterator - an iterator of items to add.
    * @returns {external:Promise.<external:Summary>} a promise which will resolve to a summary.
-   * @function external:Summary#plusAsync
+   * @function external:Summary#plusIterator
    */
   /**
    * Retrieves a view of the summary as a difference.

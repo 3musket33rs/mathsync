@@ -39,7 +39,7 @@
 
   before(function(done) {
     var i = 0;
-    empty.plusAsync({ next: function () {
+    empty.plusIterator({ next: function () {
       i++;
       if (i === 1) {
         return { done: false, value: item2 };

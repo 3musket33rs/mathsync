@@ -82,7 +82,7 @@
         utils.assertThatSetOfArrayEquals(goThroughJson(oneItem).toDifference().removed, []);
       });
     });
-    describe('with async added items', function() {
+    describe('with added items through iterator', function() {
       var asyncAdded;
       var item1 = new Int8Array([5]).buffer;
       var item2 = new Int8Array([6]).buffer;
@@ -93,7 +93,7 @@
       }
 
       before(function (done) {
-        emptyContent.plusAsync(generateItems()).then(function (c) {
+        emptyContent.plusIterator(generateItems()).then(function (c) {
           asyncAdded = c;
         }).then(done, done);
       });

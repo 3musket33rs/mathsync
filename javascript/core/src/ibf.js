@@ -69,7 +69,7 @@
       return ibfFromBuckets(bucketsCopy, digest, selector);
     }
 
-    function plusAsync(iterator) {
+    function plusIterator(iterator) {
       var bucketsCopy = copyBuckets();
       function next() {
         var result = iterator.next();
@@ -160,7 +160,7 @@
       minus : minus,
       toDifference : toDifference,
       plus : plus,
-      plusAsync : plusAsync,
+      plusIterator : plusIterator,
       toJSON : toJSON
     };
 

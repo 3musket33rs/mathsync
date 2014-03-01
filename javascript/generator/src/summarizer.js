@@ -20,7 +20,7 @@
     }
     return function generate(level) {
       var empty = ibfBuilder(levelToSize(level), digest, selector);
-      var promise = empty.plusAsync(transformed());
+      var promise = empty.plusIterator(transformed());
       return promise;
     };
   }

@@ -151,11 +151,40 @@
     return summarizer.fromJSON(producer, sha1, selector);
   }
 
+  /**
+   * @module mathsync
+   */
   module.exports = {
+
+    /**
+     * @member
+     */
     summarizer: {
+
+      /**
+       * Creates summaries representing an array.
+       *
+       * @function summarizer.fromItems
+       * @param {Object[]} array - the array of items in the current state.
+       * @param {serialize} serialize - a serializer for items in the array.
+       * @return {summarizer} a summarizer returning summaries representing the given array.
+       *
+       * @see {@link module:summarizer.fromItems}
+       * @memberof! module:mathsync
+       */
       fromItems : fromItems,
-      fromJSON : fromJSON,
-      fromLarge : summarizer.fromLarge
+
+      /**
+       * Deserializes JSON views of summaries, likely obtained throught the network.
+       *
+       * @function
+       * @param {Function} producer - the producer of JSON summaries, returns promises resolving to JSON content.
+       * @return {summarizer} a summarizer returning deserialized summaries.
+       *
+       * @see {@link module:summarizer.fromJSON}
+       * @memberof! module:mathsync
+       */
+      fromJSON : fromJSON
     },
     serialize: require('./serialize'),
     resolver: require('./resolver')

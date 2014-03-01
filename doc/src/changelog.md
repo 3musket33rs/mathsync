@@ -6,6 +6,7 @@ title: MathSync
 # On the road to 0.4.0
 
 * remove small summary generation from larger ones (concept is too weak)
+* rationalize javascript packages into a single one
 
 # 0.3.0
 

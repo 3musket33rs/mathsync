@@ -18,24 +18,13 @@
   var ibfBuilder = require('./ibf');
   var emptyFullContent = require('./fullContent');
   var levelToSize = require('./levelToSize');
+  var iterator = require('./iterator');
 
   function fromItems(array, serialize, digest, selector) {
     return function (level) {
       var empty = ibfBuilder(levelToSize(level), digest, selector);
-      var l = array.length;
-      var i = 0;
-      var filled = empty.plusIterator({
-        next: function () {
-          var res;
-          if (i < l) {
-            res = { done: false, value: serialize(array[i]) };
-            i++;
-          } else {
-            res = { done: true, value: undefined };
-          }
-          return res;
-        }
-      });
+      var it = iterator.map(iterator.fromArray(array), serialize);
+      var filled = empty.plusIterator(it);
       return filled;
     };
   }

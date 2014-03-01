@@ -26,53 +26,6 @@
    */
 
   /**
-   * An occurrence of a Generator.
-   *
-   * <p>This is the result of calling a generator function which does <code>yield</code> on each item it wants to
-   * expose, or on promise to items it wants to expose. It can actually be a hand made object as long as it respects
-   * the contract of this interface.</p>
-   *
-   * @example
-   * function* generator() {
-   *   yield 1;
-   *   yield 2;
-   *   yield 3;
-   * }
-   * var it = generator();
-   *
-   * @example
-   * var it = (function () {
-   *   var i = 0;
-   *   var content = [1, 2, 3];
-   *   return {
-   *     next : function () {
-   *       var res;
-   *       if (i < content.length) {
-   *         res = { done : false, value : content[i] };
-   *       } else {
-   *         res = { done : true };
-   *       }
-   *       i++;
-   *       return res;
-   *     }
-   *   };
-   * })();
-   *
-   * @external Iterator
-   * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator Generator on Mozilla Developer Network}
-   */
-  /**
-   * Reads the next item on the iterator.
-   *
-   * <p>Can either return a value if it is not done, <code>{ done : false, value : 'some value' }</code>, or inform it
-   * is done with <code>{ done : true }</code>. <code>value</code> can either be the actual value or a
-   * {@link external:Promise promise} which will resolve to the desired value.</p>
-   *
-   * @returns Object a done marker, or a value container, or a promise-for-value container.
-   * @function external:Iterator#next
-   */
-
-  /**
    * Represents summarized data.
    * @external Summary
    */
@@ -152,6 +105,8 @@
   }
 
   /**
+   * Entry point to default instances.
+   *
    * @module mathsync
    */
   module.exports = {
@@ -169,7 +124,7 @@
        * @param {serialize} serialize - a serializer for items in the array.
        * @return {summarizer} a summarizer returning summaries representing the given array.
        *
-       * @see {@link module:summarizer.fromItems}
+       * @see {@link module:summarizer.fromItems} for customized instances
        * @memberof! module:mathsync
        */
       fromItems : fromItems,
@@ -181,7 +136,7 @@
        * @param {Function} producer - the producer of JSON summaries, returns promises resolving to JSON content.
        * @return {summarizer} a summarizer returning deserialized summaries.
        *
-       * @see {@link module:summarizer.fromJSON}
+       * @see {@link module:summarizer.fromJSON} for customized instances
        * @memberof! module:mathsync
        */
       fromJSON : fromJSON

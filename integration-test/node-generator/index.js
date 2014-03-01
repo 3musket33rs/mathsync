@@ -1,6 +1,6 @@
 var q = require('q');
 var net = require('net');
-var ms = require('mathsync-generator');
+var ms = require('mathsync');
 
 /* Local data */
 var data = {};

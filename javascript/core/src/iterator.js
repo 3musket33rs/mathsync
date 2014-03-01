@@ -2,6 +2,22 @@
   'use strict';
 
   /**
+   * Generator functions.
+   *
+   * <p>Calling them as a function returns an {@link external:Iterator iterator}.</p>
+   *
+   * @example
+   * function* generator() {
+   *   yield 1;
+   *   yield 2;
+   *   yield 3;
+   * }
+   *
+   * @external Generator
+   * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator Generator on Mozilla Developer Network}
+   */
+
+  /**
    * An occurrence of a Generator.
    *
    * <p>This is the result of calling a generator function which does <code>yield</code> on each item it wants to

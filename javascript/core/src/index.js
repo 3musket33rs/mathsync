@@ -104,6 +104,10 @@
     return summarizer.fromJSON(producer, sha1, selector);
   }
 
+  function fromGenerator(generator, serialize) {
+    return summarizer.fromGenerator(generator, serialize, sha1, selector);
+  }
+
   /**
    * Entry point to default instances.
    *
@@ -132,14 +136,27 @@
       /**
        * Deserializes JSON views of summaries, likely obtained throught the network.
        *
-       * @function
+       * @function summarizer.fromJSON
        * @param {Function} producer - the producer of JSON summaries, returns promises resolving to JSON content.
        * @return {summarizer} a summarizer returning deserialized summaries.
        *
        * @see {@link module:summarizer.fromJSON} for customized instances
        * @memberof! module:mathsync
        */
-      fromJSON : fromJSON
+      fromJSON : fromJSON,
+
+      /**
+       * Creates summaries representing items yielded by a generator.
+       *
+       * @function summarizer.fromGenerator
+       * @param {external:Generator} generator - the generator that will yield all items.
+       * @param {serialize} serialize - a serializer for yielded items.
+       * @return {summarizer} a summarizer returning summaries representing the yielded items.
+       *
+       * @see {@link module:summarizer.fromGenerator} for customized instances
+       * @memberof! module:mathsync
+       */
+      fromGenerator : fromGenerator
     },
     serialize: require('./serialize'),
     resolver: require('./resolver')

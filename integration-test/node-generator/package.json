@@ -1,7 +1,7 @@
 {
   "private": true,
   "dependencies": {
-    "mathsync-generator": "0.4.0-alpha",
+    "mathsync": "0.4.0-alpha",
     "koa": "0.1.x",
     "koa-route": "1.0.x",
     "q": "0.9.x"

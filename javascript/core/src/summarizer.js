@@ -17,8 +17,11 @@
   var q = require('q');
   var ibfBuilder = require('./ibf');
   var emptyFullContent = require('./fullContent');
-  var levelToSize = require('./levelToSize');
   var iterator = require('./iterator');
+
+  function levelToSize(level) {
+    return Math.pow(2, level);
+  }
 
   function fromItems(array, serialize, digest, selector) {
     return function (level) {
@@ -38,6 +41,15 @@
           return emptyFullContent.fromJSON(json);
         }
       });
+    };
+  }
+
+  function fromGenerator(generator, serialize, digest, selector) {
+    return function generate(level) {
+      var empty = ibfBuilder(levelToSize(level), digest, selector);
+      var it = iterator.map(generator(), serialize);
+      var promise = empty.plusIterator(it);
+      return promise;
     };
   }
 
@@ -67,6 +79,18 @@
      * @param {bucketSelector} selector - the bucket selector to build summaries.
      * @return {summarizer} a summarizer returning deserialized summaries.
      */
-    fromJSON : fromJSON
+    fromJSON : fromJSON,
+
+    /**
+     * Creates summaries representing items yielded by a generator.
+     *
+     * @function
+     * @param {external:Generator} generator - the generator that will yield all items.
+     * @param {serialize} serialize - a serializer for yielded items.
+     * @param {digester} digest - a message digester to build summaries.
+     * @param {bucketSelector} selector - the bucket selector to build summaries.
+     * @return {summarizer} a summarizer returning summaries representing the yielded items.
+     */
+    fromGenerator : fromGenerator
   };
 })();

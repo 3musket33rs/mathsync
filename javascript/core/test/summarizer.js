@@ -29,6 +29,29 @@
       });
     });
 
+    describe('fromGenerator', function() {
+      it('generate summary with input items', function(done) {
+        function* provider() {
+          yield [1, 2];
+          yield [2, 2];
+          yield [3, 2];
+        }
+        function serialize(value) {
+          return new Int8Array(value).buffer;
+        }
+        var fromItems = summarizer.fromGenerator(provider, serialize, sha1, selector);
+
+        fromItems(5).then(function (summary) {
+          var diff = summary.toDifference();
+          utils.assertThatSetOfArrayEquals(diff.added, [[1, 2], [2, 2], [3, 2]]);
+          assert.equal(0, diff.removed.length);
+          done();
+        }, function (err) {
+          done(err);
+        });
+      });
+    });
+
     describe('fromJSON', function() {
       it('generate summary from IBF', function(done) {
         var ibf = ibfBuilder(32, sha1, selector)

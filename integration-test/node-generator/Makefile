@@ -1,3 +1,3 @@
 init:
-	npm link ../../javascript/generator
+	npm link ../../javascript/core
 	npm install .

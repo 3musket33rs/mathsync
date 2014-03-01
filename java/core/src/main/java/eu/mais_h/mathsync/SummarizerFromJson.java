@@ -1,5 +1,7 @@
 package eu.mais_h.mathsync;
 
+import org.json.JSONTokener;
+
 import eu.mais_h.mathsync.digest.Digester;
 import eu.mais_h.mathsync.digest.Sha1Digester;
 import eu.mais_h.mathsync.util.Function;
@@ -21,7 +23,17 @@ public class SummarizerFromJson implements Summarizer {
 
   @Override
   public Summary summarize(int level) {
-    return new Ibf(producer.apply(level), digester, selector);
+    String json = producer.apply(level);
+    JSONTokener tokener = new JSONTokener(json);
+    char first = tokener.nextClean();
+    tokener.back();
+    if (first == '{') {
+      return new FullContent(tokener);
+    } else if (first == '[') {
+      return new Ibf(tokener, digester, selector); 
+    } else {
+      throw new IllegalStateException("JSON " + json + " is neither detected as an array nor as a hash, cannot be parsed");
+    }
   }
 
   /**

@@ -6,6 +6,7 @@ import static org.fest.assertions.Fail.fail;
 import java.util.Arrays;
 import java.util.Set;
 
+import org.json.JSONTokener;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
@@ -172,7 +173,7 @@ public class IbfTest {
   }
 
   private Summary goThroughJson(Summary origin) {
-    return new Ibf(origin.toJSON(), digester, selector);
+    return new Ibf(new JSONTokener(origin.toJSON()), digester, selector);
   }
 
   private void assertThatSetOfArrayEquals(Set<byte[]> actual, byte[]... expected) {

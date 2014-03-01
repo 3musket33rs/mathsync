@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.Set;
 
 import org.json.JSONArray;
+import org.json.JSONTokener;
 
 import eu.mais_h.mathsync.digest.Digester;
 
@@ -15,8 +16,8 @@ class Ibf implements Summary {
   private final BucketSelector selector;
   private final Digester digester;
 
-  Ibf(String jsonString, Digester digester, BucketSelector selector) {
-    this(bucketsFromJSON(jsonString), digester, selector);
+  Ibf(JSONTokener tokener, Digester digester, BucketSelector selector) {
+    this(bucketsFromJSON(tokener), digester, selector);
   }
 
   Ibf(int size, Digester digester, BucketSelector selector) {
@@ -215,8 +216,8 @@ class Ibf implements Summary {
     return buckets;
   }
 
-  private static Bucket[] bucketsFromJSON(String jsonString) {
-    JSONArray deserialized = new JSONArray(jsonString);
+  private static Bucket[] bucketsFromJSON(JSONTokener tokener) {
+    JSONArray deserialized = new JSONArray(tokener);
     Bucket[] buckets = new Bucket[deserialized.length()];
     for (int i = 0; i < buckets.length; i++) {
       buckets[i] = new Bucket(deserialized.getJSONArray(i));

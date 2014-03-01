@@ -8,27 +8,25 @@ import java.util.Set;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 /**
  * Summary implementation simply using items content.
  */
 public class FullContent implements Summary {
   
+  static final Summary EMPTY = new FullContent(Collections.<EquatableArray>emptySet(), Collections.<EquatableArray>emptySet());
+  
   private final Set<EquatableArray> added;
   private final Set<EquatableArray> removed;
-
-  /**
-   * Constructs an empty summary.
-   */
-  public FullContent() {
-    this(Collections.<EquatableArray>emptySet(), Collections.<EquatableArray>emptySet());
-  }
   
   /**
    * Deserializes a summary from its JSON representation.
+   * 
+   * @param tokener the JSON content.
    */
-  public FullContent(String jsonString) {
-    JSONObject deserialized = new JSONObject(jsonString);
+  FullContent(JSONTokener tokener) {
+    JSONObject deserialized = new JSONObject(tokener);
     added = deserializeArray(deserialized.getJSONArray("added"));
     removed = deserializeArray(deserialized.getJSONArray("removed"));
   }

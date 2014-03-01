@@ -6,6 +6,7 @@ import static org.fest.assertions.Fail.fail;
 import java.util.Arrays;
 import java.util.Set;
 
+import org.json.JSONTokener;
 import org.junit.Test;
 
 public class FullContentTest {
@@ -14,7 +15,7 @@ public class FullContentTest {
   private byte[] item2 = new byte[] { (byte)6 };
   private byte[] item3 = new byte[] { (byte)7 };
   
-  private Summary empty = new FullContent();
+  private Summary empty = FullContent.EMPTY;
   
   @Test
   public void difference_of_empty_summary_is_empty() {
@@ -75,7 +76,7 @@ public class FullContentTest {
   }
   
   private Summary goThroughJson(Summary s) {
-    return new FullContent(s.toJSON());
+    return new FullContent(new JSONTokener(s.toJSON()));
   }
 
   private void assertThatSetOfArrayEquals(Set<byte[]> actual, byte[]... expected) {

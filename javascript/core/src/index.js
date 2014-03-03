@@ -55,6 +55,31 @@
    * @function external:Summary#plusIterator
    */
   /**
+   * Removes an item to the summary.
+   *
+   * <p>When both summaries can be {@link external:Summary#toDifference|viewed as a difference}:
+   * <ul>
+   *   <li>if the item is in the added set of that summary, it is in none of the resulting summary difference sets</li>
+   *   <li>if the item is in none of the difference sets of that summary, it is in the removed set of the resulting difference</li>
+   *   <li>if the item is in the removed set of that summary, the resulting summary may be impossible to decipher</li>
+   * </ul>
+   * </p>
+   *
+   * @param {external:ArrayBuffer} item - the serialized item.
+   * @returns {external:Summary} a new summary instance excluding this item.
+   * @function external:Summary#minus
+   */
+  /**
+   * Removes several items to the summary.
+   *
+   * <p>Equivalent to repeatedly calling {@link external:Summary#minus} for each element, but this
+   * method can do optimizations for batch updates.</p>
+   *
+   * @param {external:Iterator} iterator - an iterator of items to remove.
+   * @returns {external:Promise.<external:Summary>} a promise which will resolve to a summary.
+   * @function external:Summary#minusIterator
+   */
+  /**
    * Retrieves a view of the summary as a difference.
    *
    * @returns {external:Difference.<external:ArrayBuffer>} a difference view of the summary or <code>null</code> if it cannot be resolved with the information it contains.
@@ -66,6 +91,7 @@
    * @param {external:Summary} summary - the summary to substract to this one.
    * @returns {external:Summary} a new summary with the items substracted from this one.
    * @function external:Summary#minus
+   * @deprecated
    */
   /**
    * Retrieves a JSON view of the summary.

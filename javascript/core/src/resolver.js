@@ -1,6 +1,14 @@
 (function () {
   'use strict';
 
+  /**
+   * Function interface - Provides differences between a local and remove view.
+   *
+   * @external resolver
+   * @function
+   * @return {external:Promise.<external:Difference.<T>>} a promise resolving to a view of the difference.
+   */
+
   var q = require('q');
 
   function fromSummarizers(local, remote, deserialize) {
@@ -34,7 +42,21 @@
     };
   }
 
+  /**
+   * @module resolver
+   */
   module.exports = {
+
+    /**
+     * Creates summaries representing an array.
+     *
+     * @function
+     * @param {summarizer} local - a summarizer of the local content.
+     * @param {summarizer} remote - a summarizer of the local content.
+     * @param {deserialize} deserialize - how to deserialize byte arrays to objects.
+     * @return {resolver} a resolver returning differences between the provided summarizers.
+     * @deprecated
+     */
     fromSummarizers : fromSummarizers
   };
 })();

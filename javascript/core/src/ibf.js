@@ -87,6 +87,35 @@
       return q().then(next);
     }
 
+    function minus(content) {
+      // Backward compatibility with deprecated API
+      if (!(content instanceof ArrayBuffer)) {
+        return minusSummary(content);
+      }
+
+      var bucketsCopy = copyBuckets();
+      modifyWithSideEffect(bucketsCopy, -1, content);
+      return ibfFromBuckets(bucketsCopy, digest, selector);
+    }
+
+    function minusIterator(iterator) {
+      var bucketsCopy = copyBuckets();
+      function next() {
+        var result = iterator.next();
+        if (result.done) {
+          return ibfFromBuckets(bucketsCopy, digest, selector);
+        } else if (q.isPromiseAlike(result.value)) {
+          return result.value.then(function (res) {
+            modifyWithSideEffect(bucketsCopy, -1, res);
+          }).then(next);
+        } else {
+          modifyWithSideEffect(bucketsCopy, -1, result.value);
+          return next();
+        }
+      }
+      return q().then(next);
+    }
+
     function toDifference() {
       var bucketsCopy = copyBuckets();
       var l = bucketsCopy.length;
@@ -145,7 +174,7 @@
       }
     }
 
-    function minus(other) {
+    function minusSummary(other) {
       var updated = [];
       var otherBucket;
       for (var i = 0; i < buckets.length; i++) {
@@ -157,10 +186,11 @@
 
     var that = {
       __buckets : buckets,
-      minus : minus,
       toDifference : toDifference,
       plus : plus,
       plusIterator : plusIterator,
+      minus : minus,
+      minusIterator : minusIterator,
       toJSON : toJSON
     };
 

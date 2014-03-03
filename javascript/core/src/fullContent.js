@@ -76,22 +76,6 @@
       return fullContent(addedCopy, removedCopy);
     }
 
-    function minus(summary) {
-      var diff = summary.toDifference();
-      if (diff === null) {
-        throw new Error('Cannot substract a summary which cannot be resolved as a difference: ' + summary);
-      }
-      var addedCopy = copyArray(added);
-      var removedCopy = copyArray(removed);
-      diff.added.forEach(function (a) {
-        insertOrRemove(removedCopy, addedCopy, a);
-      });
-      diff.removed.forEach(function (r) {
-        insertOrRemove(addedCopy, removedCopy, r);
-      });
-      return fullContent(addedCopy, removedCopy);
-    }
-
     function plusIterator(iterator) {
       var addedCopy = copyArray(added);
       var removedCopy = copyArray(removed);
@@ -111,6 +95,53 @@
       return q().then(next);
     }
 
+    function minus(item) {
+      // Backward compatibility with deprecated API
+      if (!(item instanceof ArrayBuffer)) {
+        return minusSummary(item);
+      }
+
+      var addedCopy = copyArray(added);
+      var removedCopy = copyArray(removed);
+      insertOrRemove(removedCopy, addedCopy, item);
+      return fullContent(addedCopy, removedCopy);
+    }
+
+    function minusIterator(iterator) {
+      var addedCopy = copyArray(added);
+      var removedCopy = copyArray(removed);
+      function next() {
+        var result = iterator.next();
+        if (result.done) {
+          return fullContent(addedCopy, removedCopy);
+        } else if (q.isPromiseAlike(result.value)) {
+          return result.value.then(function (res) {
+            insertOrRemove(removedCopy, addedCopy, res);
+          }).then(next);
+        } else {
+          insertOrRemove(removedCopy, addedCopy, result.value);
+          return next();
+        }
+      }
+      return q().then(next);
+    }
+
+    function minusSummary(summary) {
+      var diff = summary.toDifference();
+      if (diff === null) {
+        throw new Error('Cannot substract a summary which cannot be resolved as a difference: ' + summary);
+      }
+      var addedCopy = copyArray(added);
+      var removedCopy = copyArray(removed);
+      diff.added.forEach(function (a) {
+        insertOrRemove(removedCopy, addedCopy, a);
+      });
+      diff.removed.forEach(function (r) {
+        insertOrRemove(addedCopy, removedCopy, r);
+      });
+      return fullContent(addedCopy, removedCopy);
+    }
+
     function toDifference() {
       return { added: added, removed: removed };
     }
@@ -123,6 +154,7 @@
       plus: plus,
       plusIterator: plusIterator,
       minus: minus,
+      minusIterator: minusIterator,
       toDifference: toDifference,
       toJSON: toJSON
     };

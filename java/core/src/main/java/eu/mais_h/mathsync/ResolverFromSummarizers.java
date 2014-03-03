@@ -7,6 +7,7 @@ import eu.mais_h.mathsync.serialize.Deserializer;
  *
  * @param <T> the type of compared items.
  */
+@Deprecated
 public class ResolverFromSummarizers<T> implements Resolver<T> {
 
   private final Summarizer local;

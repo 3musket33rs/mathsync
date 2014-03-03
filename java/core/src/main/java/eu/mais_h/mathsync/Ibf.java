@@ -127,6 +127,28 @@ class Ibf implements Summary {
   }
 
   @Override
+  public Summary minus(byte[] content) {
+    if (content == null) {
+      throw new IllegalArgumentException("Cannot remove a null item to an IBF");
+    }
+
+    Bucket[] updated = copyBuckets();
+    modifyWithSideEffect(updated, -1, content);
+    return new Ibf(updated, digester, selector);
+  }
+
+  @Override
+  public Summary minus(Iterator<byte[]> items) {
+    if (items == null) {
+      throw new IllegalArgumentException("Cannot remove a null iterator of items to an IBF");
+    }
+
+    Bucket[] updated = copyBuckets();
+    modifyManyWithSideEffect(updated, -1, items);
+    return new Ibf(updated, digester, selector);
+  }
+
+  @Override
   public Summary minus(Summary other) {
     if (other == null) {
       throw new IllegalArgumentException("Cannot substract a null IBF");

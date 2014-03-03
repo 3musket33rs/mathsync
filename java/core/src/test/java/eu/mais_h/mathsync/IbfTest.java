@@ -78,7 +78,7 @@ public class IbfTest {
     difference = items1and2.toDifference();
     assertThatSetOfArrayEquals(difference.added(), item1, item2);
     assertThat(difference.removed()).isEmpty();
-    
+
     difference = items2and3.toDifference();
     assertThatSetOfArrayEquals(difference.added(), item2, item3);
     assertThat(difference.removed()).isEmpty();
@@ -109,60 +109,60 @@ public class IbfTest {
 
   @Test
   public void removed_item_is_in_difference() {
-    difference = empty.minus(just1).toDifference();
+    difference = empty.minus(item1).toDifference();
     assertThat(difference.added()).isEmpty();
     assertThatSetOfArrayEquals(difference.removed(), item1);
 
-    difference = empty.minus(just2).toDifference();
+    difference = empty.minus(item2).toDifference();
     assertThat(difference.added()).isEmpty();
     assertThatSetOfArrayEquals(difference.removed(), item2);
 
-    difference = empty.minus(just3).toDifference();
+    difference = empty.minus(item3).toDifference();
     assertThat(difference.added()).isEmpty();
     assertThatSetOfArrayEquals(difference.removed(), item3);
 
-    difference = empty.minus(items1and2).toDifference();
+    difference = empty.minus(Arrays.asList(item1, item2).iterator()).toDifference();
     assertThat(difference.added()).isEmpty();
     assertThatSetOfArrayEquals(difference.removed(), item1, item2);
 
-    difference = empty.minus(items2and3).toDifference();
+    difference = empty.minus(Arrays.asList(item2, item3).iterator()).toDifference();
     assertThat(difference.added()).isEmpty();
     assertThatSetOfArrayEquals(difference.removed(), item2, item3);
   }
 
   @Test
   public void json_serialization_keeps_removed_item_in_difference() {
-    difference = goThroughJson(empty.minus(just1)).toDifference();
+    difference = goThroughJson(empty.minus(item1)).toDifference();
     assertThat(difference.added()).isEmpty();
     assertThatSetOfArrayEquals(difference.removed(), item1);
 
-    difference = goThroughJson(empty.minus(just2)).toDifference();
+    difference = goThroughJson(empty.minus(item2)).toDifference();
     assertThat(difference.added()).isEmpty();
     assertThatSetOfArrayEquals(difference.removed(), item2);
 
-    difference = goThroughJson(empty.minus(just3)).toDifference();
+    difference = goThroughJson(empty.minus(item3)).toDifference();
     assertThat(difference.added()).isEmpty();
     assertThatSetOfArrayEquals(difference.removed(), item3);
 
-    difference = goThroughJson(empty.minus(items1and2)).toDifference();
+    difference = goThroughJson(empty.minus(Arrays.asList(item1, item2).iterator())).toDifference();
     assertThat(difference.added()).isEmpty();
     assertThatSetOfArrayEquals(difference.removed(), item1, item2);
 
-    difference = goThroughJson(empty.minus(items2and3)).toDifference();
+    difference = goThroughJson(empty.minus(Arrays.asList(item2, item3).iterator())).toDifference();
     assertThat(difference.added()).isEmpty();
     assertThatSetOfArrayEquals(difference.removed(), item2, item3);
   }
 
   @Test
   public void added_and_removed_item_are_in_difference() {
-    difference = just1.minus(just2).toDifference();
+    difference = just1.minus(item2).toDifference();
     assertThatSetOfArrayEquals(difference.added(), item1);
     assertThatSetOfArrayEquals(difference.removed(), item2);
   }
 
   @Test
   public void different_item_sizes_in_the_same_bucket_are_resolved() {
-    difference = just1.plus(item2).minus(just3).toDifference();
+    difference = just1.plus(item2).minus(item3).toDifference();
     assertThatSetOfArrayEquals(difference.added(), item1, item2);
     assertThatSetOfArrayEquals(difference.removed(), item3);
   }

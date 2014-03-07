@@ -54,6 +54,17 @@
     }, deserialize);
   }
 
+  function fromGenerator(generator, remote, serialize, deserialize) {
+    return iterateOnLevelAndDeserialize(function (level) {
+      return remote(level).then(function (summary) {
+        var it = iterator.map(generator(), serialize);
+        return summary.minusIterator(it);
+      }).then(function (summary) {
+        return summary.toDifference();
+      });
+    }, deserialize);
+  }
+
   function fromSummarizers(local, remote, deserialize) {
     return iterateOnLevelAndDeserialize(function (level) {
       return q.all([local(level), remote(level)]).then(function (arr) {
@@ -89,6 +100,18 @@
      * @param {deserialize} deserialize - how to deserialize byte arrays to objects.
      * @return {resolver} a resolver returning differences between the summarizer and local items.
      */
-    fromItems : fromItems
+    fromItems : fromItems,
+
+    /**
+     * Creates a resolver giving the difference between a remote summarizer and items yielded by a generator.
+     *
+     * @function
+     * @param {external:Generator} generator - the generator that will yield all items.
+     * @param {summarizer} remote - a summarizer of the remote content.
+     * @param {serialize} serialize - a serializer for items in the array.
+     * @param {deserialize} deserialize - how to deserialize byte arrays to objects.
+     * @return {resolver} a resolver returning differences between the summarizer and local items.
+     */
+    fromGenerator : fromGenerator
   };
 })();

@@ -49,5 +49,23 @@
         }, done);
       });
     });
+    describe('fromGenerator', function () {
+      it('generate difference', function (done) {
+        var local = function* () {
+          yield [1, 2];
+          yield [2, 2];
+          yield [3, 2];
+        }
+
+        var remoteItems = [[1, 2], [4, 2]];
+        var remote = summarizer.fromItems(remoteItems, serialize, sha1, bucketSelector);
+
+        resolver.fromGenerator(local, remote, serialize, deserialize)().then(function (difference) {
+          assertThatSetOfArrayEquals(difference.added, [[4, 2]]);
+          assertThatSetOfArrayEquals(difference.removed, [[2, 2], [3, 2]]);
+          done();
+        }, done);
+      });
+    });
   });
 })();

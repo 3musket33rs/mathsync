@@ -8,11 +8,12 @@ var data = {};
 var serialize = ms.serialize.fromString();
 var deserialize = ms.serialize.toString();
 
-var local = ms.summarizer.fromGenerator(function* () {
+function* localItems() {
   for (var k in data) {
     yield (k + ':' + data[k]);
   }
-}, serialize);
+}
+var local = ms.summarizer.fromGenerator(localItems, serialize);
 
 var resolve;
 
@@ -41,7 +42,7 @@ var start = q().then(function () {
     }
     var remote = ms.summarizer.fromJSON(fetchSummary);
 
-    resolve = ms.resolver.fromSummarizers(local, remote, deserialize);
+    resolve = ms.resolver.fromGenerator(localItems, remote, serialize, deserialize);
   }
 }).then(function (api) {
 

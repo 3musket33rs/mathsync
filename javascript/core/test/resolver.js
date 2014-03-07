@@ -51,7 +51,7 @@
     });
     describe('fromGenerator', function () {
       it('generate difference', function (done) {
-        var local = function* () {
+        function* local() {
           yield [1, 2];
           yield [2, 2];
           yield [3, 2];

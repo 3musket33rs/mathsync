@@ -142,6 +142,10 @@
   module.exports = {
 
     /**
+     * Exposes the same members of {@link module:summarizer} with default settings.
+     *
+     * <p>All summarizers provided here use SHA-1 hashing and a bucket selector putting each item in 3 buckets.</p>
+     *
      * @member
      */
     summarizer: {
@@ -184,7 +188,19 @@
        */
       fromGenerator : fromGenerator
     },
+
+    /**
+     * Exposes {@link module:serialize}.
+     *
+     * @member
+     */
     serialize: require('./serialize'),
+
+    /**
+     * Exposes {@link module:resolver}.
+     *
+     * @member
+     */
     resolver: require('./resolver')
   };
 })();

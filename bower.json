@@ -1,0 +1,26 @@
+{
+  "name": "mathsync",
+  "version": "0.4.0-alpha",
+  "homepage": "http://mathsync.mais-h.eu",
+  "authors": [
+    "Mathieu Bruyen <code@mais-h.eu>"
+  ],
+  "main": "javascript/core/src/index.js",
+  "license": "Apache",
+  "ignore": [
+    "**/.*",
+    "javascript/core/node_modules",
+    "javascript/core/bower_components",
+    "javascript/core/test",
+    "javascript/core/apidocs",
+    "java",
+    "doc",
+    "dev-machine",
+    "integration-test",
+    "ios"
+  ],
+  "dependencies": {
+    "rusha": "c2f9b99ac89362b96321c4b381f284d5846e3ea7",
+    "q": "1.0.x"
+  }
+}

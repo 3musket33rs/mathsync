@@ -11,7 +11,8 @@ title: MathSync
 
 Add a dependency towards the library:
 
-```<dependency>
+```
+<dependency>
   <groupId>eu.mais-h.mathsync</groupId>
   <artifactId>core</artifactId>
   <version>0.4.0-SNAPSHOT</version>
@@ -20,7 +21,8 @@ Add a dependency towards the library:
 
 Create a servlet fetching your items, serializing them and sending the summary over the wire:
 
-```public class SummaryServlet extends HttpServlet {
+```
+public class SummaryServlet extends HttpServlet {
 
   private static final long serialVersionUID = 8629863338196207094L;
 
@@ -52,7 +54,8 @@ Create a servlet fetching your items, serializing them and sending the summary o
 
 And bind this servlet in your `web.xml`:
 
-```<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd" >
+```
+<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd" >
 <web-app>
   <display-name>My awesome webapp</display-name>
   <servlet>

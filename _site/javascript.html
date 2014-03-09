@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Mathsync - Javascript</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+    <link rel="stylesheet" href="css/main.css">
+    <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap-theme.min.css">
+  </head>
+  <body role="document">
+    <!--[if lt IE 7]>
+      <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+    <![endif]-->
+    <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+      <div class="container">
+        <ul class="nav navbar-nav">
+          <li><a href="/">Home</a></li>
+          <li><a href="https://github.com/3musket33rs/mathsync">Code on Github</a></li>
+          <li><a href="/javascript.html">Javascript</a></li>
+          <li><a href="/java.html">Java</a></li>
+          <li><a href="https://groups.google.com/forum/#!forum/mathsync">Google group</a></li>
+          <li><a href="/changelog.html">Changelog</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="container" role="main"><h1 id="javascript">Javascript</h1>
+
+<p><a href="/jsdoc">Full API doc</a> is available.</p>
+
+<p><a href="https://nodei.co/npm/mathsync/"><img src="https://nodei.co/npm/mathsync.png" alt="NPM" /></a></p>
+
+<h2 id="nodejs_server"> <a href="http://nodejs.org/">Node.js</a> server</h2>
+
+<p>Add a dependency towards the library:</p>
+
+<pre><code>&quot;dependencies&quot;: {
+  &quot;mathsync&quot;: &quot;0.4.x&quot;
+}</code></pre>
+
+<p>Create a endpoint fetching your items, serializing them and sending the summary over the wire (here done using <a href="http://koajs.com/">Koa</a>):</p>
+
+<pre><code>var ms = require('mathsync');
+
+var data = [/* where do your items come from? */];
+
+var serialize = ms.serialize.fromString(function (item) {
+  /* how to serialize your item to string? */
+});
+var summarizer = ms.summarizer.fromItems(data, serialize);
+
+var app = require('koa')();
+var route = require('koa-route');
+
+app.use(route.get('/summary/:level', function* (level) {
+  this.body = yield summarizer(level | 0);
+}));</code></pre>
+
+<p>The endpoint can be extended to expose session-specific summaries. It is possible to build custom serializers not going through a string.</p>
+
+<h2 id="browser_client"> Browser client</h2>
+
+<p>It is currently recommended to use <a href="http://browserify.org/">Browserify</a> to use the library on the browser side.</p>
+
+<p>Add a dependency towards the library and to a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise</a> provider (here using <a href="https://github.com/kriskowal/q">Q</a> but any would comply):</p>
+
+<pre><code>&quot;dependencies&quot;: {
+  &quot;mathsync&quot;: &quot;0.4.x&quot;,
+  &quot;q&quot;: &quot;0.9.x&quot;
+}</code></pre>
+
+<p>Fetch the data structure from the endpoint, returning a promise:</p>
+
+<pre><code>var ms = require('mathsync');
+var http = require('http');
+var q = require('q');
+
+var data = [/* where do your items come from? */];
+
+var serialize = ms.serialize.fromString(function (item) {
+  /* how to serialize your item? */
+});
+var local = ms.summarizer.fromItems(data, serialize);
+
+function fetchSummary(level) {
+  var deferred = q.defer();
+
+  http.get('http://localhost:8080/summary/' + level, function (res) {
+    var chunks = [];
+    res.on('data', function(chunk) {
+      chunks.push(chunk);
+    });
+    res.on('end', function() {
+      deferred.resolve(chunks);
+    });
+  }).on('error', deferred.reject);
+
+  return deferred.promise.then(Buffer.concat).then(JSON.parse);
+}
+var remote = ms.summarizer.fromJSON(fetchSummary);
+
+var deserialize = ms.serialize.toString(function (str) {
+  /* how to deserialize your item? */
+});
+var resolve = ms.resolver.fromItems(data, remote, serialize, deserialize);</code></pre>
+
+<p>and then call it whenever you want to synchronize wit the server:</p>
+
+<pre><code>resolve().then(function (difference) {
+  difference.removed.forEach(function (i) {
+    /* remove deleted item locally! */
+  });
+  difference.added.forEach(function (i) {
+    /* add new item locally! */
+  });
+});</code></pre>
+
+<h2 id="generator"> Generator</h2>
+
+<p>The library supports the use of <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators#Generators.3A_a_better_way_to_build_Iterators">generator functions</a> as iterator where one is expected to and <code>yield</code> all items:</p>
+
+<pre><code>var ms = require('mathsync-generator');
+
+var data = {};
+
+var serialize = ms.serialize.fromString();
+
+var local = ms.summarizer.fromGenerator(function* () {
+  for (var k in data) {
+    yield (k + ':' + data[k]);
+  }
+}, serialize);</code></pre></div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>
+    <script src="js/plugins.js"></script>
+    <script src="js/main.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+      ga('create', 'UA-40510403-2', 'mais-h.eu');
+      ga('send', 'pageview');
+    </script>
+  </body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: resolver.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: resolver.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>(function () {
+  'use strict';
+
+  /**
+   * Function interface - Provides differences between a local and remove view.
+   *
+   * @external resolver
+   * @function
+   * @return {external:Promise.&lt;external:Difference.&lt;T>>} a promise resolving to a view of the difference.
+   */
+
+  var Promise = require('./promise');
+  var iterator = require('./iterator');
+
+  function iterateOnLevelAndDeserialize(compute, deserialize) {
+
+    function fetchDifference(level) {
+      return compute(level).then(function (diff) {
+        if (diff === null) {
+          return fetchDifference(level + 1);
+        } else {
+          return diff;
+        }
+      });
+    }
+
+    function deserializeDifference(difference) {
+      var deserialized = { added : [], removed : [] };
+      var i;
+      for (i = 0; i &lt; difference.added.length; i++) {
+        deserialized.added.push(deserialize(difference.added[i]));
+      }
+      for (i = 0; i &lt; difference.removed.length; i++) {
+        deserialized.removed.push(deserialize(difference.removed[i]));
+      }
+      return deserialized;
+    }
+
+    function resolve() {
+      return fetchDifference(0).then(deserializeDifference);
+    }
+
+    return resolve;
+  }
+
+  function fromItems(array, remote, serialize, deserialize) {
+    return iterateOnLevelAndDeserialize(function (level) {
+      return remote(level).then(function (summary) {
+        var it = iterator.map(iterator.fromArray(array), serialize);
+        return summary.minusIterator(it);
+      }).then(function (summary) {
+        return summary.toDifference();
+      });
+    }, deserialize);
+  }
+
+  function fromGenerator(generator, remote, serialize, deserialize) {
+    return iterateOnLevelAndDeserialize(function (level) {
+      return remote(level).then(function (summary) {
+        var it = iterator.map(generator(), serialize);
+        return summary.minusIterator(it);
+      }).then(function (summary) {
+        return summary.toDifference();
+      });
+    }, deserialize);
+  }
+
+  function fromSummarizers(local, remote, deserialize) {
+    return iterateOnLevelAndDeserialize(function (level) {
+      return Promise.all([local(level), remote(level)]).then(function (arr) {
+        return arr[1].minus(arr[0]).toDifference();
+      });
+    }, deserialize);
+  }
+
+  /**
+   * @module resolver
+   */
+  module.exports = {
+
+    /**
+     * Creates a resolver giving the difference between two summaries.
+     *
+     * @function
+     * @param {summarizer} local - a summarizer of the local content.
+     * @param {summarizer} remote - a summarizer of the remote content.
+     * @param {deserialize} deserialize - how to deserialize byte arrays to objects.
+     * @return {resolver} a resolver returning differences between the provided summarizers.
+     * @deprecated
+     */
+    fromSummarizers : fromSummarizers,
+
+    /**
+     * Creates a resolver giving the difference between a remote summarizer and local items.
+     *
+     * @function
+     * @param {Object[]} array - the array of items in the current state.
+     * @param {summarizer} remote - a summarizer of the remote content.
+     * @param {serialize} serialize - a serializer for items in the array.
+     * @param {deserialize} deserialize - how to deserialize byte arrays to objects.
+     * @return {resolver} a resolver returning differences between the summarizer and local items.
+     */
+    fromItems : fromItems,
+
+    /**
+     * Creates a resolver giving the difference between a remote summarizer and items yielded by a generator.
+     *
+     * @function
+     * @param {external:Generator} generator - the generator that will yield all items.
+     * @param {summarizer} remote - a summarizer of the remote content.
+     * @param {serialize} serialize - a serializer for items in the array.
+     * @param {deserialize} deserialize - how to deserialize byte arrays to objects.
+     * @return {resolver} a resolver returning differences between the summarizer and local items.
+     */
+    fromGenerator : fromGenerator
+  };
+})();
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-bucketSelector.html">bucketSelector</a></li><li><a href="module-iterator.html">iterator</a></li><li><a href="module-mathsync.html">mathsync</a></li><li><a href="module-resolver.html">resolver</a></li><li><a href="module-serialize.html">serialize</a></li><li><a href="module-summarizer.html">summarizer</a></li></ul><h3>Externals</h3><ul><li><a href="external-ArrayBuffer.html">ArrayBuffer</a></li><li><a href="external-Difference.html">Difference</a></li><li><a href="external-Generator.html">Generator</a></li><li><a href="external-Iterator.html">Iterator</a></li><li><a href="external-Promise.html">Promise</a></li><li><a href="external-Summary.html">Summary</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bucketSelector">bucketSelector</a></li><li><a href="global.html#deserialize">deserialize</a></li><li><a href="global.html#digester">digester</a></li><li><a href="global.html#resolver">resolver</a></li><li><a href="global.html#serialize">serialize</a></li><li><a href="global.html#summarizer">summarizer</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Sun Mar 09 2014 10:05:55 GMT+0100 (CET)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

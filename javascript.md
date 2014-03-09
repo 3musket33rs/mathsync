@@ -1,6 +1,6 @@
 ---
 layout: default
-title: MathSync
+title: Javascript
 ---
 
 # Javascript
@@ -15,7 +15,7 @@ Add a dependency towards the library:
 
 ```
 "dependencies": {
-  "mathsync": "0.3.x"
+  "mathsync": "0.4.x"
 }
 ```
 
@@ -49,7 +49,7 @@ Add a dependency towards the library and to a [Promise](https://developer.mozill
 
 ```
 "dependencies": {
-  "mathsync": "0.3.x",
+  "mathsync": "0.4.x",
   "q": "0.9.x"
 }
 ```
@@ -88,7 +88,7 @@ var remote = ms.summarizer.fromJSON(fetchSummary);
 var deserialize = ms.serialize.toString(function (str) {
   /* how to deserialize your item? */
 });
-var resolve = ms.resolver.fromSummarizers(local, remote, deserialize);
+var resolve = ms.resolver.fromItems(data, remote, serialize, deserialize);
 ```
 
 and then call it whenever you want to synchronize wit the server:
@@ -106,17 +106,7 @@ resolve().then(function (difference) {
 
 ## Generator
 
-[![NPM](https://nodei.co/npm/mathsync-generator.png)](https://nodei.co/npm/mathsync-generator/)
-
-An extended version of the library allows to use [generator functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators#Generators.3A_a_better_way_to_build_Iterators):
-
-```
-"dependencies": {
-  "mathsync-generator": "0.3.x"
-}
-```
-
-and `yield` all you items inside the generator function:
+The library supports the use of [generator functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators#Generators.3A_a_better_way_to_build_Iterators) as iterator where one is expected to and `yield` all items:
 
 ```
 var ms = require('mathsync-generator');

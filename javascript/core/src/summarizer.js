@@ -25,10 +25,15 @@
 
   function fromItems(array, serialize, digest, selector) {
     return function (level) {
-      var empty = ibfBuilder(levelToSize(level), digest, selector);
+      var size = levelToSize(level);
+      var empty;
+      if (size > array.length) {
+        empty = emptyFullContent;
+      } else {
+        empty = ibfBuilder(size, digest, selector);
+      }
       var it = iterator.map(iterator.fromArray(array), serialize);
-      var filled = empty.plusIterator(it);
-      return filled;
+      return empty.plusIterator(it);
     };
   }
 
@@ -45,11 +50,22 @@
   }
 
   function fromGenerator(generator, serialize, digest, selector) {
+
+    function newIterator() {
+      return iterator.map(generator(), serialize);
+    }
+
     return function generate(level) {
-      var empty = ibfBuilder(levelToSize(level), digest, selector);
-      var it = iterator.map(generator(), serialize);
-      var promise = empty.plusIterator(it);
-      return promise;
+      var size = levelToSize(level);
+      var empty = ibfBuilder(size, digest, selector);
+      var it = iterator.count(newIterator());
+      return empty.plusIterator(it).then(function (summary) {
+        if (size > it.count) {
+          return emptyFullContent.plusIterator(newIterator());
+        } else {
+          return summary;
+        }
+      });
     };
   }
 

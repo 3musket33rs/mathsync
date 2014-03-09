@@ -15,6 +15,7 @@
   function iterateOnLevelAndDeserialize(compute, deserialize) {
 
     function fetchDifference(level) {
+      console.log(level);
       return compute(level).then(function (diff) {
         if (diff === null) {
           return fetchDifference(level + 1);

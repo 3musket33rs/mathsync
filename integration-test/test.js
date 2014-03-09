@@ -36,7 +36,7 @@
 
     it('should handle many added item', function(done) {
       var i;
-      var items = 500;
+      var items = 1000;
       var p = server.put('key0', 'value0');
       for (i = 1; i < items; i++) {
         (function (j) {

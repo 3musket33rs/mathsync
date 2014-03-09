@@ -36,6 +36,25 @@
         assert.deepEqual({ done: true, value: undefined }, i.next());
       });
     });
+    describe('count', function() {
+      it('counts 0 for empty iterator', function() {
+        var i = iterator.count(iterator.fromArray([]));
+        i.next();
+        i.next();
+        i.next();
+        assert.equal(0, i.count);
+      });
+      it('yields all items of the array and then stops', function() {
+        var i = iterator.count(iterator.fromArray(['a', 'b', 'c']));
+        i.next();
+        i.next();
+        i.next();
+        i.next();
+        i.next();
+        i.next();
+        assert.equal(3, i.count);
+      });
+    });
     describe('map', function() {
       it('transforms all items of the upstream iterator', function() {
         var upstream = iterator.fromArray([1, 2, 3]);

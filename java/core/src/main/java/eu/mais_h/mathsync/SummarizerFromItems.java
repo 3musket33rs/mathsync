@@ -1,5 +1,6 @@
 package eu.mais_h.mathsync;
 
+import java.util.Iterator;
 import java.util.Set;
 
 import eu.mais_h.mathsync.digest.Digester;
@@ -9,14 +10,16 @@ import eu.mais_h.mathsync.serialize.Serializer;
 /**
  * Summarizer which iterates on items in the current state to build summaries.
  */
-public class SummarizerFromItems implements Summarizer {
+public class SummarizerFromItems<T> implements Summarizer {
 
-  private final Iterable<byte[]> items;
+  private final Set<? extends T> items;
+  private final Serializer<? super T> serializer;
   private final Digester digester;
   private final BucketSelector selector;
 
-  SummarizerFromItems(Iterable<byte[]> items, Digester digester, BucketSelector selector) {
+  SummarizerFromItems(Set<? extends T> items, Serializer<? super T> serializer, Digester digester, BucketSelector selector) {
     this.items = items;
+    this.serializer = serializer;
     this.digester = digester;
     this.selector = selector;
   }
@@ -28,8 +31,14 @@ public class SummarizerFromItems implements Summarizer {
    */
   @Override
   public Summary summarize(int level) {
-    Summary empty = new Ibf(Defaults.ibfSizeFromLevel(level), digester, selector);
-    Summary filled = empty.plus(items.iterator());
+    int size = Defaults.ibfSizeFromLevel(level);
+    Summary empty;
+    if (size > items.size()) {
+      empty = FullContent.EMPTY;
+    } else {
+      empty = new Ibf(size, digester, selector);
+    }
+    Summary filled = empty.plus(new SerializedIterator());
     return filled;
   }
 
@@ -40,7 +49,7 @@ public class SummarizerFromItems implements Summarizer {
    * @param serializer the serializer to use to serialize items.
    * @return a summarizer with {@link Sha1Digester SHA-1 digester} and default spread.
    */
-  public static <T> Summarizer simple(Set<? extends T> items, Serializer<? super T> serializer) {
+  public static <S> Summarizer simple(Set<? extends S> items, Serializer<? super S> serializer) {
     return custom(items, serializer, Sha1Digester.get(), Defaults.defaultSelector());
   }
 
@@ -53,7 +62,31 @@ public class SummarizerFromItems implements Summarizer {
    * @param selector the strategy to choose buckets to store items in.
    * @return a summarizer corresponding to the input.
    */
-  public static <T> Summarizer custom(Set<? extends T> items, Serializer<? super T> serializer, Digester digester, BucketSelector selector) {
-    return new SummarizerFromItems(new SerializedItems<T>(items, serializer), digester, selector);
+  public static <S> Summarizer custom(Set<? extends S> items, Serializer<? super S> serializer, Digester digester, BucketSelector selector) {
+    return new SummarizerFromItems<S>(items, serializer, digester, selector);
+  }
+
+  private class SerializedIterator implements Iterator<byte[]> {
+
+    private final Iterator<? extends T> itemsIterator;
+
+    SerializedIterator() {
+      this.itemsIterator = items.iterator();
+    }
+
+    @Override
+    public boolean hasNext() {
+      return itemsIterator.hasNext();
+    }
+
+    @Override
+    public byte[] next() {
+      return serializer.serialize(itemsIterator.next());
+    }
+
+    @Override
+    public void remove() {
+      throw new UnsupportedOperationException();
+    }
   }
 }

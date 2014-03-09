@@ -1,6 +1,6 @@
 ---
 layout: default
-title: MathSync
+title: Java
 ---
 
 # Java
@@ -15,7 +15,7 @@ Add a dependency towards the library:
 <dependency>
   <groupId>eu.mais-h.mathsync</groupId>
   <artifactId>core</artifactId>
-  <version>0.4.0-SNAPSHOT</version>
+  <version>0.4.0</version>
 </dependency>
 ```
 

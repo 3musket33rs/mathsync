@@ -1,6 +1,6 @@
 ---
 layout: default
-title: MathSync
+title: Javascript
 ---
 
 # Javascript

@@ -42,7 +42,7 @@ public class ResolverFromItems<T> implements Resolver<T> {
    * @param serializer the serializer to use to serialize items.
    * @param remote the retriever of remote state.
    * @param deserializer the deserializer to use to deserialize items.
-   * @return a summarizer with {@link Sha1Digester SHA-1 digester} and default spread.
+   * @return a summarizer with SHA-1 digester and default spread.
    */
   public static <T> Resolver<T> from(Set<? extends T> items, Serializer<? super T> serializer, Summarizer remote, Deserializer<T> deserializer) {
     return new ResolverFromItems(new SerializedItems(items, serializer), remote, deserializer);

@@ -9,7 +9,7 @@
    * @return {external:Promise.<external:Difference.<T>>} a promise resolving to a view of the difference.
    */
 
-  var q = require('q');
+  var Promise = require('./promise');
   var iterator = require('./iterator');
 
   function iterateOnLevelAndDeserialize(compute, deserialize) {
@@ -67,7 +67,7 @@
 
   function fromSummarizers(local, remote, deserialize) {
     return iterateOnLevelAndDeserialize(function (level) {
-      return q.all([local(level), remote(level)]).then(function (arr) {
+      return Promise.all([local(level), remote(level)]).then(function (arr) {
         return arr[1].minus(arr[0]).toDifference();
       });
     }, deserialize);

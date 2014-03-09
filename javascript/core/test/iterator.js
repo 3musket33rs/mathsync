@@ -3,7 +3,13 @@
 
   var assert = require('assert');
   var iterator = require('../src/iterator');
-  var q = require('q');
+  var Promise = require('../src/promise');
+
+  function fulfilled(value) {
+    return new Promise(function (resolve) {
+      resolve(value);
+    });
+  }
 
   describe('Iterator utilities', function() {
     describe('fromArray', function() {
@@ -69,7 +75,7 @@
         assert.deepEqual({ done: true, value: undefined }, i.next());
       });
       it('transforms promises from upstream', function(done) {
-        var upstream = iterator.fromArray([q(1), q(2), q(3)]);
+        var upstream = iterator.fromArray([fulfilled(1), fulfilled(2), fulfilled(3)]);
         function square(i) {
           return i * i;
         }

@@ -14,7 +14,7 @@
   "main": "src/index.js",
   "dependencies": {
     "rusha": ">=0.7.3",
-    "q": "1.0.x"
+    "es6-promise": "0.1.x"
   },
   "devDependencies": {
     "grunt": "0.4.x",

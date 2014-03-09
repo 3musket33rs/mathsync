@@ -1,7 +1,7 @@
 (function () {
   'use strict';
 
-  var q = require('q');
+  var Promise = require('./promise');
   var arrayBufferSerialization = require('./arrayBufferSerialization');
 
   function copyArray(array) {
@@ -45,6 +45,24 @@
     insert(mayInsert, item);
   }
 
+  function insertOrRemoveMany(mayInsert, mayRemove, items) {
+    function next(resolve, reject) {
+      var result = items.next();
+      if (result.done) {
+        resolve();
+      } else if (typeof result.value.then === 'function') {
+        return result.value.then(function (res) {
+          insertOrRemove(mayInsert, mayRemove, res);
+        }).then(next.bind(null, resolve, reject));
+      } else {
+        insertOrRemove(mayInsert, mayRemove, result.value);
+        return next(resolve,reject);
+      }
+    }
+
+    return new Promise(next);
+  }
+
   function byteArrayComparator(a, b) {
     var
       al = a.byteLength,
@@ -79,20 +97,9 @@
     function plusIterator(iterator) {
       var addedCopy = copyArray(added);
       var removedCopy = copyArray(removed);
-      function next() {
-        var result = iterator.next();
-        if (result.done) {
-          return fullContent(addedCopy, removedCopy);
-        } else if (q.isPromiseAlike(result.value)) {
-          return result.value.then(function (res) {
-            insertOrRemove(addedCopy, removedCopy, res);
-          }).then(next);
-        } else {
-          insertOrRemove(addedCopy, removedCopy, result.value);
-          return next();
-        }
-      }
-      return q().then(next);
+      return insertOrRemoveMany(addedCopy, removedCopy, iterator).then(function () {
+        return fullContent(addedCopy, removedCopy);
+      });
     }
 
     function minus(item) {
@@ -110,20 +117,9 @@
     function minusIterator(iterator) {
       var addedCopy = copyArray(added);
       var removedCopy = copyArray(removed);
-      function next() {
-        var result = iterator.next();
-        if (result.done) {
-          return fullContent(addedCopy, removedCopy);
-        } else if (q.isPromiseAlike(result.value)) {
-          return result.value.then(function (res) {
-            insertOrRemove(removedCopy, addedCopy, res);
-          }).then(next);
-        } else {
-          insertOrRemove(removedCopy, addedCopy, result.value);
-          return next();
-        }
-      }
-      return q().then(next);
+      return insertOrRemoveMany(removedCopy, addedCopy, iterator).then(function () {
+        return fullContent(addedCopy, removedCopy);
+      });
     }
 
     function minusSummary(summary) {

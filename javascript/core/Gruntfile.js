@@ -31,7 +31,8 @@ module.exports = function(grunt) {
           module : true,
           describe : false,
           it : false,
-          before : false
+          before : false,
+          Promise : true
         }
       },
       all : [ 'Gruntfile.js', 'src/**/*.js', 'test/**/*.js' ]

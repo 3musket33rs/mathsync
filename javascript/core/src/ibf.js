@@ -2,7 +2,7 @@
   'use strict';
 
   var emptyBucket = require('./bucket');
-  var q = require('q');
+  var Promise = require('./promise');
 
   function arraysEqual(a, b) {
     if (!a || !b) {
@@ -60,6 +60,23 @@
       }
     }
 
+    function modifyManyWithSideEffect(bucketsCopy, variation, items) {
+      function next(resolve, reject) {
+        var result = items.next();
+        if (result.done) {
+          resolve();
+        } else if (typeof result.value.then === 'function') {
+          return result.value.then(function (res) {
+            modifyWithSideEffect(bucketsCopy, variation, res);
+          }).then(next.bind(null, resolve, reject));
+        } else {
+          modifyWithSideEffect(bucketsCopy, variation, result.value);
+          next(resolve, reject);
+        }
+      }
+      return new Promise(next);
+    }
+
     function plus(content) {
       if (!(content instanceof ArrayBuffer)) {
         throw new TypeError('Ibf#plus takes an ArrayBuffer, given ' + content);
@@ -71,20 +88,9 @@
 
     function plusIterator(iterator) {
       var bucketsCopy = copyBuckets();
-      function next() {
-        var result = iterator.next();
-        if (result.done) {
-          return ibfFromBuckets(bucketsCopy, digest, selector);
-        } else if (q.isPromiseAlike(result.value)) {
-          return result.value.then(function (res) {
-            modifyWithSideEffect(bucketsCopy, 1, res);
-          }).then(next);
-        } else {
-          modifyWithSideEffect(bucketsCopy, 1, result.value);
-          return next();
-        }
-      }
-      return q().then(next);
+      return modifyManyWithSideEffect(bucketsCopy, 1, iterator).then(function () {
+        return ibfFromBuckets(bucketsCopy, digest, selector);
+      });
     }
 
     function minus(content) {
@@ -100,20 +106,9 @@
 
     function minusIterator(iterator) {
       var bucketsCopy = copyBuckets();
-      function next() {
-        var result = iterator.next();
-        if (result.done) {
-          return ibfFromBuckets(bucketsCopy, digest, selector);
-        } else if (q.isPromiseAlike(result.value)) {
-          return result.value.then(function (res) {
-            modifyWithSideEffect(bucketsCopy, -1, res);
-          }).then(next);
-        } else {
-          modifyWithSideEffect(bucketsCopy, -1, result.value);
-          return next();
-        }
-      }
-      return q().then(next);
+      return modifyManyWithSideEffect(bucketsCopy, -1, iterator).then(function () {
+        return ibfFromBuckets(bucketsCopy, digest, selector);
+      });
     }
 
     function toDifference() {

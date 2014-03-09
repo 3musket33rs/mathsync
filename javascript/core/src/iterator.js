@@ -64,8 +64,6 @@
    * @function external:Iterator#next
    */
 
-  var q = require('q');
-
   function fromArray(array) {
     var i = 0;
     function next() {
@@ -99,7 +97,7 @@
       var upper = iterator.next();
       if (upper.done) {
         return upper;
-      } else if (q.isPromiseAlike(upper.value)) {
+      } else if (typeof upper.value.then === 'function') {
         return { done: false, value: upper.value.then(transform) };
       } else {
         return { done: false, value: transform(upper.value) };

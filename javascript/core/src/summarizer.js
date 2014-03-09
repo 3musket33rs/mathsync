@@ -14,7 +14,7 @@
    *                                         current state at the requested level of detail.
    */
 
-  var q = require('q');
+  var Promise = require('./promise');
   var ibfBuilder = require('./ibf');
   var emptyFullContent = require('./fullContent');
   var iterator = require('./iterator');
@@ -39,7 +39,7 @@
 
   function fromJSON(producer, digest, selector) {
     return function (level) {
-      return q().then(producer.bind(null, level)).then(function (json) {
+      return Promise.resolve(producer(level)).then(function (json) {
         if (Array.isArray(json)) {
           return ibfBuilder.fromJSON(json, digest, selector);
         } else {

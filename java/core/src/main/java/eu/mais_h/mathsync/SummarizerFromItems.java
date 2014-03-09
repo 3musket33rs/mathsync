@@ -10,16 +10,14 @@ import eu.mais_h.mathsync.serialize.Serializer;
 /**
  * Summarizer which iterates on items in the current state to build summaries.
  */
-public class SummarizerFromItems<T> implements Summarizer {
+public class SummarizerFromItems implements Summarizer {
 
-  private final Set<? extends T> items;
-  private final Serializer<? super T> serializer;
+  private final SerializedItems items;
   private final Digester digester;
   private final BucketSelector selector;
 
-  SummarizerFromItems(Set<? extends T> items, Serializer<? super T> serializer, Digester digester, BucketSelector selector) {
+  SummarizerFromItems(SerializedItems items, Digester digester, BucketSelector selector) {
     this.items = items;
-    this.serializer = serializer;
     this.digester = digester;
     this.selector = selector;
   }
@@ -38,7 +36,7 @@ public class SummarizerFromItems<T> implements Summarizer {
     } else {
       empty = new Ibf(size, digester, selector);
     }
-    Summary filled = empty.plus(new SerializedIterator());
+    Summary filled = empty.plus(items.iterator());
     return filled;
   }
 
@@ -49,7 +47,7 @@ public class SummarizerFromItems<T> implements Summarizer {
    * @param serializer the serializer to use to serialize items.
    * @return a summarizer with {@link Sha1Digester SHA-1 digester} and default spread.
    */
-  public static <S> Summarizer simple(Set<? extends S> items, Serializer<? super S> serializer) {
+  public static <T> Summarizer simple(Set<? extends T> items, Serializer<? super T> serializer) {
     return custom(items, serializer, Sha1Digester.get(), Defaults.defaultSelector());
   }
 
@@ -62,31 +60,7 @@ public class SummarizerFromItems<T> implements Summarizer {
    * @param selector the strategy to choose buckets to store items in.
    * @return a summarizer corresponding to the input.
    */
-  public static <S> Summarizer custom(Set<? extends S> items, Serializer<? super S> serializer, Digester digester, BucketSelector selector) {
-    return new SummarizerFromItems<S>(items, serializer, digester, selector);
-  }
-
-  private class SerializedIterator implements Iterator<byte[]> {
-
-    private final Iterator<? extends T> itemsIterator;
-
-    SerializedIterator() {
-      this.itemsIterator = items.iterator();
-    }
-
-    @Override
-    public boolean hasNext() {
-      return itemsIterator.hasNext();
-    }
-
-    @Override
-    public byte[] next() {
-      return serializer.serialize(itemsIterator.next());
-    }
-
-    @Override
-    public void remove() {
-      throw new UnsupportedOperationException();
-    }
+  public static <T> Summarizer custom(Set<? extends T> items, Serializer<? super T> serializer, Digester digester, BucketSelector selector) {
+    return new SummarizerFromItems(new SerializedItems(items, serializer), digester, selector);
   }
 }

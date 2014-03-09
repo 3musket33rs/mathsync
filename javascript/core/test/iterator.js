@@ -7,6 +7,10 @@
 
   describe('Iterator utilities', function() {
     describe('fromArray', function() {
+      it('directly returns finished iterator for empty array', function() {
+        var i = iterator.fromArray([]);
+        assert.deepEqual({ done: true, value: undefined }, i.next());
+      });
       it('yields all items of the array and then stops', function() {
         var i = iterator.fromArray(['a', 'b', 'c']);
         assert.deepEqual({ done: false, value: 'a' }, i.next());

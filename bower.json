@@ -1,6 +1,5 @@
 {
   "name": "mathsync",
-  "version": "0.4.0-alpha",
   "homepage": "http://mathsync.mais-h.eu",
   "authors": [
     "Mathieu Bruyen <code@mais-h.eu>"
@@ -21,6 +20,6 @@
   ],
   "dependencies": {
     "rusha": "c2f9b99ac89362b96321c4b381f284d5846e3ea7",
-    "q": "1.0.x"
+    "es6-promise": "0.1.x"
   }
 }

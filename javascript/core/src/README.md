@@ -1,3 +1,3 @@
 # Mathsync javascript implementation
 
-[Documentation](http://mathsync.mais-h.eu/javascript.html)
+Entry point when doing `require('mathsync')` is [mathsync module](module-mathsync.html).

@@ -138,6 +138,23 @@
       /**
        * Creates summaries representing an array.
        *
+       * @example <caption>Simple strings in an array</caption>
+       * var ms = require('mathsync');
+       * var data = ["aaa", "bbb", "ccc"];
+       * var summarizer = ms.summarizer.fromItems(data, ms.serialize.fromString());
+       *
+       * @example <caption>More complex objects with custom serializer</caption>
+       * var ms = require('mathsync');
+       * var data = [{ id: 1, value: 5 }, { id: 10, value: 50 }];
+       * var serializer = ms.serialize.fromString(function (item) {
+       *   var buffer = new ArrayBuffer(8);
+       *   var dv = new DataView(buffer);
+       *   dv.setInt32(0, item.id);
+       *   dv.setInt32(4, item.value);
+       *   return buffer;
+       * });
+       * var summarizer = ms.summarizer.fromItems(data, serializer);
+       *
        * @function summarizer.fromItems
        * @param {Object[]} array - the array of items in the current state.
        * @param {serialize} serialize - a serializer for items in the array.
@@ -151,6 +168,25 @@
       /**
        * Deserializes JSON views of summaries, likely obtained throught the network.
        *
+       * @example <caption>Fetches the summary fron an HTTP endpoint</caption>
+       * var Promise = require('mathsync/src/promise'); // polyfill
+       * var http = require('http');
+       * function fetchSummary(level) {
+       *   var p = new Promise(function (resolve, reject) {
+       *     http.get('http://localhost:4000/api/summary/' + level, function (res) {
+       *       var chunks = [];
+       *       res.on('data', function(chunk) {
+       *         chunks.push(chunk);
+       *       });
+       *       res.on('end', function() {
+       *         resolve(chunks);
+       *       });
+       *     }).on('error', reject);
+       *   });
+       *   return p.then(Buffer.concat).then(JSON.parse);
+       * }
+       * var summarizer = ms.summarizer.fromJSON(fetchSummary);
+       *
        * @function summarizer.fromJSON
        * @param {Function} producer - the producer of JSON summaries, returns promises resolving to JSON content.
        * @return {summarizer} a summarizer returning deserialized summaries.
@@ -162,6 +198,17 @@
 
       /**
        * Creates summaries representing items yielded by a generator.
+       *
+       * @example <caption>Yields strings from a hash</caption>
+       * var ms = require('mathsync');
+       * var data = { key1: "value", key2: "other" };
+       * var summarizer = ms.summarizer.fromGenerator(function* () {
+       *   for (var k in data) {
+       *     if (data.hasOwnProperty(k)) {
+       *       yield k + ':' + data[k];
+       *     }
+       *   }
+       * }, ms.serialize.fromString());
        *
        * @function summarizer.fromGenerator
        * @param {external:Generator} generator - the generator that will yield all items.

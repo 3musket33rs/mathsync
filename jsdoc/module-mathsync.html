@@ -132,7 +132,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line189">line 189</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line236">line 236</a>
     </li></ul></dd>
     
     
@@ -186,7 +186,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line182">line 182</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line229">line 229</a>
     </li></ul></dd>
     
     
@@ -378,7 +378,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line163">line 163</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line199">line 199</a>
     </li></ul></dd>
     
     
@@ -429,6 +429,21 @@
 
         
     
+    
+        <h5>Example</h5>
+        
+        <p class="code-caption">Yields strings from a hash</p>
+    
+    <pre class="prettyprint"><code>var ms = require('mathsync');
+var data = { key1: "value", key2: "other" };
+var summarizer = ms.summarizer.fromGenerator(function* () {
+  for (var k in data) {
+    if (data.hasOwnProperty(k)) {
+      yield k + ':' + data[k];
+    }
+  }
+}, ms.serialize.fromString());</code></pre>
+
     
 </dd>
 
@@ -599,6 +614,28 @@
         
     
     
+        <h5>Examples</h5>
+        
+        <p class="code-caption">Simple strings in an array</p>
+    
+    <pre class="prettyprint"><code>var ms = require('mathsync');
+var data = ["aaa", "bbb", "ccc"];
+var summarizer = ms.summarizer.fromItems(data, ms.serialize.fromString());</code></pre>
+
+        <p class="code-caption">More complex objects with custom serializer</p>
+    
+    <pre class="prettyprint"><code>var ms = require('mathsync');
+var data = [{ id: 1, value: 5 }, { id: 10, value: 50 }];
+var serializer = ms.serialize.fromString(function (item) {
+  var buffer = new ArrayBuffer(8);
+  var dv = new DataView(buffer);
+  dv.setInt32(0, item.id);
+  dv.setInt32(4, item.value);
+  return buffer;
+});
+var summarizer = ms.summarizer.fromItems(data, serializer);</code></pre>
+
+    
 </dd>
 
         
@@ -693,7 +730,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line151">line 151</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line168">line 168</a>
     </li></ul></dd>
     
     
@@ -744,6 +781,29 @@
 
         
     
+    
+        <h5>Example</h5>
+        
+        <p class="code-caption">Fetches the summary fron an HTTP endpoint</p>
+    
+    <pre class="prettyprint"><code>var Promise = require('mathsync/src/promise'); // polyfill
+var http = require('http');
+function fetchSummary(level) {
+  var p = new Promise(function (resolve, reject) {
+    http.get('http://localhost:4000/api/summary/' + level, function (res) {
+      var chunks = [];
+      res.on('data', function(chunk) {
+        chunks.push(chunk);
+      });
+      res.on('end', function() {
+        resolve(chunks);
+      });
+    }).on('error', reject);
+  });
+  return p.then(Buffer.concat).then(JSON.parse);
+}
+var summarizer = ms.summarizer.fromJSON(fetchSummary);</code></pre>
+
     
 </dd>
 
@@ -874,7 +934,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line189">line 189</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line236">line 236</a>
     </li></ul></dd>
     
     
@@ -928,7 +988,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line182">line 182</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line229">line 229</a>
     </li></ul></dd>
     
     
@@ -1120,7 +1180,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line163">line 163</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line199">line 199</a>
     </li></ul></dd>
     
     
@@ -1171,6 +1231,21 @@
 
         
     
+    
+        <h5>Example</h5>
+        
+        <p class="code-caption">Yields strings from a hash</p>
+    
+    <pre class="prettyprint"><code>var ms = require('mathsync');
+var data = { key1: "value", key2: "other" };
+var summarizer = ms.summarizer.fromGenerator(function* () {
+  for (var k in data) {
+    if (data.hasOwnProperty(k)) {
+      yield k + ':' + data[k];
+    }
+  }
+}, ms.serialize.fromString());</code></pre>
+
     
 </dd>
 
@@ -1341,6 +1416,28 @@
         
     
     
+        <h5>Examples</h5>
+        
+        <p class="code-caption">Simple strings in an array</p>
+    
+    <pre class="prettyprint"><code>var ms = require('mathsync');
+var data = ["aaa", "bbb", "ccc"];
+var summarizer = ms.summarizer.fromItems(data, ms.serialize.fromString());</code></pre>
+
+        <p class="code-caption">More complex objects with custom serializer</p>
+    
+    <pre class="prettyprint"><code>var ms = require('mathsync');
+var data = [{ id: 1, value: 5 }, { id: 10, value: 50 }];
+var serializer = ms.serialize.fromString(function (item) {
+  var buffer = new ArrayBuffer(8);
+  var dv = new DataView(buffer);
+  dv.setInt32(0, item.id);
+  dv.setInt32(4, item.value);
+  return buffer;
+});
+var summarizer = ms.summarizer.fromItems(data, serializer);</code></pre>
+
+    
 </dd>
 
         
@@ -1435,7 +1532,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line151">line 151</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line168">line 168</a>
     </li></ul></dd>
     
     
@@ -1487,6 +1584,29 @@
         
     
     
+        <h5>Example</h5>
+        
+        <p class="code-caption">Fetches the summary fron an HTTP endpoint</p>
+    
+    <pre class="prettyprint"><code>var Promise = require('mathsync/src/promise'); // polyfill
+var http = require('http');
+function fetchSummary(level) {
+  var p = new Promise(function (resolve, reject) {
+    http.get('http://localhost:4000/api/summary/' + level, function (res) {
+      var chunks = [];
+      res.on('data', function(chunk) {
+        chunks.push(chunk);
+      });
+      res.on('end', function() {
+        resolve(chunks);
+      });
+    }).on('error', reject);
+  });
+  return p.then(Buffer.concat).then(JSON.parse);
+}
+var summarizer = ms.summarizer.fromJSON(fetchSummary);</code></pre>
+
+    
 </dd>
 
         </dl>
@@ -1511,7 +1631,7 @@
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Sun Mar 09 2014 10:05:56 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Thu Mar 13 2014 08:37:25 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>

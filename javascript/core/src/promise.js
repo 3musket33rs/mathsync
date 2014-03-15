@@ -22,7 +22,7 @@
    * <p>Either returns the global Promise object or uses the
    * <a href="https://github.com/jakearchibald/es6-promise">polyfill</a>.</p>
    *
-   * @module mathsync
+   * @module promise
    */
   module.exports = (typeof Promise === 'undefined') ? require('es6-promise').Promise : Promise;
 })();

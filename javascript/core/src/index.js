@@ -168,7 +168,40 @@
       /**
        * Deserializes JSON views of summaries, likely obtained throught the network.
        *
-       * @example <caption>Fetches the summary fron an HTTP endpoint</caption>
+       * @example <caption>From an HTTP endpoint using XMLHttpRequest</caption>
+       * var Promise = require('mathsync/src/promise'); // polyfill
+       * function fetchSummary(level) {
+       *   var p = new Promise(function (resolve, reject) {
+       *     var req, url = 'http://localhost:4000/api/summary/' + level;
+       *     function ready() {
+       *       if (req.status === 200) {
+       *         resolve(req.responseText);
+       *       } else {
+       *         reject(new Error('Failed to get summary from ' + url));
+       *       }
+       *     }
+       *     function stateChange() {
+       *       if (req.readyState === 4) {
+       *         ready();
+       *       }
+       *     }
+       *     req = new XMLHttpRequest();
+       *     req.onreadystatechange = stateChange;
+       *     req.open('GET', url);
+       *     req.send(null);
+       *   });
+       *   return p.then(JSON.parse);
+       * }
+       * var summarizer = ms.summarizer.fromJSON(fetchSummary);
+       *
+       * @example <caption>From an HTTP endpoint using jQuery</caption>
+       * var Promise = require('mathsync/src/promise'); // polyfill
+       * function fetchSummary(level) {
+       *   return Promise.resolve($.getJSON('http://localhost:4000/api/summary/' + level));
+       * }
+       * var summarizer = ms.summarizer.fromJSON(fetchSummary);
+       *
+       * @example <caption>From an HTTP endpoint using Node's http</caption>
        * var Promise = require('mathsync/src/promise'); // polyfill
        * var http = require('http');
        * function fetchSummary(level) {

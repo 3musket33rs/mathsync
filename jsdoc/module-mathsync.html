@@ -132,7 +132,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line236">line 236</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line269">line 269</a>
     </li></ul></dd>
     
     
@@ -186,7 +186,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line229">line 229</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line262">line 262</a>
     </li></ul></dd>
     
     
@@ -378,7 +378,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line199">line 199</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line232">line 232</a>
     </li></ul></dd>
     
     
@@ -782,9 +782,44 @@ var summarizer = ms.summarizer.fromItems(data, serializer);</code></pre>
         
     
     
-        <h5>Example</h5>
+        <h5>Examples</h5>
         
-        <p class="code-caption">Fetches the summary fron an HTTP endpoint</p>
+        <p class="code-caption">From an HTTP endpoint using XMLHttpRequest</p>
+    
+    <pre class="prettyprint"><code>var Promise = require('mathsync/src/promise'); // polyfill
+function fetchSummary(level) {
+  var p = new Promise(function (resolve, reject) {
+    var req, url = 'http://localhost:4000/api/summary/' + level;
+    function ready() {
+      if (req.status === 200) {
+        resolve(req.responseText);
+      } else {
+        reject(new Error('Failed to get summary from ' + url));
+      }
+    }
+    function stateChange() {
+      if (req.readyState === 4) {
+        ready();
+      }
+    }
+    req = new XMLHttpRequest();
+    req.onreadystatechange = stateChange;
+    req.open('GET', url);
+    req.send(null);
+  });
+  return p.then(JSON.parse);
+}
+var summarizer = ms.summarizer.fromJSON(fetchSummary);</code></pre>
+
+        <p class="code-caption">From an HTTP endpoint using jQuery</p>
+    
+    <pre class="prettyprint"><code>var Promise = require('mathsync/src/promise'); // polyfill
+function fetchSummary(level) {
+  return Promise.resolve($.getJSON('http://localhost:4000/api/summary/' + level));
+}
+var summarizer = ms.summarizer.fromJSON(fetchSummary);</code></pre>
+
+        <p class="code-caption">From an HTTP endpoint using Node's http</p>
     
     <pre class="prettyprint"><code>var Promise = require('mathsync/src/promise'); // polyfill
 var http = require('http');
@@ -934,7 +969,7 @@ var summarizer = ms.summarizer.fromJSON(fetchSummary);</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line236">line 236</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line269">line 269</a>
     </li></ul></dd>
     
     
@@ -988,7 +1023,7 @@ var summarizer = ms.summarizer.fromJSON(fetchSummary);</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line229">line 229</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line262">line 262</a>
     </li></ul></dd>
     
     
@@ -1180,7 +1215,7 @@ var summarizer = ms.summarizer.fromJSON(fetchSummary);</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line199">line 199</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line232">line 232</a>
     </li></ul></dd>
     
     
@@ -1584,9 +1619,44 @@ var summarizer = ms.summarizer.fromItems(data, serializer);</code></pre>
         
     
     
-        <h5>Example</h5>
+        <h5>Examples</h5>
         
-        <p class="code-caption">Fetches the summary fron an HTTP endpoint</p>
+        <p class="code-caption">From an HTTP endpoint using XMLHttpRequest</p>
+    
+    <pre class="prettyprint"><code>var Promise = require('mathsync/src/promise'); // polyfill
+function fetchSummary(level) {
+  var p = new Promise(function (resolve, reject) {
+    var req, url = 'http://localhost:4000/api/summary/' + level;
+    function ready() {
+      if (req.status === 200) {
+        resolve(req.responseText);
+      } else {
+        reject(new Error('Failed to get summary from ' + url));
+      }
+    }
+    function stateChange() {
+      if (req.readyState === 4) {
+        ready();
+      }
+    }
+    req = new XMLHttpRequest();
+    req.onreadystatechange = stateChange;
+    req.open('GET', url);
+    req.send(null);
+  });
+  return p.then(JSON.parse);
+}
+var summarizer = ms.summarizer.fromJSON(fetchSummary);</code></pre>
+
+        <p class="code-caption">From an HTTP endpoint using jQuery</p>
+    
+    <pre class="prettyprint"><code>var Promise = require('mathsync/src/promise'); // polyfill
+function fetchSummary(level) {
+  return Promise.resolve($.getJSON('http://localhost:4000/api/summary/' + level));
+}
+var summarizer = ms.summarizer.fromJSON(fetchSummary);</code></pre>
+
+        <p class="code-caption">From an HTTP endpoint using Node's http</p>
     
     <pre class="prettyprint"><code>var Promise = require('mathsync/src/promise'); // polyfill
 var http = require('http');
@@ -1631,7 +1701,7 @@ var summarizer = ms.summarizer.fromJSON(fetchSummary);</code></pre>
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Thu Mar 13 2014 08:37:25 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Sat Mar 15 2014 09:15:20 GMT+0100 (CET)
 </footer>
 
 <script> prettyPrint(); </script>

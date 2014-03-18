@@ -3,8 +3,13 @@ layout: default
 title: Changelog
 ---
 
-# On the road
+# Pipe
 
+* refine design to get back symmetry (prevent the need for implementing both a summarizer and a resolver)
+
+# On the road to 0.5.0
+
+* summarizer and resolver from node stream
 * remove deprecated method `Summary#minus(Summary)` and deprecated class `ResolverFromSummarizers`
 * seed bucket selector
 * reduce dependencies to node to reduce browserify package size

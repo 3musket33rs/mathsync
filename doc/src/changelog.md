@@ -5,7 +5,10 @@ title: Changelog
 
 # Pipe
 
-* refine design to get back symmetry (prevent the need for implementing both a summarizer and a resolver)
+* refine design to get back pre-`0.4.x` symmetry (prevent the need for implementing both a summarizer and a resolver)
+* summarizer and resolver from node streams
+* ProtocolBuffer serialization
+* difference view indexed by key (allows to view updates in a different collection)
 
 # On the road to 0.5.0
 

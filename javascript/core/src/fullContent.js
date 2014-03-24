@@ -21,9 +21,7 @@
   }
 
   function insert(into, item) {
-    var
-      i,
-      d;
+    var i, d;
     for (i = 0; i < into.length; i++) {
       d = byteArrayComparator(into[i], item);
       if (d === 0) {
@@ -61,6 +59,20 @@
     }
 
     return new Promise(next);
+  }
+
+  function insertOrRemoveStream(mayInsert, mayRemove, stream) {
+    return new Promise(function (resolve, reject) {
+      stream.on('data', function (item) {
+        try {
+          insertOrRemove(mayInsert, mayRemove, item);
+        } catch (err) {
+          reject(err);
+        }
+      });
+      stream.on('error', reject);
+      stream.on('end', resolve);
+    });
   }
 
   function byteArrayComparator(a, b) {
@@ -102,6 +114,14 @@
       });
     }
 
+    function plusStream(stream) {
+      var addedCopy = copyArray(added);
+      var removedCopy = copyArray(removed);
+      return insertOrRemoveStream(addedCopy, removedCopy, stream).then(function () {
+        return fullContent(addedCopy, removedCopy);
+      });
+    }
+
     function minus(item) {
       // Backward compatibility with deprecated API
       if (!(item instanceof ArrayBuffer)) {
@@ -118,6 +138,14 @@
       var addedCopy = copyArray(added);
       var removedCopy = copyArray(removed);
       return insertOrRemoveMany(removedCopy, addedCopy, iterator).then(function () {
+        return fullContent(addedCopy, removedCopy);
+      });
+    }
+
+    function minusStream(stream) {
+      var addedCopy = copyArray(added);
+      var removedCopy = copyArray(removed);
+      return insertOrRemoveStream(removedCopy, addedCopy, stream).then(function () {
         return fullContent(addedCopy, removedCopy);
       });
     }
@@ -149,8 +177,10 @@
     return {
       plus: plus,
       plusIterator: plusIterator,
+      plusStream: plusStream,
       minus: minus,
       minusIterator: minusIterator,
+      minusStream: minusStream,
       toDifference: toDifference,
       toJSON: toJSON
     };

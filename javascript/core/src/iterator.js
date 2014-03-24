@@ -21,7 +21,7 @@
    * An occurrence of a Generator.
    *
    * <p>This is the result of calling a generator function which does <code>yield</code> on each item it wants to
-   * expose, or on promise to items it wants to expose. It can actually be a hand made object as long as it respects
+   * expose. It can actually be a hand made object as long as it respects
    * the contract of this interface.</p>
    *
    * @example
@@ -58,7 +58,8 @@
    *
    * <p>Can either return a value if it is not done, <code>{ done : false, value : 'some value' }</code>, or inform it
    * is done with <code>{ done : true }</code>. <code>value</code> can either be the actual value or a
-   * {@link external:Promise promise} which will resolve to the desired value.</p>
+   * {@link external:Promise promise} which will resolve to the desired value. Streams should be used in replacement of
+   * Promise-returning iterators, which will be removed in a future release.</p>
    *
    * @returns Object a done marker, or a value container, or a promise-for-value container.
    * @function external:Iterator#next

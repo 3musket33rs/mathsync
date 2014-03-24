@@ -6,6 +6,7 @@ title: Changelog
 # Pipe
 
 * refine design to get back symmetry (prevent the need for implementing both a summarizer and a resolver)
+* remove Promise-resolving in iterator-based APIs
 
 # On the road to 0.5.0
 

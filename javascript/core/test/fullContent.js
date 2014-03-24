@@ -124,7 +124,7 @@
         utils.assertThatSetOfArrayEquals(goThroughJson(asyncAdded).toDifference().removed, []);
       });
     });
-    describe('with added items through stream', function(done) {
+    describe('with added items through stream', function() {
       var asyncAdded;
       var item1 = new Int8Array([5]).buffer;
       var item2 = new Int8Array([6]).buffer;
@@ -173,11 +173,6 @@
       var asyncRemoved;
       var item1 = new Int8Array([5]).buffer;
       var item2 = new Int8Array([6]).buffer;
-
-      function* generateItems() {
-        yield item1;
-        yield item2;
-      }
 
       before(function (done) {
         emptyContent.minusStream(new ArrayStream([item1, item2])).then(function (c) {

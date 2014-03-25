@@ -11,6 +11,53 @@
    */
 
   /**
+   * Node's readable stream.
+   *
+   * <p>Only to be used in object mode.</p>
+   *
+   * @external Readable
+   * @see {@link http://nodejs.org/api/stream.html#stream_class_stream_readable stream.Readable on Node.js}
+   */
+  /**
+   * Data event.
+   *
+   * <p>Called as soon as data is available, with one item.</p>
+   *
+   * @example
+   * stream.on('data', function(item) {
+   *   console.log(item);
+   * });
+   *
+   * @event external:Readable#data
+   * @type {Object}
+   */
+  /**
+   * Error event.
+   *
+   * <p>Called if there is an error while reading data.</p>
+   *
+   * @example
+   * stream.on('error', function(err) {
+   *   console.error(err);
+   * });
+   *
+   * @event external:Readable#error
+   * @type {Error}
+   */
+  /**
+   * End event.
+   *
+   * <p>Called after all data has been read.</p>
+   *
+   * @example
+   * stream.on('end', function(err) {
+   *   console.log('done with my stream');
+   * });
+   *
+   * @event external:Readable#end
+   */
+
+  /**
    * Represents summarized data.
    * @external Summary
    */
@@ -40,7 +87,17 @@
    * @function external:Summary#plusIterator
    */
   /**
-   * Removes an item to the summary.
+   * Adds several items to the summary.
+   *
+   * <p>Equivalent to repeatedly calling {@link external:Summary#plus} for each element, but this
+   * method can do optimizations for batch updates.</p>
+   *
+   * @param {external:Readable<external:ArrayBuffer>} stream - a stream of items to add.
+   * @returns {external:Promise.<external:Summary>} a promise which will resolve to a summary.
+   * @function external:Summary#plusStream
+   */
+  /**
+   * Removes an item from the summary.
    *
    * <p>When both summaries can be {@link external:Summary#toDifference|viewed as a difference}:
    * <ul>
@@ -55,7 +112,7 @@
    * @function external:Summary#minus
    */
   /**
-   * Removes several items to the summary.
+   * Removes several items from the summary.
    *
    * <p>Equivalent to repeatedly calling {@link external:Summary#minus} for each element, but this
    * method can do optimizations for batch updates.</p>
@@ -63,6 +120,16 @@
    * @param {external:Iterator} iterator - an iterator of items to remove.
    * @returns {external:Promise.<external:Summary>} a promise which will resolve to a summary.
    * @function external:Summary#minusIterator
+   */
+  /**
+   * Removes several items from the summary.
+   *
+   * <p>Equivalent to repeatedly calling {@link external:Summary#minus} for each element, but this
+   * method can do optimizations for batch updates.</p>
+   *
+   * @param {external:Readable<external:ArrayBuffer>} stream - a stream of items to remove.
+   * @returns {external:Promise.<external:Summary>} a promise which will resolve to a summary.
+   * @function external:Summary#minusStream
    */
   /**
    * Retrieves a view of the summary as a difference.

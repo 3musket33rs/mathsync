@@ -77,6 +77,20 @@
       return new Promise(next);
     }
 
+    function modifyWithSideEffectFromStream(bucketsCopy, variation, stream) {
+      return new Promise(function (resolve, reject) {
+        stream.on('data', function (item) {
+          try {
+            modifyWithSideEffect(bucketsCopy, variation, item);
+          } catch (err) {
+            reject(err);
+          }
+        });
+        stream.on('error', reject);
+        stream.on('end', resolve);
+      });
+    }
+
     function plus(content) {
       if (!(content instanceof ArrayBuffer)) {
         throw new TypeError('Ibf#plus takes an ArrayBuffer, given ' + content);
@@ -89,6 +103,13 @@
     function plusIterator(iterator) {
       var bucketsCopy = copyBuckets();
       return modifyManyWithSideEffect(bucketsCopy, 1, iterator).then(function () {
+        return ibfFromBuckets(bucketsCopy, digest, selector);
+      });
+    }
+
+    function plusStream(stream) {
+      var bucketsCopy = copyBuckets();
+      return modifyWithSideEffectFromStream(bucketsCopy, 1, stream).then(function () {
         return ibfFromBuckets(bucketsCopy, digest, selector);
       });
     }
@@ -107,6 +128,13 @@
     function minusIterator(iterator) {
       var bucketsCopy = copyBuckets();
       return modifyManyWithSideEffect(bucketsCopy, -1, iterator).then(function () {
+        return ibfFromBuckets(bucketsCopy, digest, selector);
+      });
+    }
+
+    function minusStream(stream) {
+      var bucketsCopy = copyBuckets();
+      return modifyWithSideEffectFromStream(bucketsCopy, -1, stream).then(function () {
         return ibfFromBuckets(bucketsCopy, digest, selector);
       });
     }
@@ -184,8 +212,10 @@
       toDifference : toDifference,
       plus : plus,
       plusIterator : plusIterator,
+      plusStream : plusStream,
       minus : minus,
       minusIterator : minusIterator,
+      minusStream : minusStream,
       toJSON : toJSON
     };
 

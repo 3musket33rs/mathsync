@@ -2,12 +2,29 @@
   'use strict';
 
   var utils = require('./utils');
+  var Readable = require('stream').Readable;
+  var util = require('util');
 
   var emptyContent = require('../src/fullContent');
 
   function goThroughJson(origin) {
     return emptyContent.fromJSON(origin.toJSON());
   }
+
+  function ArrayStream(items) {
+    Readable.call(this, { objectMode: true });
+    this._index = 0;
+    this._items = items;
+  }
+  util.inherits(ArrayStream, Readable);
+  ArrayStream.prototype._read = function() {
+    if (this._index >= this._items.length) {
+      this.push(null);
+    } else {
+      this.push(this._items[this._index]);
+      this._index++;
+    }
+  };
 
   describe('Full content', function() {
     describe('empty', function() {
@@ -107,6 +124,26 @@
         utils.assertThatSetOfArrayEquals(goThroughJson(asyncAdded).toDifference().removed, []);
       });
     });
+    describe('with added items through stream', function() {
+      var asyncAdded;
+      var item1 = new Int8Array([5]).buffer;
+      var item2 = new Int8Array([6]).buffer;
+
+      before(function (done) {
+        emptyContent.plusStream(new ArrayStream([item1, item2])).then(function (c) {
+          asyncAdded = c;
+        }).then(done, done);
+      });
+
+      it('has two added elements', function() {
+        utils.assertThatSetOfArrayEquals(asyncAdded.toDifference().added, [item1, item2]);
+        utils.assertThatSetOfArrayEquals(goThroughJson(asyncAdded).toDifference().added, [item1, item2]);
+      });
+      it('has no removed element', function() {
+        utils.assertThatSetOfArrayEquals(asyncAdded.toDifference().removed, []);
+        utils.assertThatSetOfArrayEquals(goThroughJson(asyncAdded).toDifference().removed, []);
+      });
+    });
     describe('with removed items through iterator', function() {
       var asyncRemoved;
       var item1 = new Int8Array([5]).buffer;
@@ -119,6 +156,26 @@
 
       before(function (done) {
         emptyContent.minusIterator(generateItems()).then(function (c) {
+          asyncRemoved = c;
+        }).then(done, done);
+      });
+
+      it('has two removed elements', function() {
+        utils.assertThatSetOfArrayEquals(asyncRemoved.toDifference().removed, [item1, item2]);
+        utils.assertThatSetOfArrayEquals(goThroughJson(asyncRemoved).toDifference().removed, [item1, item2]);
+      });
+      it('has no added element', function() {
+        utils.assertThatSetOfArrayEquals(asyncRemoved.toDifference().added, []);
+        utils.assertThatSetOfArrayEquals(goThroughJson(asyncRemoved).toDifference().added, []);
+      });
+    });
+    describe('with removed items through stream', function() {
+      var asyncRemoved;
+      var item1 = new Int8Array([5]).buffer;
+      var item2 = new Int8Array([6]).buffer;
+
+      before(function (done) {
+        emptyContent.minusStream(new ArrayStream([item1, item2])).then(function (c) {
           asyncRemoved = c;
         }).then(done, done);
       });

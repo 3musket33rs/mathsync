@@ -182,6 +182,10 @@
     return summarizer.fromJSON(producer, sha1, selector);
   }
 
+  function fromStream(stream, serialize) {
+    return summarizer.fromStream(stream, serialize, sha1, selector);
+  }
+
   function fromGenerator(generator, serialize) {
     return summarizer.fromGenerator(generator, serialize, sha1, selector);
   }
@@ -295,6 +299,30 @@
        * @memberof! module:mathsync
        */
       fromJSON : fromJSON,
+
+      /**
+       * Creates summaries representing a stream of data.
+       *
+       * @example <caption>Taking items from a {@link https://github.com/maxogden/level.js level.js} database</caption>
+       * var ms = require('mathsync');
+       * var levelup = require('levelup');
+       * var leveljs = require('level-js');
+       * var db = levelup(name, { db : leveljs });
+       * var summarizer = ms.summarizer.fromStream(function () {
+       *   return db.createReadStream();
+       * }, ms.serialize.fromString(function (d) {
+       *   return d.key + ':' + d.value;
+       * }));
+       *
+       * @function summarizer.fromStream
+       * @param {function} streamer - function returning a new {@link external:Readable stream} every time it is called.
+       * @param {serialize} serialize - a serializer for yielded items.
+       * @return {summarizer} a summarizer returning summaries containing emitted items.
+       *
+       * @see {@link module:summarizer.fromStream} for customized instances
+       * @memberof! module:mathsync
+       */
+      fromStream : fromStream,
 
       /**
        * Creates summaries representing items yielded by a generator.

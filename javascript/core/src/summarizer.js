@@ -127,7 +127,7 @@
      * @param {serialize} serialize - a serializer for items in the array.
      * @param {digester} digest - a message digester to build summaries.
      * @param {bucketSelector} selector - the bucket selector to build summaries.
-     * @return {summarizer} a summarizer returning summaries representing after the stream ends.
+     * @return {summarizer} a summarizer returning summaries containing emitted items.
      */
     fromStream : fromStream,
 

@@ -8,6 +8,23 @@
   var sha1 = require('../src/sha1');
   var utils = require('./utils');
   var selector = require('../src/bucketSelector').padAndHash(sha1, 3);
+  var Readable = require('stream').Readable;
+  var util = require('util');
+
+  function ArrayStream(items) {
+    Readable.call(this, { objectMode: true });
+    this._index = 0;
+    this._items = items;
+  }
+  util.inherits(ArrayStream, Readable);
+  ArrayStream.prototype._read = function() {
+    if (this._index >= this._items.length) {
+      this.push(null);
+    } else {
+      this.push(this._items[this._index]);
+      this._index++;
+    }
+  };
 
   describe('Summarizer', function() {
 
@@ -42,6 +59,31 @@
         var fromItems = summarizer.fromGenerator(provider, serialize, sha1, selector);
 
         fromItems(5).then(function (summary) {
+          var diff = summary.toDifference();
+          utils.assertThatSetOfArrayEquals(diff.added, [[1, 2], [2, 2], [3, 2]]);
+          assert.equal(0, diff.removed.length);
+          done();
+        }, function (err) {
+          done(err);
+        });
+      });
+    });
+
+    describe('fromStream', function() {
+      it('generate summary with input items', function(done) {
+        function streamer() {
+          return new ArrayStream([
+            [1, 2],
+            [2, 2],
+            [3, 2]
+          ]);
+        }
+        function serialize(value) {
+          return new Int8Array(value).buffer;
+        }
+        var fromStream = summarizer.fromStream(streamer, serialize, sha1, selector);
+
+        fromStream(5).then(function (summary) {
           var diff = summary.toDifference();
           utils.assertThatSetOfArrayEquals(diff.added, [[1, 2], [2, 2], [3, 2]]);
           assert.equal(0, diff.removed.length);

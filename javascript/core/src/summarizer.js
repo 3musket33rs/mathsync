@@ -18,6 +18,18 @@
   var ibfBuilder = require('./ibf');
   var emptyFullContent = require('./fullContent');
   var iterator = require('./iterator');
+  var stream = require('stream');
+  var util = require('util');
+
+  function SerializeStream(serialize) {
+    stream.Transform.call(this, { objectMode: true });
+    this._serialize = serialize;
+  }
+  util.inherits(SerializeStream, stream.Transform);
+  SerializeStream.prototype._transform = function(item, encoding, done) {
+    this.push(this._serialize(item));
+    done();
+  };
 
   function levelToSize(level) {
     return Math.pow(2, level);
@@ -46,6 +58,16 @@
           return emptyFullContent.fromJSON(json);
         }
       });
+    };
+  }
+
+  function fromStream(streamer, serialize, digest, selector) {
+    return function (level) {
+      var serialized = new SerializeStream(serialize);
+      streamer().pipe(serialized);
+      var size = levelToSize(level);
+      var empty = ibfBuilder(size, digest, selector);
+      return empty.plusStream(serialized);
     };
   }
 
@@ -96,6 +118,18 @@
      * @return {summarizer} a summarizer returning deserialized summaries.
      */
     fromJSON : fromJSON,
+
+    /**
+     * Creates summaries representing a stream of data.
+     *
+     * @function
+     * @param {function} streamer - function returning a new {@link external:Readable stream} every time it is called.
+     * @param {serialize} serialize - a serializer for items in the array.
+     * @param {digester} digest - a message digester to build summaries.
+     * @param {bucketSelector} selector - the bucket selector to build summaries.
+     * @return {summarizer} a summarizer returning summaries representing after the stream ends.
+     */
+    fromStream : fromStream,
 
     /**
      * Creates summaries representing items yielded by a generator.

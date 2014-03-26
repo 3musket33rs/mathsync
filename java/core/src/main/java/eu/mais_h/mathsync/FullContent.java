@@ -73,23 +73,6 @@ public class FullContent implements Summary {
   }
 
   @Override
-  public Summary minus(Summary summary) {
-    Difference<byte[]> difference = summary.toDifference();
-    if (difference == null) {
-      throw new IllegalArgumentException("Cannot substract a summary which cannot be resolved as a difference: " + summary);
-    }
-    Set<EquatableArray> addedCopy = new HashSet<>(added);
-    Set<EquatableArray> removedCopy = new HashSet<>(removed);
-    for (byte[] item : difference.added()) {
-      insertOrRemove(removedCopy, addedCopy, item);
-    }
-    for (byte[] item : difference.removed()) {
-      insertOrRemove(addedCopy, removedCopy, item);
-    }
-    return new FullContent(addedCopy, removedCopy);
-  }
-
-  @Override
   public String toJSON() {
     JSONObject object = new JSONObject();
     object.put("added", serializeSet(added));

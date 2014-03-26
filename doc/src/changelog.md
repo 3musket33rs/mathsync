@@ -8,13 +8,12 @@ title: Changelog
 * refine design to get back pre-`0.4.x` symmetry (prevent the need for implementing both a summarizer and a resolver)
 * ProtocolBuffer serialization
 * difference view indexed by key (allows to view updates in a different collection)
-* remove Promise-resolving in iterator-based APIs
 
 # On the road to 0.5.0
 
 * summarizer and resolver from node streams
-* iterator manipulation no longer deals with promises, asynchronous streaming is to be handled using node streams
-* remove deprecated method `Summary#minus(Summary)` and deprecated class `ResolverFromSummarizers`
+* iterator manipulation no longer handles promises, asynchronous streaming is to be handled using node streams
+* remove deprecated method `Summary#minus(Summary)` (both in java and javascript) and the resolver which relied on it
 * seed bucket selector
 * reduce dependencies to node to reduce browserify package size
 

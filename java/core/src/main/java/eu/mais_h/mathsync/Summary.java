@@ -64,15 +64,6 @@ public interface Summary {
   Summary minus(Iterator<byte[]> items);
 
   /**
-   * Substracts a summary from this one.
-   *
-   * @param summary the summary to substract from this one.
-   * @return a new summary with the items substracted from this one.
-   */
-  @Deprecated
-  Summary minus(Summary summary);
-
-  /**
    * Retrieves a JSON view of the summary.
    *
    * @return a JSON view of the summary.

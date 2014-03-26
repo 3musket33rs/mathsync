@@ -123,11 +123,6 @@
     }
 
     function minus(item) {
-      // Backward compatibility with deprecated API
-      if (!(item instanceof ArrayBuffer)) {
-        return minusSummary(item);
-      }
-
       var addedCopy = copyArray(added);
       var removedCopy = copyArray(removed);
       insertOrRemove(removedCopy, addedCopy, item);
@@ -148,22 +143,6 @@
       return insertOrRemoveStream(removedCopy, addedCopy, stream).then(function () {
         return fullContent(addedCopy, removedCopy);
       });
-    }
-
-    function minusSummary(summary) {
-      var diff = summary.toDifference();
-      if (diff === null) {
-        throw new Error('Cannot substract a summary which cannot be resolved as a difference: ' + summary);
-      }
-      var addedCopy = copyArray(added);
-      var removedCopy = copyArray(removed);
-      diff.added.forEach(function (a) {
-        insertOrRemove(removedCopy, addedCopy, a);
-      });
-      diff.removed.forEach(function (r) {
-        insertOrRemove(addedCopy, removedCopy, r);
-      });
-      return fullContent(addedCopy, removedCopy);
     }
 
     function toDifference() {

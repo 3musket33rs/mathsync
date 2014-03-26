@@ -148,28 +148,6 @@ class Ibf implements Summary {
     return new Ibf(updated, digester, selector);
   }
 
-  @Override
-  public Summary minus(Summary other) {
-    if (other == null) {
-      throw new IllegalArgumentException("Cannot substract a null IBF");
-    }
-    Summary result;
-    if (other instanceof Ibf) {
-      result = modifyWithIbf(-1, (Ibf)other);
-    } else {
-      Difference<byte[]> asDifference = other.toDifference();
-      if (asDifference == null) {
-        throw new IllegalArgumentException("Summary cannot be viewed as a difference, it is likely the root cause is using an incompatible summary type");
-      }
-
-      Bucket[] updated = copyBuckets();
-      modifyManyWithSideEffect(updated, 1, asDifference.added().iterator());
-      modifyManyWithSideEffect(updated, -1, asDifference.removed().iterator());
-      result = new Ibf(updated, digester, selector);
-    }
-    return result;
-  }
-
   private Ibf modifyWithIbf(int variation, Ibf other) {
     if (buckets.length != other.buckets.length) {
       throw new IllegalArgumentException("Cannot substract IBFs of different sizes, tried to substract " + other + " from " + this);

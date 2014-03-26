@@ -109,11 +109,6 @@
     }
 
     function minus(content) {
-      // Backward compatibility with deprecated API
-      if (!(content instanceof ArrayBuffer)) {
-        return minusSummary(content);
-      }
-
       var bucketsCopy = copyBuckets();
       modifyWithSideEffect(bucketsCopy, -1, content);
       return ibfFromBuckets(bucketsCopy, digest, selector);
@@ -191,18 +186,7 @@
       }
     }
 
-    function minusSummary(other) {
-      var updated = [];
-      var otherBucket;
-      for (var i = 0; i < buckets.length; i++) {
-        otherBucket = other.__buckets[i];
-        updated.push(buckets[i].modify(-otherBucket.items(), otherBucket.xored(), otherBucket.hashed()));
-      }
-      return ibfFromBuckets(updated, digest, selector);
-    }
-
     var that = {
-      __buckets : buckets,
       toDifference : toDifference,
       plus : plus,
       plusIterator : plusIterator,

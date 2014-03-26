@@ -138,14 +138,6 @@
    * @function external:Summary#toDifference
    */
   /**
-   * Substracts a summary from this one.
-   *
-   * @param {external:Summary} summary - the summary to substract to this one.
-   * @returns {external:Summary} a new summary with the items substracted from this one.
-   * @function external:Summary#minus
-   * @deprecated
-   */
-  /**
    * Retrieves a JSON view of the summary.
    *
    * @returns {Object} a JSON view of the summary.

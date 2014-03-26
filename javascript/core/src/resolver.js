@@ -9,7 +9,6 @@
    * @return {external:Promise.<external:Difference.<T>>} a promise resolving to a view of the difference.
    */
 
-  var Promise = require('./promise');
   var iterator = require('./iterator');
 
   function iterateOnLevelAndDeserialize(compute, deserialize) {
@@ -65,30 +64,10 @@
     }, deserialize);
   }
 
-  function fromSummarizers(local, remote, deserialize) {
-    return iterateOnLevelAndDeserialize(function (level) {
-      return Promise.all([local(level), remote(level)]).then(function (arr) {
-        return arr[1].minus(arr[0]).toDifference();
-      });
-    }, deserialize);
-  }
-
   /**
    * @module resolver
    */
   module.exports = {
-
-    /**
-     * Creates a resolver giving the difference between two summaries.
-     *
-     * @function
-     * @param {summarizer} local - a summarizer of the local content.
-     * @param {summarizer} remote - a summarizer of the remote content.
-     * @param {deserialize} deserialize - how to deserialize byte arrays to objects.
-     * @return {resolver} a resolver returning differences between the provided summarizers.
-     * @deprecated
-     */
-    fromSummarizers : fromSummarizers,
 
     /**
      * Creates a resolver giving the difference between a remote summarizer and local items.

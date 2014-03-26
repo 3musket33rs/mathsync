@@ -14,7 +14,7 @@
    * }
    *
    * @external Generator
-   * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator Generator on Mozilla Developer Network}
+   * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function* Generators on Mozilla Developer Network}
    */
 
   /**
@@ -51,7 +51,7 @@
    * })();
    *
    * @external Iterator
-   * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator Generator on Mozilla Developer Network}
+   * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/The_Iterator_protocol The Iterator protocol on Mozilla Developer Network}
    */
   /**
    * Reads the next item on the iterator.

@@ -60,21 +60,15 @@
       }
     }
 
-    function modifyManyWithSideEffect(bucketsCopy, variation, items) {
-      function next(resolve, reject) {
-        var result = items.next();
-        if (result.done) {
-          resolve();
-        } else if (typeof result.value.then === 'function') {
-          return result.value.then(function (res) {
-            modifyWithSideEffect(bucketsCopy, variation, res);
-          }).then(next.bind(null, resolve, reject));
-        } else {
+    function modifyManyWithSideEffect(bucketsCopy, variation, iterator) {
+      return new Promise(function (resolve) {
+        var result = iterator.next();
+        while(!result.done) {
           modifyWithSideEffect(bucketsCopy, variation, result.value);
-          next(resolve, reject);
+          result = iterator.next();
         }
-      }
-      return new Promise(next);
+        resolve();
+      });
     }
 
     function modifyWithSideEffectFromStream(bucketsCopy, variation, stream) {

@@ -12,7 +12,8 @@ title: Changelog
 
 # On the road to 0.5.0
 
-* summarizer and resolver from node stream
+* summarizer and resolver from node streams
+* iterator manipulation no longer deals with promises, asynchronous streaming is to be handled using node streams
 * remove deprecated method `Summary#minus(Summary)` and deprecated class `ResolverFromSummarizers`
 * seed bucket selector
 * reduce dependencies to node to reduce browserify package size

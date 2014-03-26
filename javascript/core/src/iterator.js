@@ -21,8 +21,7 @@
    * An occurrence of a Generator.
    *
    * <p>This is the result of calling a generator function which does <code>yield</code> on each item it wants to
-   * expose. It can actually be a hand made object as long as it respects
-   * the contract of this interface.</p>
+   * expose. It can actually be a hand made object as long as it respects the contract of this interface.</p>
    *
    * @example
    * function* generator() {
@@ -57,11 +56,9 @@
    * Reads the next item on the iterator.
    *
    * <p>Can either return a value if it is not done, <code>{ done : false, value : 'some value' }</code>, or inform it
-   * is done with <code>{ done : true }</code>. <code>value</code> can either be the actual value or a
-   * {@link external:Promise promise} which will resolve to the desired value. Streams should be used in replacement of
-   * Promise-returning iterators, which will be removed in a future release.</p>
+   * is done with <code>{ done : true }</code>.</p>
    *
-   * @returns Object a done marker, or a value container, or a promise-for-value container.
+   * @returns Object a done marker or a value container.
    * @function external:Iterator#next
    */
 
@@ -98,8 +95,6 @@
       var upper = iterator.next();
       if (upper.done) {
         return upper;
-      } else if (typeof upper.value.then === 'function') {
-        return { done: false, value: upper.value.then(transform) };
       } else {
         return { done: false, value: transform(upper.value) };
       }
@@ -138,9 +133,6 @@
 
     /**
      * Transforms values of an array.
-     *
-     * <p>Does the transformation synchronously when possible but handles promises returned by the upstream iterator.
-     * The transformer function can return {@link external:Promise promises} too.</p>
      *
      * @function
      * @param {external:Iterator} iterator - the original iterator to transform.

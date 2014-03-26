@@ -18,18 +18,6 @@
   var ibfBuilder = require('./ibf');
   var emptyFullContent = require('./fullContent');
   var iterator = require('./iterator');
-  var stream = require('stream');
-  var util = require('util');
-
-  function SerializeStream(serialize) {
-    stream.Transform.call(this, { objectMode: true });
-    this._serialize = serialize;
-  }
-  util.inherits(SerializeStream, stream.Transform);
-  SerializeStream.prototype._transform = function(item, encoding, done) {
-    this.push(this._serialize(item));
-    done();
-  };
 
   function levelToSize(level) {
     return Math.pow(2, level);
@@ -63,11 +51,9 @@
 
   function fromStream(streamer, serialize, digest, selector) {
     return function (level) {
-      var serialized = new SerializeStream(serialize);
-      streamer().pipe(serialized);
       var size = levelToSize(level);
       var empty = ibfBuilder(size, digest, selector);
-      return empty.plusStream(serialized);
+      return empty.plusStream(streamer(), serialize);
     };
   }
 

@@ -61,11 +61,11 @@
     return new Promise(next);
   }
 
-  function insertOrRemoveStream(mayInsert, mayRemove, stream) {
+  function insertOrRemoveStream(mayInsert, mayRemove, stream, serialize) {
     return new Promise(function (resolve, reject) {
       stream.on('data', function (item) {
         try {
-          insertOrRemove(mayInsert, mayRemove, item);
+          insertOrRemove(mayInsert, mayRemove, serialize(item));
         } catch (err) {
           reject(err);
         }
@@ -114,10 +114,10 @@
       });
     }
 
-    function plusStream(stream) {
+    function plusStream(stream, serialize) {
       var addedCopy = copyArray(added);
       var removedCopy = copyArray(removed);
-      return insertOrRemoveStream(addedCopy, removedCopy, stream).then(function () {
+      return insertOrRemoveStream(addedCopy, removedCopy, stream, serialize).then(function () {
         return fullContent(addedCopy, removedCopy);
       });
     }
@@ -137,10 +137,10 @@
       });
     }
 
-    function minusStream(stream) {
+    function minusStream(stream, serialize) {
       var addedCopy = copyArray(added);
       var removedCopy = copyArray(removed);
-      return insertOrRemoveStream(removedCopy, addedCopy, stream).then(function () {
+      return insertOrRemoveStream(removedCopy, addedCopy, stream, serialize).then(function () {
         return fullContent(addedCopy, removedCopy);
       });
     }

@@ -71,11 +71,11 @@
       });
     }
 
-    function modifyWithSideEffectFromStream(bucketsCopy, variation, stream) {
+    function modifyWithSideEffectFromStream(bucketsCopy, variation, stream, serialize) {
       return new Promise(function (resolve, reject) {
         stream.on('data', function (item) {
           try {
-            modifyWithSideEffect(bucketsCopy, variation, item);
+            modifyWithSideEffect(bucketsCopy, variation, serialize(item));
           } catch (err) {
             reject(err);
           }
@@ -101,9 +101,9 @@
       });
     }
 
-    function plusStream(stream) {
+    function plusStream(stream, serialize) {
       var bucketsCopy = copyBuckets();
-      return modifyWithSideEffectFromStream(bucketsCopy, 1, stream).then(function () {
+      return modifyWithSideEffectFromStream(bucketsCopy, 1, stream, serialize).then(function () {
         return ibfFromBuckets(bucketsCopy, digest, selector);
       });
     }
@@ -121,9 +121,9 @@
       });
     }
 
-    function minusStream(stream) {
+    function minusStream(stream, serialize) {
       var bucketsCopy = copyBuckets();
-      return modifyWithSideEffectFromStream(bucketsCopy, -1, stream).then(function () {
+      return modifyWithSideEffectFromStream(bucketsCopy, -1, stream, serialize).then(function () {
         return ibfFromBuckets(bucketsCopy, digest, selector);
       });
     }

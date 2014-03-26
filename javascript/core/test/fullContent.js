@@ -7,6 +7,9 @@
 
   var emptyContent = require('../src/fullContent');
 
+  var item1 = new Int8Array([5]).buffer;
+  var item2 = new Int8Array([6]).buffer;
+
   function goThroughJson(origin) {
     return emptyContent.fromJSON(origin.toJSON());
   }
@@ -38,44 +41,41 @@
       });
     });
     describe('with one added item', function() {
-      var item = new Int8Array([5]).buffer;
-      var oneItem = emptyContent.plus(item);
+      var oneItem = emptyContent.plus(item1);
 
       it('has one added element', function() {
-        utils.assertThatSetOfArrayEquals(oneItem.toDifference().added, [item]);
-        utils.assertThatSetOfArrayEquals(goThroughJson(oneItem).toDifference().added, [item]);
+        utils.assertThatSetOfArrayEquals(oneItem.toDifference().added, [item1]);
+        utils.assertThatSetOfArrayEquals(goThroughJson(oneItem).toDifference().added, [item1]);
       });
       it('has no removed element', function() {
         utils.assertThatSetOfArrayEquals(oneItem.toDifference().removed, []);
         utils.assertThatSetOfArrayEquals(goThroughJson(oneItem).toDifference().removed, []);
       });
       it('does not accept duplicates', function() {
-        var duplicated = oneItem.plus(item);
-        utils.assertThatSetOfArrayEquals(duplicated.toDifference().added, [item]);
-        utils.assertThatSetOfArrayEquals(goThroughJson(duplicated).toDifference().added, [item]);
+        var duplicated = oneItem.plus(item1);
+        utils.assertThatSetOfArrayEquals(duplicated.toDifference().added, [item1]);
+        utils.assertThatSetOfArrayEquals(goThroughJson(duplicated).toDifference().added, [item1]);
       });
     });
     describe('with one removed item', function() {
-      var item = new Int8Array([5]).buffer;
-      var oneItem = emptyContent.minus(item);
+      var oneItem = emptyContent.minus(item1);
 
       it('has no added element', function() {
         utils.assertThatSetOfArrayEquals(oneItem.toDifference().added, []);
         utils.assertThatSetOfArrayEquals(goThroughJson(oneItem).toDifference().added, []);
       });
       it('has one removed element', function() {
-        utils.assertThatSetOfArrayEquals(oneItem.toDifference().removed, [item]);
-        utils.assertThatSetOfArrayEquals(goThroughJson(oneItem).toDifference().removed, [item]);
+        utils.assertThatSetOfArrayEquals(oneItem.toDifference().removed, [item1]);
+        utils.assertThatSetOfArrayEquals(goThroughJson(oneItem).toDifference().removed, [item1]);
       });
       it('does not accept duplicates', function() {
-        var duplicated = oneItem.minus(item);
-        utils.assertThatSetOfArrayEquals(duplicated.toDifference().removed, [item]);
-        utils.assertThatSetOfArrayEquals(goThroughJson(duplicated).toDifference().removed, [item]);
+        var duplicated = oneItem.minus(item1);
+        utils.assertThatSetOfArrayEquals(duplicated.toDifference().removed, [item1]);
+        utils.assertThatSetOfArrayEquals(goThroughJson(duplicated).toDifference().removed, [item1]);
       });
     });
     describe('with added then removed item', function() {
-      var item = new Int8Array([5]).buffer;
-      var oneItem = emptyContent.plus(item).minus(item);
+      var oneItem = emptyContent.plus(item1).minus(item1);
 
       it('has no added element', function() {
         utils.assertThatSetOfArrayEquals(oneItem.toDifference().added, []);
@@ -87,8 +87,7 @@
       });
     });
     describe('with removed then added item', function() {
-      var item = new Int8Array([5]).buffer;
-      var oneItem = emptyContent.minus(item).plus(item);
+      var oneItem = emptyContent.minus(item1).plus(item1);
 
       it('has no added element', function() {
         utils.assertThatSetOfArrayEquals(oneItem.toDifference().added, []);
@@ -101,8 +100,6 @@
     });
     describe('with added items through iterator', function() {
       var asyncAdded;
-      var item1 = new Int8Array([5]).buffer;
-      var item2 = new Int8Array([6]).buffer;
 
       function* generateItems() {
         yield item1;
@@ -126,11 +123,17 @@
     });
     describe('with added items through stream', function() {
       var asyncAdded;
-      var item1 = new Int8Array([5]).buffer;
-      var item2 = new Int8Array([6]).buffer;
+
+      function serialize(item) {
+        if (item === 1) {
+          return item1;
+        } else if (item === 2) {
+          return item2;
+        }
+      }
 
       before(function (done) {
-        emptyContent.plusStream(new ArrayStream([item1, item2])).then(function (c) {
+        emptyContent.plusStream(new ArrayStream([1, 2]), serialize).then(function (c) {
           asyncAdded = c;
         }).then(done, done);
       });
@@ -146,8 +149,6 @@
     });
     describe('with removed items through iterator', function() {
       var asyncRemoved;
-      var item1 = new Int8Array([5]).buffer;
-      var item2 = new Int8Array([6]).buffer;
 
       function* generateItems() {
         yield item1;
@@ -171,11 +172,17 @@
     });
     describe('with removed items through stream', function() {
       var asyncRemoved;
-      var item1 = new Int8Array([5]).buffer;
-      var item2 = new Int8Array([6]).buffer;
+
+      function serialize(item) {
+        if (item === 1) {
+          return item1;
+        } else if (item === 2) {
+          return item2;
+        }
+      }
 
       before(function (done) {
-        emptyContent.minusStream(new ArrayStream([item1, item2])).then(function (c) {
+        emptyContent.minusStream(new ArrayStream([1, 2]), serialize).then(function (c) {
           asyncRemoved = c;
         }).then(done, done);
       });

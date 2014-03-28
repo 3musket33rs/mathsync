@@ -29,21 +29,23 @@
   describe('Synchronization', function() {
 
     it('should handle added item', function() {
-      return server.put('key', 'value').then(client.sync).then(client.get).then(function (state) {
+      var i, noise = 10;
+      var p = server.put('noise0', 'noise0');
+      for (i = 1; i < noise; i++) {
+        p = p.then(server.put.bind(server, 'noise' + i, 'noise' + i));
+      }
+      return p.then(client.sync).then(function () {
+        return server.put('key', 'value');
+      }).then(client.sync).then(client.get).then(function (state) {
         assert.equal('value', state.key);
       });
     });
 
     it('should handle many added item', function() {
-      var i;
-      var items = 1000;
+      var i, items = 1000;
       var p = server.put('key0', 'value0');
       for (i = 1; i < items; i++) {
-        (function (j) {
-          p = p.then(function () {
-            return server.put('key' + j, 'value' + j);
-          });
-        })(i);
+        p = p.then(server.put.bind(server, 'key' + i, 'value' + i));
       }
       return p.then(client.sync).then(client.get).then(function (state) {
         for (i = 0; i < items; i++) {
@@ -53,18 +55,28 @@
     });
 
     it('should handle removed item', function() {
-      return server.put('key', 'value').then(client.sync).then(function () {
-        return server.del('key');
+      var i, initial = 10;
+      var p = server.put('initial0', 'value0');
+      for (i = 1; i < initial; i++) {
+        p = p.then(server.put.bind(server, 'initial' + i, 'initial' + i));
+      }
+      return p.then(client.sync).then(function () {
+        return server.del('initial0');
       }).then(client.sync).then(client.get).then(function (state) {
-        assert.equal(undefined, state.key);
+        assert.equal(undefined, state.initial0);
       });
     });
 
     it('should handle modified item', function() {
-      return server.put('key', 'value1').then(client.sync).then(function () {
-        return server.put('key', 'value2');
+      var i, initial = 10;
+      var p = server.put('initial0', 'value0');
+      for (i = 1; i < initial; i++) {
+        p = p.then(server.put.bind(server, 'initial' + i, 'initial' + i));
+      }
+      return p.then(client.sync).then(function () {
+        return server.put('initial0', 'another_value');
       }).then(client.sync).then(client.get).then(function (state) {
-        assert.equal('value2', state.key);
+        assert.equal('another_value', state.initial0);
       });
     });
   });

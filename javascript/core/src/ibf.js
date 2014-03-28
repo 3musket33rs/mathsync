@@ -51,7 +51,13 @@
       return copy;
     }
 
-    function modifyWithSideEffect(bucketsCopy, variation, content) {
+    function modifyWithSideEffect(modify) {
+      return Promise.resolve(copyBuckets()).then(modify).then(function (modified) {
+        return ibfFromBuckets(modified, digest, selector);
+      });
+    }
+
+    function modifyOneWithSideEffect(bucketsCopy, variation, content) {
       var digested = digest(content);
       var selected = selector(content);
       for (var i = 0; i < selected.length; i++) {
@@ -60,28 +66,26 @@
       }
     }
 
-    function modifyManyWithSideEffect(bucketsCopy, variation, iterator) {
-      return new Promise(function (resolve) {
-        var result = iterator.next();
-        while(!result.done) {
-          modifyWithSideEffect(bucketsCopy, variation, result.value);
-          result = iterator.next();
-        }
-        resolve();
-      });
+    function modifyWithSideEffectFromIterator(variation, iterator, bucketsCopy) {
+      var result = iterator.next();
+      while(!result.done) {
+        modifyOneWithSideEffect(bucketsCopy, variation, result.value);
+        result = iterator.next();
+      }
+      return bucketsCopy;
     }
 
-    function modifyWithSideEffectFromStream(bucketsCopy, variation, stream, serialize) {
+    function modifyWithSideEffectFromStream(variation, stream, serialize, bucketsCopy) {
       return new Promise(function (resolve, reject) {
         stream.on('data', function (item) {
           try {
-            modifyWithSideEffect(bucketsCopy, variation, serialize(item));
+            modifyOneWithSideEffect(bucketsCopy, variation, serialize(item));
           } catch (err) {
             reject(err);
           }
         });
         stream.on('error', reject);
-        stream.on('end', resolve);
+        stream.on('end', resolve.bind(null, bucketsCopy));
       });
     }
 
@@ -90,42 +94,33 @@
         throw new TypeError('Ibf#plus takes an ArrayBuffer, given ' + content);
       }
       var bucketsCopy = copyBuckets();
-      modifyWithSideEffect(bucketsCopy, 1, content);
+      modifyOneWithSideEffect(bucketsCopy, 1, content);
       return ibfFromBuckets(bucketsCopy, digest, selector);
     }
 
     function plusIterator(iterator) {
-      var bucketsCopy = copyBuckets();
-      return modifyManyWithSideEffect(bucketsCopy, 1, iterator).then(function () {
-        return ibfFromBuckets(bucketsCopy, digest, selector);
-      });
+      return modifyWithSideEffect(modifyWithSideEffectFromIterator.bind(null, 1, iterator));
     }
 
     function plusStream(stream, serialize) {
-      var bucketsCopy = copyBuckets();
-      return modifyWithSideEffectFromStream(bucketsCopy, 1, stream, serialize).then(function () {
-        return ibfFromBuckets(bucketsCopy, digest, selector);
-      });
+      return modifyWithSideEffect(modifyWithSideEffectFromStream.bind(null, 1, stream, serialize));
     }
 
     function minus(content) {
+      if (!(content instanceof ArrayBuffer)) {
+        throw new TypeError('Ibf#minus takes an ArrayBuffer, given ' + content);
+      }
       var bucketsCopy = copyBuckets();
-      modifyWithSideEffect(bucketsCopy, -1, content);
+      modifyOneWithSideEffect(bucketsCopy, -1, content);
       return ibfFromBuckets(bucketsCopy, digest, selector);
     }
 
     function minusIterator(iterator) {
-      var bucketsCopy = copyBuckets();
-      return modifyManyWithSideEffect(bucketsCopy, -1, iterator).then(function () {
-        return ibfFromBuckets(bucketsCopy, digest, selector);
-      });
+      return modifyWithSideEffect(modifyWithSideEffectFromIterator.bind(null, -1, iterator));
     }
 
     function minusStream(stream, serialize) {
-      var bucketsCopy = copyBuckets();
-      return modifyWithSideEffectFromStream(bucketsCopy, -1, stream, serialize).then(function () {
-        return ibfFromBuckets(bucketsCopy, digest, selector);
-      });
+      return modifyWithSideEffect(modifyWithSideEffectFromStream.bind(null, -1, stream, serialize));
     }
 
     function toDifference() {
@@ -153,7 +148,7 @@
                 removed.push(verified);
                 break;
               }
-              modifyWithSideEffect(bucketsCopy, -items, verified);
+              modifyOneWithSideEffect(bucketsCopy, -items, verified);
               found = true;
             }
           }

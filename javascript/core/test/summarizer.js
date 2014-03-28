@@ -29,25 +29,22 @@
   describe('Summarizer', function() {
 
     describe('fromItems', function() {
-      it('generate summary with input items', function(done) {
+      it('generate summary with input items', function() {
         function serialize(value) {
           return new Int8Array(value).buffer;
         }
         var fromItems = summarizer.fromItems([[1, 2], [2, 2], [3, 2]], serialize, sha1, selector);
 
-        fromItems(5).then(function (summary) {
+        return fromItems(5).then(function (summary) {
           var diff = summary.toDifference();
           utils.assertThatSetOfArrayEquals(diff.added, [[1, 2], [2, 2], [3, 2]]);
           assert.equal(0, diff.removed.length);
-          done();
-        }, function (err) {
-          done(err);
         });
       });
     });
 
     describe('fromGenerator', function() {
-      it('generate summary with input items', function(done) {
+      it('generate summary with input items', function() {
         function* provider() {
           yield [1, 2];
           yield [2, 2];
@@ -58,19 +55,16 @@
         }
         var fromItems = summarizer.fromGenerator(provider, serialize, sha1, selector);
 
-        fromItems(5).then(function (summary) {
+        return fromItems(5).then(function (summary) {
           var diff = summary.toDifference();
           utils.assertThatSetOfArrayEquals(diff.added, [[1, 2], [2, 2], [3, 2]]);
           assert.equal(0, diff.removed.length);
-          done();
-        }, function (err) {
-          done(err);
         });
       });
     });
 
     describe('fromStream', function() {
-      it('generate summary with input items', function(done) {
+      it('generate summary with input items', function() {
         function streamer() {
           return new ArrayStream([
             [1, 2],
@@ -83,19 +77,16 @@
         }
         var fromStream = summarizer.fromStream(streamer, serialize, sha1, selector);
 
-        fromStream(5).then(function (summary) {
+        return fromStream(5).then(function (summary) {
           var diff = summary.toDifference();
           utils.assertThatSetOfArrayEquals(diff.added, [[1, 2], [2, 2], [3, 2]]);
           assert.equal(0, diff.removed.length);
-          done();
-        }, function (err) {
-          done(err);
         });
       });
     });
 
     describe('fromJSON', function() {
-      it('generate summary from IBF', function(done) {
+      it('generate summary from IBF', function() {
         var ibf = ibfBuilder(32, sha1, selector)
           .plus(new Int8Array([1, 2]).buffer)
           .plus(new Int8Array([2, 2]).buffer)
@@ -106,17 +97,14 @@
           return ibf.toJSON();
         }, sha1, selector);
 
-        throughJson(5).then(function (summary) {
+        return throughJson(5).then(function (summary) {
           var diff = summary.toDifference();
           utils.assertThatSetOfArrayEquals(diff.added, [[1, 2], [2, 2], [3, 2]]);
           assert.equal(0, diff.removed.length);
-          done();
-        }, function (err) {
-          done(err);
         });
       });
 
-      it('generate summary from full content', function(done) {
+      it('generate summary from full content', function() {
         var fullContent = empty
           .plus(new Int8Array([1, 2]).buffer)
           .plus(new Int8Array([2, 2]).buffer)
@@ -127,13 +115,10 @@
           return fullContent.toJSON();
         }, sha1, selector);
 
-        throughJson(5).then(function (summary) {
+        return throughJson(5).then(function (summary) {
           var diff = summary.toDifference();
           utils.assertThatSetOfArrayEquals(diff.added, [[1, 2], [2, 2], [3, 2]]);
           assert.equal(0, diff.removed.length);
-          done();
-        }, function (err) {
-          done(err);
         });
       });
     });

@@ -106,31 +106,25 @@
       });
     });
     describe('with added items through iterator', function() {
-      var asyncAdded;
-
       function* generateItems() {
         yield item1;
         yield item2;
       }
 
-      before(function (done) {
-        emptyContent.plusIterator(generateItems()).then(function (c) {
-          asyncAdded = c;
-        }).then(done, done);
-      });
-
       it('has two added elements', function() {
-        utils.assertThatSetOfArrayEquals(asyncAdded.toDifference().added, [item1, item2]);
-        utils.assertThatSetOfArrayEquals(goThroughJson(asyncAdded).toDifference().added, [item1, item2]);
+        return emptyContent.plusIterator(generateItems()).then(function (asyncAdded) {
+          utils.assertThatSetOfArrayEquals(asyncAdded.toDifference().added, [item1, item2]);
+          utils.assertThatSetOfArrayEquals(goThroughJson(asyncAdded).toDifference().added, [item1, item2]);
+        });
       });
       it('has no removed element', function() {
-        utils.assertThatSetOfArrayEquals(asyncAdded.toDifference().removed, []);
-        utils.assertThatSetOfArrayEquals(goThroughJson(asyncAdded).toDifference().removed, []);
+        return emptyContent.plusIterator(generateItems()).then(function (asyncAdded) {
+          utils.assertThatSetOfArrayEquals(asyncAdded.toDifference().removed, []);
+          utils.assertThatSetOfArrayEquals(goThroughJson(asyncAdded).toDifference().removed, []);
+        });
       });
     });
     describe('with added items through stream', function() {
-      var asyncAdded;
-
       function serialize(item) {
         if (item === 1) {
           return item1;
@@ -139,47 +133,39 @@
         }
       }
 
-      before(function (done) {
-        emptyContent.plusStream(new ArrayStream([1, 2]), serialize).then(function (c) {
-          asyncAdded = c;
-        }).then(done, done);
-      });
-
       it('has two added elements', function() {
-        utils.assertThatSetOfArrayEquals(asyncAdded.toDifference().added, [item1, item2]);
-        utils.assertThatSetOfArrayEquals(goThroughJson(asyncAdded).toDifference().added, [item1, item2]);
+        return emptyContent.plusStream(new ArrayStream([1, 2]), serialize).then(function (asyncAdded) {
+          utils.assertThatSetOfArrayEquals(asyncAdded.toDifference().added, [item1, item2]);
+          utils.assertThatSetOfArrayEquals(goThroughJson(asyncAdded).toDifference().added, [item1, item2]);
+        });
       });
       it('has no removed element', function() {
-        utils.assertThatSetOfArrayEquals(asyncAdded.toDifference().removed, []);
-        utils.assertThatSetOfArrayEquals(goThroughJson(asyncAdded).toDifference().removed, []);
+        return emptyContent.plusStream(new ArrayStream([1, 2]), serialize).then(function (asyncAdded) {
+          utils.assertThatSetOfArrayEquals(asyncAdded.toDifference().removed, []);
+          utils.assertThatSetOfArrayEquals(goThroughJson(asyncAdded).toDifference().removed, []);
+        });
       });
     });
     describe('with removed items through iterator', function() {
-      var asyncRemoved;
-
       function* generateItems() {
         yield item1;
         yield item2;
       }
 
-      before(function (done) {
-        emptyContent.minusIterator(generateItems()).then(function (c) {
-          asyncRemoved = c;
-        }).then(done, done);
-      });
-
       it('has two removed elements', function() {
-        utils.assertThatSetOfArrayEquals(asyncRemoved.toDifference().removed, [item1, item2]);
-        utils.assertThatSetOfArrayEquals(goThroughJson(asyncRemoved).toDifference().removed, [item1, item2]);
+        return emptyContent.minusIterator(generateItems()).then(function (asyncRemoved) {
+          utils.assertThatSetOfArrayEquals(asyncRemoved.toDifference().removed, [item1, item2]);
+          utils.assertThatSetOfArrayEquals(goThroughJson(asyncRemoved).toDifference().removed, [item1, item2]);
+        });
       });
       it('has no added element', function() {
-        utils.assertThatSetOfArrayEquals(asyncRemoved.toDifference().added, []);
-        utils.assertThatSetOfArrayEquals(goThroughJson(asyncRemoved).toDifference().added, []);
+        return emptyContent.minusIterator(generateItems()).then(function (asyncRemoved) {
+          utils.assertThatSetOfArrayEquals(asyncRemoved.toDifference().added, []);
+          utils.assertThatSetOfArrayEquals(goThroughJson(asyncRemoved).toDifference().added, []);
+        });
       });
     });
     describe('with removed items through stream', function() {
-      var asyncRemoved;
-
       function serialize(item) {
         if (item === 1) {
           return item1;
@@ -188,19 +174,17 @@
         }
       }
 
-      before(function (done) {
-        emptyContent.minusStream(new ArrayStream([1, 2]), serialize).then(function (c) {
-          asyncRemoved = c;
-        }).then(done, done);
-      });
-
       it('has two removed elements', function() {
-        utils.assertThatSetOfArrayEquals(asyncRemoved.toDifference().removed, [item1, item2]);
-        utils.assertThatSetOfArrayEquals(goThroughJson(asyncRemoved).toDifference().removed, [item1, item2]);
+        return emptyContent.minusStream(new ArrayStream([1, 2]), serialize).then(function (asyncRemoved) {
+          utils.assertThatSetOfArrayEquals(asyncRemoved.toDifference().removed, [item1, item2]);
+          utils.assertThatSetOfArrayEquals(goThroughJson(asyncRemoved).toDifference().removed, [item1, item2]);
+        });
       });
       it('has no added element', function() {
-        utils.assertThatSetOfArrayEquals(asyncRemoved.toDifference().added, []);
-        utils.assertThatSetOfArrayEquals(goThroughJson(asyncRemoved).toDifference().added, []);
+        return emptyContent.minusStream(new ArrayStream([1, 2]), serialize).then(function (asyncRemoved) {
+          utils.assertThatSetOfArrayEquals(asyncRemoved.toDifference().added, []);
+          utils.assertThatSetOfArrayEquals(goThroughJson(asyncRemoved).toDifference().added, []);
+        });
       });
     });
   });

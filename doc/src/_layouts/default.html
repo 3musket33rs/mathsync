@@ -26,17 +26,21 @@
     <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
       <div class="container">
         <ul class="nav navbar-nav">
+          <li class="navbar-brand">Mathsync</li>
           <li><a href="/">Home</a></li>
-          <li><a href="https://github.com/3musket33rs/mathsync">Code on Github</a></li>
+          <li><a href="/learn_more.html">Learn more</a></li>
           <li><a href="/javascript.html">Javascript</a></li>
           <li><a href="/java.html">Java</a></li>
-          <li><a href="https://groups.google.com/forum/#!forum/mathsync">Google group</a></li>
+          <li><a href="/contact.html">Contact</a></li>
           <li><a href="/changelog.html">Changelog</a></li>
         </ul>
       </div>
     </div>
 
-    <div class="container" role="main">{{ content }}</div>
+    <div class="container" role="main">
+      <a href="https://github.com/3musket33rs/mathsync"><img style="position: absolute; top: 50px; right: 0; border: 0;" src="https://camo.githubusercontent.com/a6677b08c955af8400f44c6298f40e7d19cc5b2d/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f677261795f3664366436642e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png"></a>
+      {{ content }}
+    </div>
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.10.2.min.js"><\/script>')</script>

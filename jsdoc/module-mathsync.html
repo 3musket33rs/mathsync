@@ -64,7 +64,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line122">line 122</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line197">line 197</a>
     </li></ul></dd>
     
     
@@ -132,7 +132,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line269">line 269</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line368">line 368</a>
     </li></ul></dd>
     
     
@@ -186,7 +186,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line262">line 262</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line361">line 361</a>
     </li></ul></dd>
     
     
@@ -242,7 +242,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line136">line 136</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line211">line 211</a>
     </li></ul></dd>
     
     
@@ -378,7 +378,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line232">line 232</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line331">line 331</a>
     </li></ul></dd>
     
     
@@ -562,7 +562,7 @@ var summarizer = ms.summarizer.fromGenerator(function* () {
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line138">line 138</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line213">line 213</a>
     </li></ul></dd>
     
     
@@ -730,7 +730,7 @@ var summarizer = ms.summarizer.fromItems(data, serializer);</code></pre>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="index.js.html">index.js</a>, <a href="index.js.html#line168">line 168</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line243">line 243</a>
     </li></ul></dd>
     
     
@@ -842,6 +842,190 @@ var summarizer = ms.summarizer.fromJSON(fetchSummary);</code></pre>
     
 </dd>
 
+        
+            
+<dt>
+    <h4 class="name" id="summarizer.fromStream"><span class="type-signature">&lt;static> </span>summarizer.fromStream<span class="signature">(streamer, serialize)</span><span class="type-signature"> &rarr; {<a href="global.html#summarizer">summarizer</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Creates summaries representing a stream of data.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>streamer</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">function returning a new <a href="external-Readable.html">stream</a> every time it is called.</td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>serialize</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type"><a href="global.html#serialize">serialize</a></span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last">a serializer for yielded items.</td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line307">line 307</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    <dt class="tag-see">See:</dt>
+    <dd class="tag-see">
+        <ul>
+            <li><a href="module-summarizer.html#fromStream">module:summarizer.fromStream</a> for customized instances</li>
+        </ul>
+    </dd>
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    a summarizer returning summaries containing emitted items.
+</div>
+
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="global.html#summarizer">summarizer</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+        <h5>Example</h5>
+        
+        <p class="code-caption">Taking items from a <a href="https://github.com/maxogden/level.js">level.js</a> database</p>
+    
+    <pre class="prettyprint"><code>var ms = require('mathsync');
+var levelup = require('levelup');
+var leveljs = require('level-js');
+var db = levelup(name, { db : leveljs });
+var summarizer = ms.summarizer.fromStream(function () {
+  return db.createReadStream();
+}, ms.serialize.fromString(function (d) {
+  return d.key + ':' + d.value;
+}));</code></pre>
+
+    
+</dd>
+
         </dl>
     
     
@@ -858,13 +1042,13 @@ var summarizer = ms.summarizer.fromJSON(fetchSummary);</code></pre>
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-bucketSelector.html">bucketSelector</a></li><li><a href="module-iterator.html">iterator</a></li><li><a href="module-mathsync.html">mathsync</a></li><li><a href="module-promise.html">promise</a></li><li><a href="module-resolver.html">resolver</a></li><li><a href="module-serialize.html">serialize</a></li><li><a href="module-summarizer.html">summarizer</a></li></ul><h3>Externals</h3><ul><li><a href="external-ArrayBuffer.html">ArrayBuffer</a></li><li><a href="external-Difference.html">Difference</a></li><li><a href="external-Generator.html">Generator</a></li><li><a href="external-Iterator.html">Iterator</a></li><li><a href="external-Promise.html">Promise</a></li><li><a href="external-Summary.html">Summary</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bucketSelector">bucketSelector</a></li><li><a href="global.html#deserialize">deserialize</a></li><li><a href="global.html#digester">digester</a></li><li><a href="global.html#resolver">resolver</a></li><li><a href="global.html#serialize">serialize</a></li><li><a href="global.html#summarizer">summarizer</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-arrayBufferSerialization.html">arrayBufferSerialization</a></li><li><a href="module-bucketSelector.html">bucketSelector</a></li><li><a href="module-iterator.html">iterator</a></li><li><a href="module-mathsync.html">mathsync</a></li><li><a href="module-promise.html">promise</a></li><li><a href="module-resolver.html">resolver</a></li><li><a href="module-serialize.html">serialize</a></li><li><a href="module-summarizer.html">summarizer</a></li></ul><h3>Externals</h3><ul><li><a href="external-ArrayBuffer.html">ArrayBuffer</a></li><li><a href="external-Difference.html">Difference</a></li><li><a href="external-Generator.html">Generator</a></li><li><a href="external-Iterator.html">Iterator</a></li><li><a href="external-Promise.html">Promise</a></li><li><a href="external-Readable.html">Readable</a></li><li><a href="external-Summary.html">Summary</a></li></ul><h3>Events</h3><ul><li><a href="external-Readable.html#event:data">data</a></li><li><a href="external-Readable.html#event:end">end</a></li><li><a href="external-Readable.html#event:error">error</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bucketSelector">bucketSelector</a></li><li><a href="global.html#deserialize">deserialize</a></li><li><a href="global.html#digester">digester</a></li><li><a href="global.html#resolver">resolver</a></li><li><a href="global.html#serialize">serialize</a></li><li><a href="global.html#summarizer">summarizer</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Sat Mar 15 2014 09:18:34 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Mon Apr 07 2014 18:56:59 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

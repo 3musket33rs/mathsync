@@ -41,15 +41,14 @@
    * }
    *
    * @external Generator
-   * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator Generator on Mozilla Developer Network}
+   * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function* Generators on Mozilla Developer Network}
    */
 
   /**
    * An occurrence of a Generator.
    *
    * &lt;p>This is the result of calling a generator function which does &lt;code>yield&lt;/code> on each item it wants to
-   * expose, or on promise to items it wants to expose. It can actually be a hand made object as long as it respects
-   * the contract of this interface.&lt;/p>
+   * expose. It can actually be a hand made object as long as it respects the contract of this interface.&lt;/p>
    *
    * @example
    * function* generator() {
@@ -78,16 +77,15 @@
    * })();
    *
    * @external Iterator
-   * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Generator Generator on Mozilla Developer Network}
+   * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/The_Iterator_protocol The Iterator protocol on Mozilla Developer Network}
    */
   /**
    * Reads the next item on the iterator.
    *
    * &lt;p>Can either return a value if it is not done, &lt;code>{ done : false, value : 'some value' }&lt;/code>, or inform it
-   * is done with &lt;code>{ done : true }&lt;/code>. &lt;code>value&lt;/code> can either be the actual value or a
-   * {@link external:Promise promise} which will resolve to the desired value.&lt;/p>
+   * is done with &lt;code>{ done : true }&lt;/code>.&lt;/p>
    *
-   * @returns Object a done marker, or a value container, or a promise-for-value container.
+   * @returns Object a done marker or a value container.
    * @function external:Iterator#next
    */
 
@@ -124,8 +122,6 @@
       var upper = iterator.next();
       if (upper.done) {
         return upper;
-      } else if (typeof upper.value.then === 'function') {
-        return { done: false, value: upper.value.then(transform) };
       } else {
         return { done: false, value: transform(upper.value) };
       }
@@ -165,9 +161,6 @@
     /**
      * Transforms values of an array.
      *
-     * &lt;p>Does the transformation synchronously when possible but handles promises returned by the upstream iterator.
-     * The transformer function can return {@link external:Promise promises} too.&lt;/p>
-     *
      * @function
      * @param {external:Iterator} iterator - the original iterator to transform.
      * @param {Function} transform - the function transforming individual items.
@@ -186,13 +179,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-bucketSelector.html">bucketSelector</a></li><li><a href="module-iterator.html">iterator</a></li><li><a href="module-mathsync.html">mathsync</a></li><li><a href="module-promise.html">promise</a></li><li><a href="module-resolver.html">resolver</a></li><li><a href="module-serialize.html">serialize</a></li><li><a href="module-summarizer.html">summarizer</a></li></ul><h3>Externals</h3><ul><li><a href="external-ArrayBuffer.html">ArrayBuffer</a></li><li><a href="external-Difference.html">Difference</a></li><li><a href="external-Generator.html">Generator</a></li><li><a href="external-Iterator.html">Iterator</a></li><li><a href="external-Promise.html">Promise</a></li><li><a href="external-Summary.html">Summary</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bucketSelector">bucketSelector</a></li><li><a href="global.html#deserialize">deserialize</a></li><li><a href="global.html#digester">digester</a></li><li><a href="global.html#resolver">resolver</a></li><li><a href="global.html#serialize">serialize</a></li><li><a href="global.html#summarizer">summarizer</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-arrayBufferSerialization.html">arrayBufferSerialization</a></li><li><a href="module-bucketSelector.html">bucketSelector</a></li><li><a href="module-iterator.html">iterator</a></li><li><a href="module-mathsync.html">mathsync</a></li><li><a href="module-promise.html">promise</a></li><li><a href="module-resolver.html">resolver</a></li><li><a href="module-serialize.html">serialize</a></li><li><a href="module-summarizer.html">summarizer</a></li></ul><h3>Externals</h3><ul><li><a href="external-ArrayBuffer.html">ArrayBuffer</a></li><li><a href="external-Difference.html">Difference</a></li><li><a href="external-Generator.html">Generator</a></li><li><a href="external-Iterator.html">Iterator</a></li><li><a href="external-Promise.html">Promise</a></li><li><a href="external-Readable.html">Readable</a></li><li><a href="external-Summary.html">Summary</a></li></ul><h3>Events</h3><ul><li><a href="external-Readable.html#event:data">data</a></li><li><a href="external-Readable.html#event:end">end</a></li><li><a href="external-Readable.html#event:error">error</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bucketSelector">bucketSelector</a></li><li><a href="global.html#deserialize">deserialize</a></li><li><a href="global.html#digester">digester</a></li><li><a href="global.html#resolver">resolver</a></li><li><a href="global.html#serialize">serialize</a></li><li><a href="global.html#summarizer">summarizer</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Sat Mar 15 2014 09:18:34 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Mon Apr 07 2014 18:56:58 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

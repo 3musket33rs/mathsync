@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: bucketSelector.js</title>
+    <title>JSDoc: Source: arrayBufferSerialization.js</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">Source: bucketSelector.js</h1>
+    <h1 class="page-title">Source: arrayBufferSerialization.js</h1>
     
     
 
@@ -28,61 +28,33 @@
             <pre class="prettyprint source"><code>(function () {
   'use strict';
 
-  /**
-   * Function interface - Selects buckets to store items in.
-   *
-   * &lt;p>This interface leaks internal details about summary structure. One can implement and use custom instances to
-   * customize settings but be ready for major changes in following versions.&lt;/p>
-   *
-   * &lt;p>The output array must contain integers between &lt;code>0&lt;/code> and &lt;code>Integer.MAX_VALUE&lt;/code>. It is better
-   * if all integers in that range have the same probability of appearance.&lt;/p>
-   *
-   * &lt;p>The output must be consistent, for any byte array&lt;code>content&lt;/code>, for any positive integer &lt;code>b&lt;/code>,
-   * multiple invocations of &lt;code>selectBuckets(b, content)&lt;/code> must return the same array.&lt;/p>
-   *
-   * &lt;p>The number of returned buckets may vary for different contents and the returned array may contain
-   * duplicates.&lt;/p>
-   *
-   * @external bucketSelector
-   * @function
-   * @param {external:ArrayBuffer} item - the item to serialize.
-   * @return {number[]} buckets to store the item in.
-   */
-
-  function intFromDigestedBytes(digested) {
-    var int8arr = new Int8Array(digested);
-    return ((int8arr[0] &lt;&lt; 24) | (int8arr[1] &lt;&lt; 16) | (int8arr[2] &lt;&lt; 8) | (int8arr[3]));
-  }
-
-  function padAndHash(digest, spread) {
-    return function (content) {
-      var selected = [];
-      var bucketId;
-      var copy = new Int8Array(content.byteLength + 1);
-      copy.set(new Int8Array(content));
-      for (var i = 0; i &lt; spread; i++) {
-        copy[copy.length - 1] = i;
-        bucketId = intFromDigestedBytes(digest(copy.buffer));
-        selected.push(Math.abs(bucketId));
-      }
-      return selected;
-    };
-  }
+  var b64 = require('base64-arraybuffer');
 
   /**
-   * @module bucketSelector
+   * Serializes and deserializes byte arrays to and from strings.
+   *
+   * @see {@link https://www.npmjs.org/package/base64-arraybuffer|base64-arraybuffer, inlined because latest version is not published}
+   * @module arrayBufferSerialization
    */
   module.exports = {
 
     /**
-     * Selects multiple buckets to store items in by padding items and digesting them.
+     * Serializes an ArrayBuffer to a string.
      *
      * @function
-     * @param {digester} digest - digester for padded items.
-     * @param {number} spread - the number of buckets to return.
-     * @return {bucketSelector} a bucket selector.
+     * @param {ArrayBuffer} buffer - the buffer to serialize.
+     * @return {string} a string representing buffer content.
      */
-    padAndHash: padAndHash
+    toString: b64.encode,
+
+    /**
+     * Deserializes a string to an ArrayBuffer
+     *
+     * @function
+     * @param {string} content - the serialized string to decode.
+     * @return {ArrayBuffer} a buffer corresponding to the string.
+     */
+    fromString: b64.decode
   };
 })();
 </code></pre>

@@ -16,7 +16,7 @@ Add a dependency towards the library:
 {% highlight json %}
 {
   "dependencies": {
-    "mathsync": "0.4.x"
+    "mathsync": "0.5.x"
   }
 }
 {% endhighlight %}
@@ -52,7 +52,7 @@ Add a dependency towards the library and to a [Promise](https://developer.mozill
 {% highlight json%}
 {
   "dependencies": {
-    "mathsync": "0.4.x",
+    "mathsync": "0.5.x",
     "q": "0.9.x"
   }
 }
@@ -113,7 +113,7 @@ resolve().then(function (difference) {
 The library supports the use of [generator functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators#Generators.3A_a_better_way_to_build_Iterators) as iterator where one is expected to and `yield` all items:
 
 {% highlight javascript %}
-var ms = require('mathsync-generator');
+var ms = require('mathsync');
 
 var data = {};
 

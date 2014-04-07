@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: External: Promise</title>
+    <title>JSDoc: External: Readable</title>
     
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
     
-    <h1 class="page-title">External: Promise</h1>
+    <h1 class="page-title">External: Readable</h1>
     
     
 
@@ -27,7 +27,7 @@
     
 <header>
     <h2>
-    Promise
+    Readable
     </h2>
     
 </header>  
@@ -38,7 +38,9 @@
     
     
         
-            <div class="description">The native promise object.</div>
+            <div class="description">Node's readable stream.
+
+<p>Only to be used in object mode.</p></div>
         
         
         
@@ -64,7 +66,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="promise.js.html">promise.js</a>, <a href="promise.js.html#line4">line 4</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line6">line 6</a>
     </li></ul></dd>
     
     
@@ -74,7 +76,7 @@
     <dt class="tag-see">See:</dt>
     <dd class="tag-see">
         <ul>
-            <li><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise">Promise on Mozilla Developer Network</a></li>
+            <li><a href="http://nodejs.org/api/stream.html#stream_class_stream_readable">stream.Readable on Node.js</a></li>
         </ul>
     </dd>
     
@@ -100,12 +102,16 @@
     
     
     
-        <h3 class="subsection-title">Methods</h3>
+    
+    
+    
+    
+        <h3 class="subsection-title">Events</h3>
         
         <dl>
             
 <dt>
-    <h4 class="name" id="then"><span class="type-signature"></span>then<span class="signature">(onFullfilled, onRejected)</span><span class="type-signature"> &rarr; {<a href="external-Promise.html">external:Promise</a>}</span></h4>
+    <h4 class="name" id="event:data">data</h4>
     
     
 </dt>
@@ -113,85 +119,26 @@
     
     
     <div class="description">
-        Register fullfillment and rejection handlers to the promise.
+        Data event.
+
+<p>Called as soon as data is available, with one item.</p>
     </div>
     
 
     
-    
-    
-    
-    
-        <h5>Parameters:</h5>
-        
-
-<table class="params">
-    <thead>
-	<tr>
-		
-		<th>Name</th>
-		
-		
-		<th>Type</th>
-		
-		
-		
-		
-		
-		<th class="last">Description</th>
-	</tr>
-	</thead>
-	
-	<tbody>
-	
-	
-        <tr>
-            
-                <td class="name"><code>onFullfilled</code></td>
-            
-            
-            <td class="type">
-            
+        <h5>Type:</h5>
+        <ul>
+            <li>
                 
-<span class="param-type">function</span>
+<span class="param-type">Object</span>
 
 
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">fullfillment handler called with the resolved value.</td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>onRejected</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">function</span>
-
-
-            
-            </td>
-            
-            
-            
-            
-            
-            <td class="description last">rejection handler called with the rejection cause.</td>
-        </tr>
-	
-	
-	</tbody>
-</table>
+            </li>
+        </ul>
+    
+    
+    
+    
     
     
     
@@ -217,7 +164,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="promise.js.html">promise.js</a>, <a href="promise.js.html#line5">line 5</a>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line7">line 7</a>
     </li></ul></dd>
     
     
@@ -238,37 +185,184 @@
     
     
     
-    <h5>Returns:</h5>
     
-            
-<div class="param-desc">
-    a promise resolving to the result value of the called handler.
-</div>
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>stream.on('data', function(item) {
+  console.log(item);
+});</code></pre>
 
-
-
-<dl>
-	<dt>
-		Type
-	</dt>
-	<dd>
-		
-<span class="param-type"><a href="external-Promise.html">external:Promise</a></span>
-
-
-	</dd>
-</dl>
+    
+</dd>
 
         
+            
+<dt>
+    <h4 class="name" id="event:end">end</h4>
     
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        End event.
+
+<p>Called after all data has been read.</p>
+    </div>
+    
+
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line9">line 9</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>stream.on('end', function(err) {
+  console.log('done with my stream');
+});</code></pre>
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="event:error">error</h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Error event.
+
+<p>Called if there is an error while reading data.</p>
+    </div>
+    
+
+    
+        <h5>Type:</h5>
+        <ul>
+            <li>
+                
+<span class="param-type">Error</span>
+
+
+            </li>
+        </ul>
+    
+    
+    
+    
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="index.js.html">index.js</a>, <a href="index.js.html#line8">line 8</a>
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+
+    
+
+    
+    
+    
+    
+    
+    
+    
+        <h5>Example</h5>
+        
+    <pre class="prettyprint"><code>stream.on('error', function(err) {
+  console.error(err);
+});</code></pre>
+
     
 </dd>
 
         </dl>
-    
-    
-    
-    
     
 </article>
 
@@ -286,7 +380,7 @@
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Mon Apr 07 2014 18:56:58 GMT+0200 (CEST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Mon Apr 07 2014 18:56:59 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -38,6 +38,53 @@
    */
 
   /**
+   * Node's readable stream.
+   *
+   * &lt;p>Only to be used in object mode.&lt;/p>
+   *
+   * @external Readable
+   * @see {@link http://nodejs.org/api/stream.html#stream_class_stream_readable stream.Readable on Node.js}
+   */
+  /**
+   * Data event.
+   *
+   * &lt;p>Called as soon as data is available, with one item.&lt;/p>
+   *
+   * @example
+   * stream.on('data', function(item) {
+   *   console.log(item);
+   * });
+   *
+   * @event external:Readable#data
+   * @type {Object}
+   */
+  /**
+   * Error event.
+   *
+   * &lt;p>Called if there is an error while reading data.&lt;/p>
+   *
+   * @example
+   * stream.on('error', function(err) {
+   *   console.error(err);
+   * });
+   *
+   * @event external:Readable#error
+   * @type {Error}
+   */
+  /**
+   * End event.
+   *
+   * &lt;p>Called after all data has been read.&lt;/p>
+   *
+   * @example
+   * stream.on('end', function(err) {
+   *   console.log('done with my stream');
+   * });
+   *
+   * @event external:Readable#end
+   */
+
+  /**
    * Represents summarized data.
    * @external Summary
    */
@@ -67,7 +114,23 @@
    * @function external:Summary#plusIterator
    */
   /**
-   * Removes an item to the summary.
+   * Adds several items to the summary.
+   *
+   * &lt;p>Equivalent to repeatedly calling {@link external:Summary#plus} for each element, but this
+   * method can do optimizations for batch updates.&lt;/p>
+   *
+   * &lt;p>Having the serializer passed as an argument is less than optimal because summaries should have to deal only with
+   * &lt;code>ArrayBuffer&lt;/code>s, but this allows the library not to have a &lt;code>require('stream')&lt;/code> which makes
+   * size of the browser bundle explode for clients not using streams. This workaround may change at some point in the
+   * future.&lt;/p>
+   *
+   * @param {external:Readable} stream - a stream of items to add.
+   * @param {serialize} serialize - a serializer for items in the array.
+   * @returns {external:Promise.&lt;external:Summary>} a promise which will resolve to a summary.
+   * @function external:Summary#plusStream
+   */
+  /**
+   * Removes an item from the summary.
    *
    * &lt;p>When both summaries can be {@link external:Summary#toDifference|viewed as a difference}:
    * &lt;ul>
@@ -82,7 +145,7 @@
    * @function external:Summary#minus
    */
   /**
-   * Removes several items to the summary.
+   * Removes several items from the summary.
    *
    * &lt;p>Equivalent to repeatedly calling {@link external:Summary#minus} for each element, but this
    * method can do optimizations for batch updates.&lt;/p>
@@ -92,18 +155,26 @@
    * @function external:Summary#minusIterator
    */
   /**
+   * Removes several items from the summary.
+   *
+   * &lt;p>Equivalent to repeatedly calling {@link external:Summary#minus} for each element, but this
+   * method can do optimizations for batch updates.&lt;/p>
+   *
+   * &lt;p>Having the serializer passed as an argument is less than optimal because summaries should have to deal only with
+   * &lt;code>ArrayBuffer&lt;/code>s, but this allows the library not to have a &lt;code>require('stream')&lt;/code> which makes
+   * size of the browser bundle explode for clients not using streams. This workaround may change at some point in the
+   * future.&lt;/p>
+   *
+   * @param {external:Readable&lt;external:ArrayBuffer>} stream - a stream of items to remove.
+   * @param {serialize} serialize - a serializer for items in the array.
+   * @returns {external:Promise.&lt;external:Summary>} a promise which will resolve to a summary.
+   * @function external:Summary#minusStream
+   */
+  /**
    * Retrieves a view of the summary as a difference.
    *
    * @returns {external:Difference.&lt;external:ArrayBuffer>} a difference view of the summary or &lt;code>null&lt;/code> if it cannot be resolved with the information it contains.
    * @function external:Summary#toDifference
-   */
-  /**
-   * Substracts a summary from this one.
-   *
-   * @param {external:Summary} summary - the summary to substract to this one.
-   * @returns {external:Summary} a new summary with the items substracted from this one.
-   * @function external:Summary#minus
-   * @deprecated
    */
   /**
    * Retrieves a JSON view of the summary.
@@ -140,6 +211,10 @@
 
   function fromJSON(producer) {
     return summarizer.fromJSON(producer, sha1, selector);
+  }
+
+  function fromStream(stream, serialize) {
+    return summarizer.fromStream(stream, serialize, sha1, selector);
   }
 
   function fromGenerator(generator, serialize) {
@@ -257,6 +332,30 @@
       fromJSON : fromJSON,
 
       /**
+       * Creates summaries representing a stream of data.
+       *
+       * @example &lt;caption>Taking items from a {@link https://github.com/maxogden/level.js level.js} database&lt;/caption>
+       * var ms = require('mathsync');
+       * var levelup = require('levelup');
+       * var leveljs = require('level-js');
+       * var db = levelup(name, { db : leveljs });
+       * var summarizer = ms.summarizer.fromStream(function () {
+       *   return db.createReadStream();
+       * }, ms.serialize.fromString(function (d) {
+       *   return d.key + ':' + d.value;
+       * }));
+       *
+       * @function summarizer.fromStream
+       * @param {function} streamer - function returning a new {@link external:Readable stream} every time it is called.
+       * @param {serialize} serialize - a serializer for yielded items.
+       * @return {summarizer} a summarizer returning summaries containing emitted items.
+       *
+       * @see {@link module:summarizer.fromStream} for customized instances
+       * @memberof! module:mathsync
+       */
+      fromStream : fromStream,
+
+      /**
        * Creates summaries representing items yielded by a generator.
        *
        * @example &lt;caption>Yields strings from a hash&lt;/caption>
@@ -306,13 +405,13 @@
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-bucketSelector.html">bucketSelector</a></li><li><a href="module-iterator.html">iterator</a></li><li><a href="module-mathsync.html">mathsync</a></li><li><a href="module-promise.html">promise</a></li><li><a href="module-resolver.html">resolver</a></li><li><a href="module-serialize.html">serialize</a></li><li><a href="module-summarizer.html">summarizer</a></li></ul><h3>Externals</h3><ul><li><a href="external-ArrayBuffer.html">ArrayBuffer</a></li><li><a href="external-Difference.html">Difference</a></li><li><a href="external-Generator.html">Generator</a></li><li><a href="external-Iterator.html">Iterator</a></li><li><a href="external-Promise.html">Promise</a></li><li><a href="external-Summary.html">Summary</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bucketSelector">bucketSelector</a></li><li><a href="global.html#deserialize">deserialize</a></li><li><a href="global.html#digester">digester</a></li><li><a href="global.html#resolver">resolver</a></li><li><a href="global.html#serialize">serialize</a></li><li><a href="global.html#summarizer">summarizer</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-arrayBufferSerialization.html">arrayBufferSerialization</a></li><li><a href="module-bucketSelector.html">bucketSelector</a></li><li><a href="module-iterator.html">iterator</a></li><li><a href="module-mathsync.html">mathsync</a></li><li><a href="module-promise.html">promise</a></li><li><a href="module-resolver.html">resolver</a></li><li><a href="module-serialize.html">serialize</a></li><li><a href="module-summarizer.html">summarizer</a></li></ul><h3>Externals</h3><ul><li><a href="external-ArrayBuffer.html">ArrayBuffer</a></li><li><a href="external-Difference.html">Difference</a></li><li><a href="external-Generator.html">Generator</a></li><li><a href="external-Iterator.html">Iterator</a></li><li><a href="external-Promise.html">Promise</a></li><li><a href="external-Readable.html">Readable</a></li><li><a href="external-Summary.html">Summary</a></li></ul><h3>Events</h3><ul><li><a href="external-Readable.html#event:data">data</a></li><li><a href="external-Readable.html#event:end">end</a></li><li><a href="external-Readable.html#event:error">error</a></li></ul><h3>Global</h3><ul><li><a href="global.html#bucketSelector">bucketSelector</a></li><li><a href="global.html#deserialize">deserialize</a></li><li><a href="global.html#digester">digester</a></li><li><a href="global.html#resolver">resolver</a></li><li><a href="global.html#serialize">serialize</a></li><li><a href="global.html#summarizer">summarizer</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Sat Mar 15 2014 09:18:34 GMT+0100 (CET)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.2</a> on Mon Apr 07 2014 18:56:58 GMT+0200 (CEST)
 </footer>
 
 <script> prettyPrint(); </script>

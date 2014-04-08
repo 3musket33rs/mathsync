@@ -15,7 +15,7 @@ Add a dependency towards the library:
 <dependency>
   <groupId>eu.mais-h.mathsync</groupId>
   <artifactId>core</artifactId>
-  <version>0.5.0</version>
+  <version>{{ site.version }}</version>
 </dependency>
 {% endhighlight %}
 

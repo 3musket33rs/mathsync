@@ -17,9 +17,11 @@ deploy:
 set-dev-version:
 	make set-dev-version -C java
 	make set-dev-version -C javascript
+	make set-release-version -C doc
 	make set-dev-version -C integration-test
 
 set-release-version:
 	make set-release-version -C java
 	make set-release-version -C javascript
+	make set-release-version -C doc
 	make set-release-version -C integration-test

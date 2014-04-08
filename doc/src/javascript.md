@@ -16,7 +16,7 @@ Add a dependency towards the library:
 {% highlight json %}
 {
   "dependencies": {
-    "mathsync": "0.5.x"
+    "mathsync": "{{ site.version }}"
   }
 }
 {% endhighlight %}
@@ -52,7 +52,7 @@ Add a dependency towards the library and to a [Promise](https://developer.mozill
 {% highlight json%}
 {
   "dependencies": {
-    "mathsync": "0.5.x",
+    "mathsync": "{{ site.version }}",
     "q": "0.9.x"
   }
 }

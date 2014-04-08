@@ -1,5 +1,6 @@
 package eu.mais_h.mathsync;
 
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 
 import eu.mais_h.mathsync.digest.Digester;
@@ -25,11 +26,12 @@ public class PadAndHashBucketSelector implements BucketSelector {
   }
 
   @Override
-  public int[] selectBuckets(byte[] content) {
+  public int[] selectBuckets(int seed, byte[] content) {
     int[] destinations = new int[spread];
-    byte[] paddedContent = Arrays.copyOf(content, content.length + 1);
-    for (byte i = 0; i < spread; i++) {
-      paddedContent[content.length] = i;
+    byte[] paddedContent = Arrays.copyOf(content, content.length + 4);
+    ByteBuffer buffer = ByteBuffer.wrap(paddedContent);
+    for (int i = 0; i < spread; i++) {
+      buffer.putInt(content.length, seed + i);
       destinations[i] = destinationBucket(digester.digest(paddedContent));
     }
     return destinations;

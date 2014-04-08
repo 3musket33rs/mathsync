@@ -31,13 +31,13 @@ public class IbfTest {
 
   @Before
   public void prepareIbf() {
-    Mockito.when(selector.selectBuckets(Matchers.eq(item1))).thenReturn(new int[] { 6, 3, 4 });
+    Mockito.when(selector.selectBuckets(Matchers.eq(5), Matchers.eq(item1))).thenReturn(new int[] { 6, 3, 4 });
     Mockito.when(digester.digest(Matchers.eq(item1))).thenReturn(new byte[] { (byte)4 });
 
-    Mockito.when(selector.selectBuckets(Matchers.eq(item2))).thenReturn(new int[] { 2, 3, 4 });
+    Mockito.when(selector.selectBuckets(Matchers.eq(5), Matchers.eq(item2))).thenReturn(new int[] { 2, 3, 4 });
     Mockito.when(digester.digest(Matchers.eq(item2))).thenReturn(new byte[] { (byte)8 });
 
-    Mockito.when(selector.selectBuckets(Matchers.eq(item3))).thenReturn(new int[] { 0, 1, 2 });
+    Mockito.when(selector.selectBuckets(Matchers.eq(5), Matchers.eq(item3))).thenReturn(new int[] { 0, 1, 2 });
     Mockito.when(digester.digest(Matchers.eq(item3))).thenReturn(new byte[] { (byte)12 });
 
     just1 = empty.plus(item1);

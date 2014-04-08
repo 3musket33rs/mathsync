@@ -179,7 +179,7 @@ class Ibf implements Summary {
    */
   private void modifyWithSideEffect(Bucket[] buckets, int variation, byte[] item) {
     byte[] hashed = digester.digest(item);
-    for (int bucket : selector.selectBuckets(item)) {
+    for (int bucket : selector.selectBuckets(buckets.length, item)) {
       bucket = bucket % buckets.length;
       buckets[bucket] = buckets[bucket].modify(variation, item, hashed);
     }

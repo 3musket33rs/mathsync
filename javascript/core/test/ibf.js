@@ -8,7 +8,10 @@
   var item1 = new Int8Array([5]).buffer;
   var item2 = new Int8Array([6]).buffer;
 
-  function selector(content) {
+  function selector(seed, content) {
+    if (seed !== 5) {
+      return null;
+    }
     if (utils.isEqual(content, item1)) {
       return [6, 3, 4];
     } else if (utils.isEqual(content, item2)) {

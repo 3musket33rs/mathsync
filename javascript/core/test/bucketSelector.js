@@ -30,29 +30,29 @@
 
       it('should return indexes taken from padded hash', function() {
         function digester(content) {
-          if (utils.isEqual(content, new Int8Array([5, 0]).buffer)) {
+          if (utils.isEqual(content, new Int8Array([5, 0, 0, 0, 10]).buffer)) {
             return intToBytes(2);
-          } else if (utils.isEqual(content, new Int8Array([5, 1]).buffer)) {
+          } else if (utils.isEqual(content, new Int8Array([5, 0, 0, 0, 11]).buffer)) {
             return intToBytes(3);
-          } else if (utils.isEqual(content, new Int8Array([5, 2]).buffer)) {
+          } else if (utils.isEqual(content, new Int8Array([5, 0, 0, 0, 12]).buffer)) {
             return intToBytes(4);
           }
         }
-        var selected = selector.padAndHash(digester, 3)(new Int8Array([5]).buffer);
+        var selected = selector.padAndHash(digester, 3)(10, new Int8Array([5]).buffer);
         assertThatSetOfArrayEquals(selected, [2, 3, 4]);
       });
 
       it('should return absolute indexes taken from padded hash', function() {
         function digester(content) {
-          if (utils.isEqual(content, new Int8Array([5, 0]).buffer)) {
+          if (utils.isEqual(content, new Int8Array([5, 0, 0, 0, 10]).buffer)) {
             return intToBytes(-1);
-          } else if (utils.isEqual(content, new Int8Array([5, 1]).buffer)) {
+          } else if (utils.isEqual(content, new Int8Array([5, 0, 0, 0, 11]).buffer)) {
             return intToBytes(3);
-          } else if (utils.isEqual(content, new Int8Array([5, 2]).buffer)) {
+          } else if (utils.isEqual(content, new Int8Array([5, 0, 0, 0, 12]).buffer)) {
             return intToBytes(-5);
           }
         }
-        var selected = selector.padAndHash(digester, 3)(new Int8Array([5]).buffer);
+        var selected = selector.padAndHash(digester, 3)(10, new Int8Array([5]).buffer);
         assertThatSetOfArrayEquals(selected, [1, 3, 5]);
       });
     });

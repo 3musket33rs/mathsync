@@ -59,7 +59,7 @@
 
     function modifyOneWithSideEffect(bucketsCopy, variation, content) {
       var digested = digest(content);
-      var selected = selector(content);
+      var selected = selector(buckets.length, content);
       for (var i = 0; i < selected.length; i++) {
         var b = selected[i] % buckets.length;
         bucketsCopy[b] = bucketsCopy[b].modify(variation, content, digested);

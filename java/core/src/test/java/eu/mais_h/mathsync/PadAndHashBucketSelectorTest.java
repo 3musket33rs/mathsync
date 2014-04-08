@@ -39,22 +39,22 @@ public class PadAndHashBucketSelectorTest {
 
   @Test
   public void returns_indexes_taken_from_padded_hash() {
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)0 }))).thenReturn(intToBytes(2));
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)1 }))).thenReturn(intToBytes(3));
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)2 }))).thenReturn(intToBytes(4));
+    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)0, (byte)0, (byte)0, (byte)10 }))).thenReturn(intToBytes(2));
+    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)0, (byte)0, (byte)0, (byte)11 }))).thenReturn(intToBytes(3));
+    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)0, (byte)0, (byte)0, (byte)12 }))).thenReturn(intToBytes(4));
 
-    int[] selected = selector.selectBuckets(new byte[] { (byte)5 });
+    int[] selected = selector.selectBuckets(10, new byte[] { (byte)5 });
 
     assertSelectedEquals(selected, 2, 3, 4);
   }
 
   @Test
   public void returns_absolute_indexes_taken_from_padded_hash() {
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)0 }))).thenReturn(intToBytes(-1));
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)1 }))).thenReturn(intToBytes(3));
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)2 }))).thenReturn(intToBytes(-5));
+    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)0, (byte)0, (byte)0, (byte)10 }))).thenReturn(intToBytes(-1));
+    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)0, (byte)0, (byte)0, (byte)11 }))).thenReturn(intToBytes(3));
+    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)0, (byte)0, (byte)0, (byte)12 }))).thenReturn(intToBytes(-5));
 
-    int[] selected = selector.selectBuckets(new byte[] { (byte)5 });
+    int[] selected = selector.selectBuckets(10, new byte[] { (byte)5 });
 
     assertSelectedEquals(selected, 1, 3, 5);
   }

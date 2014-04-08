@@ -10,6 +10,8 @@ import eu.mais_h.mathsync.digest.Digester;
  */
 public class PadAndHashBucketSelector implements BucketSelector {
 
+  private static final int BYTES_PER_INT = 4;
+
   private final int spread;
   private final Digester digester;
 
@@ -27,22 +29,25 @@ public class PadAndHashBucketSelector implements BucketSelector {
 
   @Override
   public int[] selectBuckets(int seed, byte[] content) {
-    int[] destinations = new int[spread];
-    byte[] paddedContent = Arrays.copyOf(content, content.length + 4);
-    ByteBuffer buffer = ByteBuffer.wrap(paddedContent);
-    for (int i = 0; i < spread; i++) {
-      buffer.putInt(content.length, seed + i);
-      destinations[i] = destinationBucket(digester.digest(paddedContent));
-    }
-    return destinations;
-  }
+    int remaining = spread * BYTES_PER_INT;
+    ByteBuffer bucketsBytes = ByteBuffer.allocate(remaining);
 
-  private int destinationBucket(byte[] digested) {
-    if (digested.length < 4) {
-      throw new IllegalArgumentException("Digester " + digester + " does not produce long enough digests: " + digested.length);
+    byte[] paddedContent = Arrays.copyOf(content, content.length + BYTES_PER_INT);
+    ByteBuffer buffer = ByteBuffer.wrap(paddedContent);
+
+    int pad = seed;
+    while (remaining > 0) {
+      buffer.putInt(content.length, pad++);
+      byte[] hashed = digester.digest(paddedContent);
+      bucketsBytes.put(hashed, 0, Math.min(hashed.length, remaining));
+      remaining = bucketsBytes.remaining();
     }
-    int id = ((digested[0] << 24) | (digested[1] << 16) | (digested[2] << 8) | (digested[3]));
-    return Math.abs(id);
+
+    int[] buckets = new int[spread];
+    for (int i = 0; i < spread; i++) {
+      buckets[i] = Math.abs(bucketsBytes.getInt(i * BYTES_PER_INT));
+    }
+    return buckets;
   }
 
   /**

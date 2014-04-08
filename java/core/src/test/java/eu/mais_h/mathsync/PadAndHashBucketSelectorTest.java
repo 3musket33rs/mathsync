@@ -39,9 +39,34 @@ public class PadAndHashBucketSelectorTest {
 
   @Test
   public void returns_indexes_taken_from_padded_hash() {
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)0, (byte)0, (byte)0, (byte)10 }))).thenReturn(intToBytes(2));
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)0, (byte)0, (byte)0, (byte)11 }))).thenReturn(intToBytes(3));
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)0, (byte)0, (byte)0, (byte)12 }))).thenReturn(intToBytes(4));
+    Mockito.when(digester.digest(Matchers.eq(new byte[] {
+      (byte)5, (byte)0, (byte)0, (byte)0, (byte)10
+    }))).thenReturn(new byte[] {
+      (byte)0, (byte)0, (byte)0, (byte)2,
+      (byte)0, (byte)0, (byte)0, (byte)3,
+      (byte)0, (byte)0, (byte)0, (byte)4,
+      (byte)0, (byte)0, (byte)0, (byte)5
+    });
+
+    int[] selected = selector.selectBuckets(10, new byte[] { (byte)5 });
+
+    assertSelectedEquals(selected, 2, 3, 4);
+  }
+
+  @Test
+  public void increments_on_pad_until_enough_bytes_are_generated() {
+    Mockito.when(digester.digest(Matchers.eq(new byte[] {
+      (byte)5, (byte)0, (byte)0, (byte)0, (byte)10
+    }))).thenReturn(new byte[] {
+      (byte)0, (byte)0, (byte)0, (byte)2,
+      (byte)0, (byte)0, (byte)0, (byte)3
+    });
+    Mockito.when(digester.digest(Matchers.eq(new byte[] {
+      (byte)5, (byte)0, (byte)0, (byte)0, (byte)11
+    }))).thenReturn(new byte[] {
+      (byte)0, (byte)0, (byte)0, (byte)4,
+      (byte)0, (byte)0, (byte)0, (byte)5
+    });
 
     int[] selected = selector.selectBuckets(10, new byte[] { (byte)5 });
 
@@ -50,9 +75,14 @@ public class PadAndHashBucketSelectorTest {
 
   @Test
   public void returns_absolute_indexes_taken_from_padded_hash() {
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)0, (byte)0, (byte)0, (byte)10 }))).thenReturn(intToBytes(-1));
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)0, (byte)0, (byte)0, (byte)11 }))).thenReturn(intToBytes(3));
-    Mockito.when(digester.digest(Matchers.eq(new byte[] { (byte)5, (byte)0, (byte)0, (byte)0, (byte)12 }))).thenReturn(intToBytes(-5));
+    Mockito.when(digester.digest(Matchers.eq(new byte[] {
+      (byte)5, (byte)0, (byte)0, (byte)0, (byte)10
+    }))).thenReturn(new byte[] {
+      (byte)255, (byte)255, (byte)255, (byte)255,
+      (byte)0, (byte)0, (byte)0, (byte)3,
+      (byte)255, (byte)255, (byte)255, (byte)251,
+      (byte)0, (byte)0, (byte)0, (byte)12
+    });
 
     int[] selected = selector.selectBuckets(10, new byte[] { (byte)5 });
 
@@ -60,15 +90,7 @@ public class PadAndHashBucketSelectorTest {
   }
 
   private void assertSelectedEquals(int[] selected, int... expected) {
-    assertThat(new HashSet<>(Arrays.asList(selected))).isEqualTo(new HashSet<>(Arrays.asList(selected)));
-  }
-
-  private byte[] intToBytes(int i) {
-    return new byte[] {
-      (byte)((i >> 24) & 0xff),
-      (byte)((i >> 16) & 0xff),
-      (byte)((i >> 8) & 0xff),
-      (byte)(i & 0xff)
-    };
+    assertThat(selected.length).isEqualTo(expected.length);
+    assertThat(selected).contains(expected);
   }
 }

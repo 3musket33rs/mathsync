@@ -25,24 +25,42 @@
    * @return {number[]} buckets to store the item in.
    */
 
-  function intFromDigestedBytes(digested) {
-    var int8arr = new Int8Array(digested);
-    return ((int8arr[0] << 24) | (int8arr[1] << 16) | (int8arr[2] << 8) | (int8arr[3]));
+  var BYTES_PER_INT = 4;
+
+  function bytesToInt(buffer) {
+    var dv = new DataView(buffer);
+    var buckets = [];
+    for (var i = 0; i < buffer.byteLength; i += BYTES_PER_INT) {
+      buckets.push(Math.abs(dv.getInt32(i)));
+    }
+    return buckets;
   }
 
   function padAndHash(digest, spread) {
     return function (seed, content) {
-      var selected = [];
-      var bucketId;
-      var copy = new Int8Array(content.byteLength + 4);
+      var hashed;
+
+      var remaining = spread * BYTES_PER_INT;
+      var pointer = 0;
+      var bucketsBytes = new Int8Array(remaining);
+
+      var copy = new Int8Array(content.byteLength + BYTES_PER_INT);
       copy.set(new Int8Array(content));
       var dv = new DataView(copy.buffer);
-      for (var i = 0; i < spread; i++) {
-        dv.setInt32(content.byteLength, seed + i);
-        bucketId = intFromDigestedBytes(digest(copy.buffer));
-        selected.push(Math.abs(bucketId));
+
+      var pad = seed;
+      while (true) {
+        dv.setInt32(content.byteLength, pad++);
+        hashed = new Int8Array(digest(copy.buffer));
+        if (hashed.byteLength < remaining) {
+          bucketsBytes.set(hashed, pointer);
+          pointer += hashed.byteLength;
+          remaining -= hashed.byteLength;
+        } else {
+          bucketsBytes.set(hashed.subarray(0, remaining), pointer);
+          return bytesToInt(bucketsBytes.buffer);
+        }
       }
-      return selected;
     };
   }
 

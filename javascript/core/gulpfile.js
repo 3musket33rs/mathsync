@@ -3,20 +3,22 @@
 
   var gulp = require('gulp');
   var jshint = require('gulp-jshint');
-  var browserify = require('gulp-browserify');
   var clean = require('gulp-clean');
   var jsdoc = require('gulp-jsdoc');
   var mocha = require('gulp-mocha');
+  var browserify = require('browserify');
+  var source = require('vinyl-source-stream');
 
   // Browser package
   gulp.task('clean-browser', function() {
-    return gulp.src('./browser/browser.js', { read: false })
+    return gulp.src('browser', { read: false })
       .pipe(clean());
   });
   gulp.task('browser', ['clean-browser'], function() {
-    return gulp.src('src/index.js')
-      .pipe(browserify())
-      .pipe(gulp.dest('./browser/browser.js'));
+    return browserify('./src/index.js')
+      .bundle()
+      .pipe(source('browser.js'))
+      .pipe(gulp.dest('browser'));
   });
 
   // Tests

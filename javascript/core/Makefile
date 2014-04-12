@@ -2,8 +2,7 @@ init:
 	npm install .
 
 build:
-	grunt
-	npm test
+	node --harmony `which gulp`
 
 deploy: build
 	npm publish .

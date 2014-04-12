@@ -6,6 +6,7 @@
   var browserify = require('gulp-browserify');
   var clean = require('gulp-clean');
   var jsdoc = require('gulp-jsdoc');
+  var mocha = require('gulp-mocha');
 
   // Browser package
   gulp.task('clean-browser', function() {
@@ -16,6 +17,12 @@
     return gulp.src('src/index.js')
       .pipe(browserify())
       .pipe(gulp.dest('./browser/browser.js'));
+  });
+
+  // Tests
+  gulp.task('test', function () {
+    return gulp.src('test/**/*.js')
+      .pipe(mocha({reporter: 'spec'}));
   });
 
   // API docs
@@ -35,5 +42,5 @@
       .pipe(jshint.reporter('default'));
   });
 
-  gulp.task('default', ['lint', 'browser', 'apidoc']);
+  gulp.task('default', ['lint', 'browser', 'apidoc', 'test']);
 })();

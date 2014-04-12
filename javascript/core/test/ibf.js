@@ -1,4 +1,5 @@
 (function () {
+  /* global describe, it */
   'use strict';
 
   var utils = require('./utils');

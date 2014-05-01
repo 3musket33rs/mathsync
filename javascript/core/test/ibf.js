@@ -109,6 +109,26 @@
         utils.assertThatSetOfArrayEquals(goThroughJson(oneItem).toDifference().removed, []);
       });
     });
+    describe('with added items', function() {
+      function updater(item, done) {
+        item(item1);
+        item(item2);
+        done();
+      }
+
+      it('has two added elements', function() {
+        return emptyContent.plusMany(updater).then(function (asyncAdded) {
+          utils.assertThatSetOfArrayEquals(asyncAdded.toDifference().added, [item1, item2]);
+          utils.assertThatSetOfArrayEquals(goThroughJson(asyncAdded).toDifference().added, [item1, item2]);
+        });
+      });
+      it('has no removed element', function() {
+        return emptyContent.plusMany(updater).then(function (asyncAdded) {
+          utils.assertThatSetOfArrayEquals(asyncAdded.toDifference().removed, []);
+          utils.assertThatSetOfArrayEquals(goThroughJson(asyncAdded).toDifference().removed, []);
+        });
+      });
+    });
     describe('with added items through iterator', function() {
       function* generateItems() {
         yield item1;
@@ -147,6 +167,26 @@
         return emptyContent.plusStream(new ArrayStream([1, 2]), serialize).then(function (asyncAdded) {
           utils.assertThatSetOfArrayEquals(asyncAdded.toDifference().removed, []);
           utils.assertThatSetOfArrayEquals(goThroughJson(asyncAdded).toDifference().removed, []);
+        });
+      });
+    });
+    describe('with removed items', function() {
+      function updater(item, done) {
+        item(item1);
+        item(item2);
+        done();
+      }
+
+      it('has two removed elements', function() {
+        return emptyContent.minusMany(updater).then(function (asyncRemoved) {
+          utils.assertThatSetOfArrayEquals(asyncRemoved.toDifference().removed, [item1, item2]);
+          utils.assertThatSetOfArrayEquals(goThroughJson(asyncRemoved).toDifference().removed, [item1, item2]);
+        });
+      });
+      it('has no added element', function() {
+        return emptyContent.minusMany(updater).then(function (asyncRemoved) {
+          utils.assertThatSetOfArrayEquals(asyncRemoved.toDifference().added, []);
+          utils.assertThatSetOfArrayEquals(goThroughJson(asyncRemoved).toDifference().added, []);
         });
       });
     });

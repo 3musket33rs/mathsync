@@ -59,11 +59,23 @@
 
     function modifyOneWithSideEffect(bucketsCopy, variation, content) {
       var digested = digest(content);
-      var selected = selector(buckets.length, content);
+      var selected = selector(bucketsCopy.length, content);
       for (var i = 0; i < selected.length; i++) {
-        var b = selected[i] % buckets.length;
+        var b = selected[i] % bucketsCopy.length;
         bucketsCopy[b] = bucketsCopy[b].modify(variation, content, digested);
       }
+    }
+
+    function modifyManyWithSideEffect(variation, updater) {
+      return Promise.resolve(copyBuckets()).then(function (bucketsCopy) {
+        return new Promise(function (resolve, reject) {
+          var item = modifyOneWithSideEffect.bind(null, bucketsCopy, variation);
+          var done = resolve.bind(null, bucketsCopy);
+          updater(item, done, reject);
+        });
+      }).then(function (modified) {
+        return ibfFromBuckets(modified, digest, selector);
+      });
     }
 
     function modifyWithSideEffectFromIterator(variation, iterator, bucketsCopy) {
@@ -98,6 +110,10 @@
       return ibfFromBuckets(bucketsCopy, digest, selector);
     }
 
+    function plusMany(updater) {
+      return modifyManyWithSideEffect(1, updater);
+    }
+
     function plusIterator(iterator) {
       return modifyWithSideEffect(modifyWithSideEffectFromIterator.bind(null, 1, iterator));
     }
@@ -113,6 +129,10 @@
       var bucketsCopy = copyBuckets();
       modifyOneWithSideEffect(bucketsCopy, -1, content);
       return ibfFromBuckets(bucketsCopy, digest, selector);
+    }
+
+    function minusMany(updater) {
+      return modifyManyWithSideEffect(-1, updater);
     }
 
     function minusIterator(iterator) {
@@ -184,9 +204,11 @@
     var that = {
       toDifference : toDifference,
       plus : plus,
+      plusMany : plusMany,
       plusIterator : plusIterator,
       plusStream : plusStream,
       minus : minus,
+      minusMany : minusMany,
       minusIterator : minusIterator,
       minusStream : minusStream,
       toJSON : toJSON

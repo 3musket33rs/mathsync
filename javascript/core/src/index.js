@@ -58,6 +58,45 @@
    */
 
   /**
+   * Function interface - Adds/removes multiple items to a summary.
+   *
+   * <p>This function is provided to the summary and called by it with appropriate parameters. The function is then
+   * responsible for calling <code>item</code> function repeatedly with a single argument
+   * being the {@link external:ArrayBuffer buffer} representing the item to add or remove. Once all items have been, the
+   * <code>done</code> method has to be called to notify the summary batch update is finished. If any issue occurs,
+   * call <code>fail</code> function with an error object.<p>
+   *
+   * @example <caption>Synchronously add items to the summary</caption>
+   * var promise = summary.plusMany(function(item, done) {
+   *   item(new Int8Array([1, 2, 3]).buffer);
+   *   item(new Int8Array([4, 5, 6]).buffer);
+   *   done();
+   * });
+   *
+   * @example <caption>Asynchronously add items to the summary, with possible failure</caption>
+   * var promise = summary.plusMany(function(item, done, fail) {
+   *   function convertToBufferAndAdd(line) {
+   *     var buffer = ...
+   *     item(buffer);
+   *   }
+   *   readLines('file.csv', function (err, lines) {
+   *     if (err) {
+   *       return fail(err);
+   *     }
+   *     lines.forEach(convert);
+   *     done();
+   *   });
+   * });
+   *
+   * @external SummaryBatchUpdater
+   * @name SummaryBatchUpdater
+   * @function
+   * @param {Function} item - a function to call on each item to add/remove from the summary-.
+   * @param {Function} done - a function to call once all items have been added/removed from the summary.
+   * @param {Function} fail - a function to call if any issue occurs.
+   */
+
+  /**
    * Represents summarized data.
    * @external Summary
    */
@@ -89,6 +128,19 @@
   /**
    * Adds several items to the summary.
    *
+   * <p>Equivalent to repeatedly calling {@link external:Summary#plus} for each element reported in the updater, but
+   * this method can do optimizations for batch updates.</p>
+   *
+   * <p>The promise returned by this method resolves once the updater reports finishing its work, or rejects if the
+   * updater reports an issue.</p>
+   *
+   * @param {external:SummaryBatchUpdater} updater - an updater which will report items to add.
+   * @returns {external:Promise.<external:Summary>} a promise which will resolve to a summary.
+   * @function external:Summary#plusMany
+   */
+  /**
+   * Adds several items to the summary.
+   *
    * <p>Equivalent to repeatedly calling {@link external:Summary#plus} for each element, but this
    * method can do optimizations for batch updates.</p>
    *
@@ -116,6 +168,19 @@
    * @param {external:ArrayBuffer} item - the serialized item.
    * @returns {external:Summary} a new summary instance excluding this item.
    * @function external:Summary#minus
+   */
+  /**
+   * Removes several items to the summary.
+   *
+   * <p>Equivalent to repeatedly calling {@link external:Summary#minus} for each element reported in the updater, but
+   * this method can do optimizations for batch updates.</p>
+   *
+   * <p>The promise returned by this method resolves once the updater reports finishing its work, or rejects if the
+   * updater reports an issue.</p>
+   *
+   * @param {external:SummaryBatchUpdater} updater - an updater which will report items to remove.
+   * @returns {external:Promise.<external:Summary>} a promise which will resolve to a summary.
+   * @function external:Summary#minusMany
    */
   /**
    * Removes several items from the summary.

@@ -2,11 +2,20 @@
   'use strict';
 
   /**
+   * The built in Error object.
+   *
+   * @class Error
+   * @external
+   * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error Error on Mozilla Developer Network}
+   */
+
+  /**
    * The built in ArrayBuffer object.
    *
    * <p>Arraybuffers are the way to represent items serialized in binary format.</p>
    *
-   * @external ArrayBuffer
+   * @class ArrayBuffer
+   * @external
    * @see {@link https://developer.mozilla.org/en-US/docs/Web/API/ArrayBuffer ArrayBuffer on Mozilla Developer Network}
    */
 
@@ -15,7 +24,8 @@
    *
    * <p>Only to be used in object mode.</p>
    *
-   * @external Readable
+   * @class Readable
+   * @external
    * @see {@link http://nodejs.org/api/stream.html#stream_class_stream_readable stream.Readable on Node.js}
    */
   /**
@@ -58,47 +68,8 @@
    */
 
   /**
-   * Function interface - Adds/removes multiple items to a summary.
-   *
-   * <p>This function is provided to the summary and called by it with appropriate parameters. The function is then
-   * responsible for calling <code>item</code> function repeatedly with a single argument
-   * being the {@link external:ArrayBuffer buffer} representing the item to add or remove. Once all items have been, the
-   * <code>done</code> method has to be called to notify the summary batch update is finished. If any issue occurs,
-   * call <code>fail</code> function with an error object.<p>
-   *
-   * @example <caption>Synchronously add items to the summary</caption>
-   * var promise = summary.plusMany(function(item, done) {
-   *   item(new Int8Array([1, 2, 3]).buffer);
-   *   item(new Int8Array([4, 5, 6]).buffer);
-   *   done();
-   * });
-   *
-   * @example <caption>Asynchronously add items to the summary, with possible failure</caption>
-   * var promise = summary.plusMany(function(item, done, fail) {
-   *   function convertToBufferAndAdd(line) {
-   *     var buffer = ...
-   *     item(buffer);
-   *   }
-   *   readLines('file.csv', function (err, lines) {
-   *     if (err) {
-   *       return fail(err);
-   *     }
-   *     lines.forEach(convert);
-   *     done();
-   *   });
-   * });
-   *
-   * @external SummaryBatchUpdater
-   * @name SummaryBatchUpdater
-   * @function
-   * @param {Function} item - a function to call on each item to add/remove from the summary-.
-   * @param {Function} done - a function to call once all items have been added/removed from the summary.
-   * @param {Function} fail - a function to call if any issue occurs.
-   */
-
-  /**
    * Represents summarized data.
-   * @external Summary
+   * @class Summary
    */
   /**
    * Adds an item to the summary.
@@ -112,37 +83,37 @@
    * </p>
    *
    * @param {external:ArrayBuffer} item - the serialized item.
-   * @returns {external:Summary} a new summary instance including this item.
-   * @function external:Summary#plus
+   * @returns {Summary} a new summary instance including this item.
+   * @function Summary#plus
    */
   /**
    * Adds several items to the summary.
    *
-   * <p>Equivalent to repeatedly calling {@link external:Summary#plus} for each element, but this
-   * method can do optimizations for batch updates.</p>
+   * <p>Equivalent to repeatedly calling {@link Summary#plus} for each element, but this method can do optimizations for
+   * batch updates.</p>
    *
    * @param {external:Iterator} iterator - an iterator of items to add.
-   * @returns {external:Promise.<external:Summary>} a promise which will resolve to a summary.
-   * @function external:Summary#plusIterator
+   * @returns {external:Promise.<Summary>} a promise which will resolve to a summary.
+   * @function Summary#plusIterator
    */
   /**
    * Adds several items to the summary.
    *
-   * <p>Equivalent to repeatedly calling {@link external:Summary#plus} for each element reported in the updater, but
-   * this method can do optimizations for batch updates.</p>
+   * <p>Equivalent to repeatedly calling {@link Summary#plus} for each element reported in the updater, but this method
+   * can do optimizations for batch updates.</p>
    *
    * <p>The promise returned by this method resolves once the updater reports finishing its work, or rejects if the
    * updater reports an issue.</p>
    *
-   * @param {external:SummaryBatchUpdater} updater - an updater which will report items to add.
-   * @returns {external:Promise.<external:Summary>} a promise which will resolve to a summary.
-   * @function external:Summary#plusMany
+   * @param {Summary~SummaryBatchUpdater} updater - an updater which will report items to add.
+   * @returns {external:Promise.<Summary>} a promise which will resolve to a summary.
+   * @function Summary#plusMany
    */
   /**
    * Adds several items to the summary.
    *
-   * <p>Equivalent to repeatedly calling {@link external:Summary#plus} for each element, but this
-   * method can do optimizations for batch updates.</p>
+   * <p>Equivalent to repeatedly calling {@link Summary#plus} for each element, but this method can do optimizations for
+   * batch updates.</p>
    *
    * <p>Having the serializer passed as an argument is less than optimal because summaries should have to deal only with
    * <code>ArrayBuffer</code>s, but this allows the library not to have a <code>require('stream')</code> which makes
@@ -151,13 +122,13 @@
    *
    * @param {external:Readable} stream - a stream of items to add.
    * @param {serialize} serialize - a serializer for items in the array.
-   * @returns {external:Promise.<external:Summary>} a promise which will resolve to a summary.
-   * @function external:Summary#plusStream
+   * @returns {external:Promise.<Summary>} a promise which will resolve to a summary.
+   * @function Summary#plusStream
    */
   /**
    * Removes an item from the summary.
    *
-   * <p>When both summaries can be {@link external:Summary#toDifference|viewed as a difference}:
+   * <p>When both summaries can be {@link Summary#toDifference|viewed as a difference}:
    * <ul>
    *   <li>if the item is in the added set of that summary, it is in none of the resulting summary difference sets</li>
    *   <li>if the item is in none of the difference sets of that summary, it is in the removed set of the resulting difference</li>
@@ -166,37 +137,37 @@
    * </p>
    *
    * @param {external:ArrayBuffer} item - the serialized item.
-   * @returns {external:Summary} a new summary instance excluding this item.
-   * @function external:Summary#minus
+   * @returns {Summary} a new summary instance excluding this item.
+   * @function Summary#minus
    */
   /**
    * Removes several items to the summary.
    *
-   * <p>Equivalent to repeatedly calling {@link external:Summary#minus} for each element reported in the updater, but
-   * this method can do optimizations for batch updates.</p>
+   * <p>Equivalent to repeatedly calling {@link Summary#minus} for each element reported in the updater, but this method
+   * can do optimizations for batch updates.</p>
    *
    * <p>The promise returned by this method resolves once the updater reports finishing its work, or rejects if the
    * updater reports an issue.</p>
    *
-   * @param {external:SummaryBatchUpdater} updater - an updater which will report items to remove.
-   * @returns {external:Promise.<external:Summary>} a promise which will resolve to a summary.
-   * @function external:Summary#minusMany
+   * @param {Summary~SummaryBatchUpdater} updater - an updater which will report items to remove.
+   * @returns {external:Promise.<Summary>} a promise which will resolve to a summary.
+   * @function Summary#minusMany
    */
   /**
    * Removes several items from the summary.
    *
-   * <p>Equivalent to repeatedly calling {@link external:Summary#minus} for each element, but this
-   * method can do optimizations for batch updates.</p>
+   * <p>Equivalent to repeatedly calling {@link Summary#minus} for each element, but this method can do optimizations
+   * for batch updates.</p>
    *
    * @param {external:Iterator} iterator - an iterator of items to remove.
-   * @returns {external:Promise.<external:Summary>} a promise which will resolve to a summary.
-   * @function external:Summary#minusIterator
+   * @returns {external:Promise.<Summary>} a promise which will resolve to a summary.
+   * @function Summary#minusIterator
    */
   /**
    * Removes several items from the summary.
    *
-   * <p>Equivalent to repeatedly calling {@link external:Summary#minus} for each element, but this
-   * method can do optimizations for batch updates.</p>
+   * <p>Equivalent to repeatedly calling {@link Summary#minus} for each element, but this method can do optimizations
+   * for batch updates.</p>
    *
    * <p>Having the serializer passed as an argument is less than optimal because summaries should have to deal only with
    * <code>ArrayBuffer</code>s, but this allows the library not to have a <code>require('stream')</code> which makes
@@ -205,38 +176,74 @@
    *
    * @param {external:Readable<external:ArrayBuffer>} stream - a stream of items to remove.
    * @param {serialize} serialize - a serializer for items in the array.
-   * @returns {external:Promise.<external:Summary>} a promise which will resolve to a summary.
-   * @function external:Summary#minusStream
+   * @returns {external:Promise.<Summary>} a promise which will resolve to a summary.
+   * @function Summary#minusStream
    */
   /**
    * Retrieves a view of the summary as a difference.
    *
-   * @returns {external:Difference.<external:ArrayBuffer>} a difference view of the summary or <code>null</code> if it cannot be resolved with the information it contains.
-   * @function external:Summary#toDifference
+   * @returns {Difference.<external:ArrayBuffer>} a difference view of the summary or <code>null</code> if it cannot be resolved with the information it contains.
+   * @function Summary#toDifference
    */
   /**
    * Retrieves a JSON view of the summary.
    *
    * @returns {Object} a JSON view of the summary.
-   * @function external:Summary#toJSON
+   * @function Summary#toJSON
+   */
+  /**
+   * Adds/removes multiple items to a summary.
+   *
+   * <p>This function is provided to the summary and called by it with appropriate parameters. The function is then
+   * responsible for calling <code>item</code> function repeatedly with a single argument being the
+   * {@link external:ArrayBuffer buffer} representing the item to add or remove. Once all items have been, the
+   * <code>done</code> method has to be called to notify the summary batch update is finished. If any issue occurs, call
+   * <code>fail</code> function with an {@link external:Error error} object.<p>
+   *
+   * @example <caption>Synchronously add items to the summary</caption>
+   * var promise = summary.plusMany(function(item, done) {
+   *   item(new Int8Array([1, 2, 3]).buffer);
+   *   item(new Int8Array([4, 5, 6]).buffer);
+   *   done();
+   * });
+   *
+   * @example <caption>Asynchronously add items to the summary, with possible failure</caption>
+   * var promise = summary.plusMany(function(item, done, fail) {
+   *   readLines('file.csv', function (err, lines) {
+   *     if (err) {
+   *       return fail(err);
+   *     }
+   *     lines.forEach(function (line) {
+   *       var buffer = ...
+   *       item(line);
+   *     });
+   *     done();
+   *   });
+   * });
+   *
+   * @name Summary~SummaryBatchUpdater
+   * @function
+   * @param {function} item - a function to call on each item to add/remove from the summary.
+   * @param {function} done - a function to call once all items have been added/removed from the summary.
+   * @param {function} fail - a function to call if any issue occurs.
    */
 
   /**
    * Represents the difference between two states.
    *
-   * @external Difference
+   * @class Difference
    */
   /**
    * Represents the set of items added on the remote side compared to the local state.
    *
    * @returns {Array.<T>} the array of items added on the remote side compared to the local state.
-   * @function external:Difference#added
+   * @function Difference#added
    */
   /**
    * Represents the set of items removed on the remote side compared to the local state.
    *
    * @returns {Array.<T>} the array of items removed on the remote side compared to the local state.
-   * @function external:Difference#removed
+   * @function Difference#removed
    */
 
   var sha1 = require('./sha1');

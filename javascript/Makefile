@@ -1,5 +1,4 @@
 init:
-	npm install -g grunt-cli
 	make init -C core
 
 build:

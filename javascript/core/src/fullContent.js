@@ -43,7 +43,12 @@
     insert(mayInsert, item);
   }
 
-  function insertOrRemoveMany(mayInsert, mayRemove, items) {
+  function insertOrRemoveMany(mayInsert, mayRemove, updater) {
+    var item = insertOrRemove.bind(null, mayInsert, mayRemove);
+    return new Promise(updater.bind(null, item));
+  }
+
+  function insertOrRemoveIterator(mayInsert, mayRemove, items) {
     function next(resolve, reject) {
       var result = items.next();
       if (result.done) {
@@ -106,10 +111,18 @@
       return fullContent(addedCopy, removedCopy);
     }
 
+    function plusMany(updater) {
+      var addedCopy = copyArray(added);
+      var removedCopy = copyArray(removed);
+      return insertOrRemoveMany(addedCopy, removedCopy, updater).then(function () {
+        return fullContent(addedCopy, removedCopy);
+      });
+    }
+
     function plusIterator(iterator) {
       var addedCopy = copyArray(added);
       var removedCopy = copyArray(removed);
-      return insertOrRemoveMany(addedCopy, removedCopy, iterator).then(function () {
+      return insertOrRemoveIterator(addedCopy, removedCopy, iterator).then(function () {
         return fullContent(addedCopy, removedCopy);
       });
     }
@@ -129,10 +142,18 @@
       return fullContent(addedCopy, removedCopy);
     }
 
+    function minusMany(updater) {
+      var addedCopy = copyArray(added);
+      var removedCopy = copyArray(removed);
+      return insertOrRemoveMany(removedCopy, addedCopy, updater).then(function () {
+        return fullContent(addedCopy, removedCopy);
+      });
+    }
+
     function minusIterator(iterator) {
       var addedCopy = copyArray(added);
       var removedCopy = copyArray(removed);
-      return insertOrRemoveMany(removedCopy, addedCopy, iterator).then(function () {
+      return insertOrRemoveIterator(removedCopy, addedCopy, iterator).then(function () {
         return fullContent(addedCopy, removedCopy);
       });
     }
@@ -155,9 +176,11 @@
 
     return {
       plus: plus,
+      plusMany: plusMany,
       plusIterator: plusIterator,
       plusStream: plusStream,
       minus: minus,
+      minusMany: minusMany,
       minusIterator: minusIterator,
       minusStream: minusStream,
       toDifference: toDifference,

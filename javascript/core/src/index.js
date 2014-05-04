@@ -121,7 +121,7 @@
    * future.</p>
    *
    * @param {external:Readable} stream - a stream of items to add.
-   * @param {serialize} serialize - a serializer for items in the array.
+   * @param {Serial~Serialize} serialize - a serializer for items in the array.
    * @returns {external:Promise.<Summary>} a promise which will resolve to a summary.
    * @function Summary#plusStream
    */
@@ -175,7 +175,7 @@
    * future.</p>
    *
    * @param {external:Readable<external:ArrayBuffer>} stream - a stream of items to remove.
-   * @param {serialize} serialize - a serializer for items in the array.
+   * @param {Serial~Serialize} serialize - a serializer for items in the array.
    * @returns {external:Promise.<Summary>} a promise which will resolve to a summary.
    * @function Summary#minusStream
    */
@@ -304,7 +304,7 @@
        *
        * @function summarizer.fromItems
        * @param {Object[]} array - the array of items in the current state.
-       * @param {serialize} serialize - a serializer for items in the array.
+       * @param {Serial~Serialize} serialize - a serializer for items in the array.
        * @return {summarizer} a summarizer returning summaries representing the given array.
        *
        * @see {@link module:summarizer.fromItems} for customized instances
@@ -392,7 +392,7 @@
        *
        * @function summarizer.fromStream
        * @param {function} streamer - function returning a new {@link external:Readable stream} every time it is called.
-       * @param {serialize} serialize - a serializer for yielded items.
+       * @param {Serial~Serialize} serialize - a serializer for yielded items.
        * @return {summarizer} a summarizer returning summaries containing emitted items.
        *
        * @see {@link module:summarizer.fromStream} for customized instances
@@ -416,7 +416,7 @@
        *
        * @function summarizer.fromGenerator
        * @param {external:Generator} generator - the generator that will yield all items.
-       * @param {serialize} serialize - a serializer for yielded items.
+       * @param {Serial~Serialize} serialize - a serializer for yielded items.
        * @return {summarizer} a summarizer returning summaries representing the yielded items.
        *
        * @see {@link module:summarizer.fromGenerator} for customized instances

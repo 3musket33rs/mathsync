@@ -2,7 +2,12 @@
   'use strict';
 
   /**
-   * Function interface - Serializes objects to arrays of bytes.
+   * Serializer and deserializer interfaces.
+   *
+   * @class Serial
+   */
+  /**
+   * Serializes objects to arrays of bytes.
    *
    * <p>Any instance of <code>T</code> must be accepted and have a non <code>null</code> return value:
    * for any <code>o</code>, <code>o instanceof T</code> implies <code>serialize(o) != null</code>.</p>
@@ -10,23 +15,24 @@
    * <p>The output must be consistent, an identical output should be returned if called twice on the equal
    * objects.</p>
    *
-   * @external serialize
+   * @name Serial~Serialize
    * @function
    * @param {T} item - the item to serialize.
    * @return {external:ArrayBuffer} the serialized item.
    */
   /**
-   * Function interface - Deserializes an array of bytes back to an object.
+   * Deserializes an array of bytes back to an object.
    *
    * <p>Any array of bytes should lead to either a non <code>null</code> value or throw.</p>
    *
    * <p>The output must be consistent, an identical output should be returned if called twice
    * on the identical arrays.</p>
    *
-   * @external deserialize
+   * @name Serial~Deserialize
    * @function
    * @param {external:ArrayBuffer} content - the array of bytes representing an object.
    * @return {T} the object deserialized from the array of bytes.
+   * @throws {external:Error} in case the buffer cannot be read.
    */
 
   var Buffer = require('buffer').Buffer;
@@ -62,7 +68,7 @@
      *
      * @function
      * @param {Function} func - translates objects to string before serializing them, can be skipped if the item is already a string.
-     * @return {serialize} a serializer function which converts objects to string and take the bytes out of the string.
+     * @return {Serial~Serialize} a serializer function which converts objects to string and take the bytes out of the string.
      */
     fromString: fromString,
 
@@ -71,7 +77,7 @@
      *
      * @function
      * @param {Function} func - retrieves an object corresponding to the input string view, can be skipped if target type is string.
-     * @return {deserialize} a deserializer function which reads strings from byte arrays and converts them to objects.
+     * @return {Serial~Deserialize} a deserializer function which reads strings from byte arrays and converts them to objects.
      */
     toString: toString
   };

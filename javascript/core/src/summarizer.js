@@ -2,12 +2,17 @@
   'use strict';
 
   /**
-   * Function interface - Produces a summary at a given level of detail.
+   * Summarizer interface.
+   *
+   * @class Summarizer
+   */
+  /**
+   * Produces a summary at a given level of detail.
    *
    * <p>The larger detail level is, the bigger summary will consume on the wire, but the more
    * information it conveys.</p>
    *
-   * @external summarizer
+   * @name Summarizer~Summarizer
    * @function
    * @param {number} level - the level of detail.
    * @return {external:Promise.<external:Summary>} a promise resolving to a summary of the
@@ -87,7 +92,7 @@
      *
      * @function
      * @param {Object[]} array - the array of items in the current state.
-     * @param {serialize} serialize - a serializer for items in the array.
+     * @param {Serial~Serialize} serialize - a serializer for items in the array.
      * @param {digester} digest - a message digester to build summaries.
      * @param {bucketSelector} selector - the bucket selector to build summaries.
      * @return {summarizer} a summarizer returning summaries representing the given array.
@@ -110,7 +115,7 @@
      *
      * @function
      * @param {function} streamer - function returning a new {@link external:Readable stream} every time it is called.
-     * @param {serialize} serialize - a serializer for items in the array.
+     * @param {Serial~Serialize} serialize - a serializer for items in the array.
      * @param {digester} digest - a message digester to build summaries.
      * @param {bucketSelector} selector - the bucket selector to build summaries.
      * @return {summarizer} a summarizer returning summaries containing emitted items.
@@ -122,7 +127,7 @@
      *
      * @function
      * @param {external:Generator} generator - the generator that will yield all items.
-     * @param {serialize} serialize - a serializer for yielded items.
+     * @param {Serial~Serialize} serialize - a serializer for yielded items.
      * @param {digester} digest - a message digester to build summaries.
      * @param {bucketSelector} selector - the bucket selector to build summaries.
      * @return {summarizer} a summarizer returning summaries representing the yielded items.

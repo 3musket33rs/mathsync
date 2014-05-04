@@ -75,8 +75,8 @@
      * @function
      * @param {Object[]} array - the array of items in the current state.
      * @param {summarizer} remote - a summarizer of the remote content.
-     * @param {serialize} serialize - a serializer for items in the array.
-     * @param {deserialize} deserialize - how to deserialize byte arrays to objects.
+     * @param {Serial~Serialize} serialize - a serializer for items in the array.
+     * @param {Serial~Deserialize} deserialize - how to deserialize byte arrays to objects.
      * @return {resolver} a resolver returning differences between the summarizer and local items.
      */
     fromItems : fromItems,
@@ -87,8 +87,8 @@
      * @function
      * @param {external:Generator} generator - the generator that will yield all items.
      * @param {summarizer} remote - a summarizer of the remote content.
-     * @param {serialize} serialize - a serializer for items in the array.
-     * @param {deserialize} deserialize - how to deserialize byte arrays to objects.
+     * @param {Serial~Serialize} serialize - a serializer for items in the array.
+     * @param {Serial~Deserialize} deserialize - how to deserialize byte arrays to objects.
      * @return {resolver} a resolver returning differences between the summarizer and local items.
      */
     fromGenerator : fromGenerator

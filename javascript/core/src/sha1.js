@@ -2,7 +2,12 @@
   'use strict';
 
   /**
-   * Function interface - Digests an item serialized as an array of bytes.
+   * Digester interface.
+   *
+   * @class Digest
+   */
+  /**
+   * Digests an item serialized as an array of bytes.
    *
    * <p>Any byte array value must be accepted and have a non <code>null</code> return value: for any <code>a</code>,
    * <code>digester(a) != null</code>.</p>
@@ -17,7 +22,7 @@
    * <p>In addition to those constrains, it is recommended that it has the properties of a
    * <a href="http://en.wikipedia.org/wiki/Cryptographic_hash_function">cryptographic hash function</a>.</p>
    *
-   * @external digester
+   * @name Digest~Digester
    * @function
    * @param {external:ArrayBuffer} item - the item to digest.
    * @return {external:ArrayBuffer} the message digest of the item.

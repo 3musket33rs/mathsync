@@ -1,67 +1,6 @@
 (function () {
   'use strict';
 
-  /**
-   * Generator functions.
-   *
-   * <p>Calling them as a function returns an {@link external:Iterator iterator}.</p>
-   *
-   * @example
-   * function* generator() {
-   *   yield 1;
-   *   yield 2;
-   *   yield 3;
-   * }
-   *
-   * @external Generator
-   * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function* Generators on Mozilla Developer Network}
-   */
-
-  /**
-   * An occurrence of a Generator.
-   *
-   * <p>This is the result of calling a generator function which does <code>yield</code> on each item it wants to
-   * expose. It can actually be a hand made object as long as it respects the contract of this interface.</p>
-   *
-   * @example
-   * function* generator() {
-   *   yield 1;
-   *   yield 2;
-   *   yield 3;
-   * }
-   * var it = generator();
-   *
-   * @example
-   * var it = (function () {
-   *   var i = 0;
-   *   var content = [1, 2, 3];
-   *   return {
-   *     next : function () {
-   *       var res;
-   *       if (i < content.length) {
-   *         res = { done : false, value : content[i] };
-   *       } else {
-   *         res = { done : true };
-   *       }
-   *       i++;
-   *       return res;
-   *     }
-   *   };
-   * })();
-   *
-   * @external Iterator
-   * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/The_Iterator_protocol The Iterator protocol on Mozilla Developer Network}
-   */
-  /**
-   * Reads the next item on the iterator.
-   *
-   * <p>Can either return a value if it is not done, <code>{ done : false, value : 'some value' }</code>, or inform it
-   * is done with <code>{ done : true }</code>.</p>
-   *
-   * @returns Object a done marker or a value container.
-   * @function external:Iterator#next
-   */
-
   function fromArray(array) {
     var i = 0;
     function next() {

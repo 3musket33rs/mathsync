@@ -23,6 +23,7 @@
   var ibfBuilder = require('./ibf');
   var emptyFullContent = require('./fullContent');
   var iterator = require('./iterator');
+  var generator = require('./generator');
 
   function levelToSize(level) {
     return Math.pow(2, level);
@@ -59,26 +60,6 @@
       var size = levelToSize(level);
       var empty = ibfBuilder(size, digest, selector);
       return empty.plusStream(streamer(), serialize);
-    };
-  }
-
-  function fromGenerator(generator, serialize, digest, selector) {
-
-    function newIterator() {
-      return iterator.map(generator(), serialize);
-    }
-
-    return function generate(level) {
-      var size = levelToSize(level);
-      var empty = ibfBuilder(size, digest, selector);
-      var it = iterator.count(newIterator());
-      return empty.plusIterator(it).then(function (summary) {
-        if (size > it.count) {
-          return emptyFullContent.plusIterator(newIterator());
-        } else {
-          return summary;
-        }
-      });
     };
   }
 
@@ -132,6 +113,6 @@
      * @param {bucketSelector} selector - the bucket selector to build summaries.
      * @return {summarizer} a summarizer returning summaries representing the yielded items.
      */
-    fromGenerator : fromGenerator
+    fromGenerator : generator.newSummarizer
   };
 })();

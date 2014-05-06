@@ -2,9 +2,14 @@
   'use strict';
 
   /**
-   * Function interface - Provides differences between a local and remove view.
+   * Resolver interface.
    *
-   * @external resolver
+   * @class Resolver
+   */
+  /**
+   * Provides differences between a local and remove view.
+   *
+   * @name Resolver~Resolver
    * @function
    * @return {external:Promise.<external:Difference.<T>>} a promise resolving to a view of the difference.
    */

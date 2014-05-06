@@ -9,7 +9,6 @@
    * @return {external:Promise.<external:Difference.<T>>} a promise resolving to a view of the difference.
    */
 
-  var iterator = require('./iterator');
   var generator = require('./generator');
 
   function iterateOnLevelAndDeserialize(compute, deserialize) {
@@ -46,8 +45,13 @@
   function fromItems(array, remote, serialize, deserialize) {
     return iterateOnLevelAndDeserialize(function (level) {
       return remote(level).then(function (summary) {
-        var it = iterator.map(iterator.fromArray(array), serialize);
-        return summary.minusIterator(it);
+        return summary.minusMany(function (item, done) {
+          function serializedAdd(i) {
+            item(serialize(i));
+          }
+          array.forEach(serializedAdd);
+          done();
+        });
       }).then(function (summary) {
         return summary.toDifference();
       });

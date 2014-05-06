@@ -22,7 +22,6 @@
   var Promise = require('./promise');
   var ibfBuilder = require('./ibf');
   var emptyFullContent = require('./fullContent');
-  var iterator = require('./iterator');
   var generator = require('./generator');
 
   function levelToSize(level) {
@@ -38,8 +37,13 @@
       } else {
         empty = ibfBuilder(size, digest, selector);
       }
-      var it = iterator.map(iterator.fromArray(array), serialize);
-      return empty.plusIterator(it);
+      return empty.plusMany(function (item, done) {
+        function serializedAdd(i) {
+          item(serialize(i));
+        }
+        array.forEach(serializedAdd);
+        done();
+      });
     };
   }
 

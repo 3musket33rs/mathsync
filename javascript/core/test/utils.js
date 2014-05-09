@@ -28,10 +28,15 @@
   }
 
   function assertThatSetOfArrayEquals(arr1, arr2) {
+    return assertSetEquals(arr1, arr2, isEqual);
+  }
+
+  function assertSetEquals(arr1, arr2, eq) {
+    eq = eq || _.isEqual;
     assert.equal(arr1.length, arr2.length);
     assert.ok(_(arr1).every(function (item1) {
       return _(arr2).some(function (item2) {
-        return isEqual(item1, item2);
+        return eq(item1, item2);
       });
     }));
   }
@@ -39,6 +44,7 @@
   module.exports = {
     assertThatSetOfArrayEquals : assertThatSetOfArrayEquals,
     assertEqual: assertEqual,
-    isEqual : isEqual
+    isEqual : isEqual,
+    assertSetEquals : assertSetEquals
   };
 })();

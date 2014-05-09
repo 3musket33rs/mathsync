@@ -11,12 +11,10 @@
   }
 
   function newSummarizer(updater, serialize, digester, selector) {
-    digester = digester || sha1;
-    selector = selector || defaultSelector;
 
     function generate(level) {
       var size = levelToSize(level);
-      var empty = ibf(size, digester, selector);
+      var empty = ibf(size, digester || sha1, selector || defaultSelector);
       var count = 0;
       return empty.plusMany(function (item, done, fail) {
         function counted(buffer) {

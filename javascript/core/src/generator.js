@@ -4,13 +4,32 @@
   /**
    * Generator functions.
    *
-   * <p>Calling them as a function returns an {@link external:Iterator iterator}.</p>
+   * <p>They are actually a simple function which returns an {@link external:Iterator iterator} and can be implemented
+   * in duck typing.</p>
    *
-   * @example
+   * @example <caption>function-star notation</caption>
    * function* generator() {
    *   yield 1;
    *   yield 2;
    *   yield 3;
+   * }
+   *
+   * @example <caption>Duck typing</caption>
+   * function generator() {
+   *   var i = 0;
+   *   var content = [1, 2, 3];
+   *   return {
+   *     next : function () {
+   *       var res;
+   *       if (i < content.length) {
+   *         res = { done : false, value : content[i] };
+   *       } else {
+   *         res = { done : true };
+   *       }
+   *       i++;
+   *       return res;
+   *     }
+   *   };
    * }
    *
    * @class Generator

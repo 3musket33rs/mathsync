@@ -183,189 +183,67 @@
    * @function Difference#removed
    */
 
-  var sha1 = require('./sha1');
-  var summarizer = require('./summarizer');
-  var selector = require('./bucketSelector').padAndHash(sha1, 3);
-
-  function fromItems(array, serialize) {
-    return summarizer.fromItems(array, serialize, sha1, selector);
-  }
-
-  function fromJSON(producer) {
-    return summarizer.fromJSON(producer, sha1, selector);
-  }
-
-  function fromStream(stream, serialize) {
-    return summarizer.fromStream(stream, serialize, sha1, selector);
-  }
-
-  function fromGenerator(generator, serialize) {
-    return summarizer.fromGenerator(generator, serialize, sha1, selector);
-  }
+  /**
+   * Summarizer interface.
+   *
+   * @class Summarizer
+   */
+  /**
+   * Produces a summary at a given level of detail.
+   *
+   * <p>The larger detail level is, the bigger summary will consume on the wire, but the more
+   * information it conveys.</p>
+   *
+   * @name Summarizer~Summarizer
+   * @function
+   * @param {number} level - the level of detail.
+   * @return {external:Promise.<external:Summary>} a promise resolving to a summary of the
+   *                                         current state at the requested level of detail.
+   */
 
   /**
-   * Entry point to default instances.
+   * Entry point aggregating all features.
+   *
+   * <p>Using this module forces dependencies to all submodules, this should not be an issue for Node targets but it may
+   * be interesting to depend only on actually used modules for browser targets
+   * (like with {@link http://browserify.org/ Browserify}) because they are just aliased here.</p>
    *
    * @module mathsync
    */
   module.exports = {
 
     /**
-     * Exposes the same members of {@link module:summarizer} with default settings.
+     * Aliases {@link module:mathsync/generator generator} summarizer/resolver module.
      *
-     * <p>All summarizers provided here use SHA-1 hashing and a bucket selector putting each item in 3 buckets.</p>
-     *
-     * @member
+     * @name module:mathsync.generator
      */
-    summarizer: {
-
-      /**
-       * Creates summaries representing an array.
-       *
-       * @example <caption>Simple strings in an array</caption>
-       * var ms = require('mathsync');
-       * var data = ["aaa", "bbb", "ccc"];
-       * var summarizer = ms.summarizer.fromItems(data, ms.string.newSerializer());
-       *
-       * @example <caption>More complex objects with custom serializer</caption>
-       * var ms = require('mathsync');
-       * var data = [{ id: 1, value: 5 }, { id: 10, value: 50 }];
-       * var serializer = ms.string.newSerializer()(function (item) {
-       *   var buffer = new ArrayBuffer(8);
-       *   var dv = new DataView(buffer);
-       *   dv.setInt32(0, item.id);
-       *   dv.setInt32(4, item.value);
-       *   return buffer;
-       * });
-       * var summarizer = ms.summarizer.fromItems(data, serializer);
-       *
-       * @function summarizer.fromItems
-       * @param {Object[]} array - the array of items in the current state.
-       * @param {Serial~Serialize} serialize - a serializer for items in the array.
-       * @return {summarizer} a summarizer returning summaries representing the given array.
-       *
-       * @see {@link module:summarizer.fromItems} for customized instances
-       * @memberof! module:mathsync
-       */
-      fromItems : fromItems,
-
-      /**
-       * Deserializes JSON views of summaries, likely obtained throught the network.
-       *
-       * @example <caption>From an HTTP endpoint using XMLHttpRequest</caption>
-       * var Promise = require('mathsync/src/promise'); // polyfill
-       * function fetchSummary(level) {
-       *   var p = new Promise(function (resolve, reject) {
-       *     var req, url = 'http://localhost:4000/api/summary/' + level;
-       *     function ready() {
-       *       if (req.status === 200) {
-       *         resolve(req.responseText);
-       *       } else {
-       *         reject(new Error('Failed to get summary from ' + url));
-       *       }
-       *     }
-       *     function stateChange() {
-       *       if (req.readyState === 4) {
-       *         ready();
-       *       }
-       *     }
-       *     req = new XMLHttpRequest();
-       *     req.onreadystatechange = stateChange;
-       *     req.open('GET', url);
-       *     req.send(null);
-       *   });
-       *   return p.then(JSON.parse);
-       * }
-       * var summarizer = ms.summarizer.fromJSON(fetchSummary);
-       *
-       * @example <caption>From an HTTP endpoint using jQuery</caption>
-       * var Promise = require('mathsync/src/promise'); // polyfill
-       * function fetchSummary(level) {
-       *   return Promise.resolve($.getJSON('http://localhost:4000/api/summary/' + level));
-       * }
-       * var summarizer = ms.summarizer.fromJSON(fetchSummary);
-       *
-       * @example <caption>From an HTTP endpoint using Node's http</caption>
-       * var Promise = require('mathsync/src/promise'); // polyfill
-       * var http = require('http');
-       * function fetchSummary(level) {
-       *   var p = new Promise(function (resolve, reject) {
-       *     http.get('http://localhost:4000/api/summary/' + level, function (res) {
-       *       var chunks = [];
-       *       res.on('data', function(chunk) {
-       *         chunks.push(chunk);
-       *       });
-       *       res.on('end', function() {
-       *         resolve(chunks);
-       *       });
-       *     }).on('error', reject);
-       *   });
-       *   return p.then(Buffer.concat).then(JSON.parse);
-       * }
-       * var summarizer = ms.summarizer.fromJSON(fetchSummary);
-       *
-       * @function summarizer.fromJSON
-       * @param {Function} producer - the producer of JSON summaries, returns promises resolving to JSON content.
-       * @return {summarizer} a summarizer returning deserialized summaries.
-       *
-       * @see {@link module:summarizer.fromJSON} for customized instances
-       * @memberof! module:mathsync
-       */
-      fromJSON : fromJSON,
-
-      /**
-       * Creates summaries representing a stream of data.
-       *
-       * @example <caption>Taking items from a {@link https://github.com/maxogden/level.js level.js} database</caption>
-       * var ms = require('mathsync');
-       * var levelup = require('levelup');
-       * var leveljs = require('level-js');
-       * var db = levelup(name, { db : leveljs });
-       * var summarizer = ms.summarizer.fromStream(function () {
-       *   return db.createReadStream();
-       * }, ms.string.newSerializer()(function (d) {
-       *   return d.key + ':' + d.value;
-       * }));
-       *
-       * @function summarizer.fromStream
-       * @param {function} streamer - function returning a new {@link external:Readable stream} every time it is called.
-       * @param {Serial~Serialize} serialize - a serializer for yielded items.
-       * @return {summarizer} a summarizer returning summaries containing emitted items.
-       *
-       * @see {@link module:summarizer.fromStream} for customized instances
-       * @memberof! module:mathsync
-       */
-      fromStream : fromStream,
-
-      /**
-       * Creates summaries representing items yielded by a generator.
-       *
-       * @example <caption>Yields strings from a hash</caption>
-       * var ms = require('mathsync');
-       * var data = { key1: "value", key2: "other" };
-       * var summarizer = ms.summarizer.fromGenerator(function* () {
-       *   for (var k in data) {
-       *     if (data.hasOwnProperty(k)) {
-       *       yield k + ':' + data[k];
-       *     }
-       *   }
-       * }, ms.string.newSerializer());
-       *
-       * @function summarizer.fromGenerator
-       * @param {external:Generator} generator - the generator that will yield all items.
-       * @param {Serial~Serialize} serialize - a serializer for yielded items.
-       * @return {summarizer} a summarizer returning summaries representing the yielded items.
-       *
-       * @see {@link module:summarizer.fromGenerator} for customized instances
-       * @memberof! module:mathsync
-       */
-      fromGenerator : fromGenerator
-    },
+    generator : require('./generator'),
 
     /**
-     * Exposes {@link module:serialize}.
+     * Aliases {@link module:mathsync/stream stream} summarizer/resolver module.
      *
-     * @member
+     * @name module:mathsync.stream
+     */
+    stream : require('./stream'),
+
+    /**
+     * Aliases {@link module:mathsync/array array} summarizer/resolver module.
+     *
+     * @name module:mathsync.array
+     */
+    array : require('./array'),
+
+    /**
+     * Aliases {@link module:mathsync/json json summarizer} module.
+     *
+     * @name module:mathsync.json
+     */
+    json : require('./json'),
+
+    /**
+     * Aliases {@link module:mathsync/string string serialization} module.
+     *
+     * @name module:mathsync.string
      */
     string: require('./string'),
 

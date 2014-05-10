@@ -117,7 +117,7 @@
     /**
      * Creates a new summarizer.
      *
-     * @example <caption>Items from an array.</caption>
+     * @example <caption>Yields items from an array.</caption>
      * var items = [{ from: 1, to: 2 }, { from: 2, to: 5}];
      * function* generator() {
      *   var i, l = items.length;
@@ -129,6 +129,16 @@
      *   return new Int32Array([item.from, item.to]).buffer;
      * }
      * var summarizer = require('mathsync/generator').newSummarizer(generator, serialize);
+     *
+     * @example <caption>Yields strings from a hash.</caption>
+     * var data = { key1: "value", key2: "other" };
+     * var summarizer = require('mathsync/generator').newSummarizer(function* () {
+     *   for (var k in data) {
+     *     if (data.hasOwnProperty(k)) {
+     *       yield k + ':' + data[k];
+     *     }
+     *   }
+     * }, require('mathsync/string').newSerializer());
      *
      * @name module:mathsync/generator.newSummarizer
      * @function

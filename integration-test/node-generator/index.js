@@ -13,7 +13,7 @@ function* localItems() {
     yield (k + ':' + data[k]);
   }
 }
-var local = ms.summarizer.fromGenerator(localItems, serialize);
+var local = ms.generator.newSummarizer(localItems, serialize);
 
 var resolve;
 
@@ -40,9 +40,9 @@ var start = q().then(function () {
 
       return deferred.promise.then(Buffer.concat).then(JSON.parse);
     }
-    var remote = ms.summarizer.fromJSON(fetchSummary);
+    var remote = ms.json.newSummarizer(fetchSummary);
 
-    resolve = ms.resolver.fromGenerator(localItems, remote, serialize, deserialize);
+    resolve = ms.generator.newResolver(localItems, remote, serialize, deserialize);
   }
 }).then(function (api) {
 

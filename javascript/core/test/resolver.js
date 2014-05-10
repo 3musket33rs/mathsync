@@ -3,7 +3,7 @@
   'use strict';
 
   var resolver = require('../src/resolver');
-  var summarizer = require('../src/summarizer');
+  var array = require('../src/array');
   var sha1 = require('../src/sha1');
   var bucketSelector = require('../src/bucketSelector').padAndHash(sha1, 3);
   var assertThatSetOfArrayEquals = require('./utils').assertThatSetOfArrayEquals;
@@ -26,7 +26,7 @@
         var localItems = [[1, 2], [2, 2], [3, 2]];
 
         var remoteItems = [[1, 2], [4, 2]];
-        var remote = summarizer.fromItems(remoteItems, serialize, sha1, bucketSelector);
+        var remote = array.newSummarizer(remoteItems, serialize, sha1, bucketSelector);
 
         return resolver.fromItems(localItems, remote, serialize, deserialize)().then(function (difference) {
           assertThatSetOfArrayEquals(difference.added, [[4, 2]]);
@@ -43,7 +43,7 @@
         }
 
         var remoteItems = [[1, 2], [4, 2]];
-        var remote = summarizer.fromItems(remoteItems, serialize, sha1, bucketSelector);
+        var remote = array.newSummarizer(remoteItems, serialize, sha1, bucketSelector);
 
         return resolver.fromGenerator(local, remote, serialize, deserialize)().then(function (difference) {
           assertThatSetOfArrayEquals(difference.added, [[4, 2]]);

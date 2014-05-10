@@ -2,13 +2,15 @@
   /* global describe, it */
   'use strict';
 
+  var skeleton = require('../src/skeleton');
+
   var ibf = require('../src/ibf');
   var sha1 = require('../src/sha1');
   var defaultSelector = require('../src/bucketSelector').padAndHash(sha1, 3);
 
   var assert = require('assert');
-  var skeleton = require('../src/skeleton');
   var assertSetEquals = require('./utils').assertSetEquals;
+  var assertSummaryContains = require('./utils').assertSummaryContains;
 
   function assertIsIbfOfSize(size, summary) {
     assert.equal(size, summary.toJSON().length);
@@ -19,18 +21,6 @@
     assert.ok(!!summary.toJSON().added);
     assert.ok(!!summary.toJSON().removed);
     return summary;
-  }
-
-  function assertContainsExactly(items, summary) {
-    return summary.minusMany(function (item, done) {
-      items.forEach(item);
-      done();
-    }).then(function (emptied) {
-      var diff = emptied.toDifference();
-      assert.equal(0, diff.added.length);
-      assert.equal(0, diff.removed.length);
-      return summary;
-    });
   }
 
   describe('Skeleton', function() {
@@ -51,7 +41,7 @@
 
         return summarizer(2)
           .then(assertIsIbfOfSize.bind(null, 4))
-          .then(assertContainsExactly.bind(null, [
+          .then(assertSummaryContains.bind(null, [
             new Int32Array([1, 2]).buffer,
             new Int32Array([2, 3]).buffer,
             new Int32Array([3, 4]).buffer,
@@ -71,7 +61,7 @@
 
         return summarizer(4)
           .then(assertIsFullContent)
-          .then(assertContainsExactly.bind(null, [
+          .then(assertSummaryContains.bind(null, [
             new Int32Array([1, 2]).buffer,
             new Int32Array([2, 3]).buffer
           ]));

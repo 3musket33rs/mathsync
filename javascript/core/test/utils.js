@@ -41,10 +41,23 @@
     }));
   }
 
+  function assertSummaryContains(items, summary) {
+    return summary.minusMany(function (item, done) {
+      items.forEach(item);
+      done();
+    }).then(function (emptied) {
+      var diff = emptied.toDifference();
+      assert.equal(0, diff.added.length);
+      assert.equal(0, diff.removed.length);
+      return summary;
+    });
+  }
+
   module.exports = {
     assertThatSetOfArrayEquals : assertThatSetOfArrayEquals,
     assertEqual: assertEqual,
     isEqual : isEqual,
-    assertSetEquals : assertSetEquals
+    assertSetEquals : assertSetEquals,
+    assertSummaryContains : assertSummaryContains
   };
 })();

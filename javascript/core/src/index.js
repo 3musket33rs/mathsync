@@ -20,54 +20,6 @@
    */
 
   /**
-   * Node's readable stream.
-   *
-   * <p>Only to be used in object mode.</p>
-   *
-   * @class Readable
-   * @external
-   * @see {@link http://nodejs.org/api/stream.html#stream_class_stream_readable stream.Readable on Node.js}
-   */
-  /**
-   * Data event.
-   *
-   * <p>Called as soon as data is available, with one item.</p>
-   *
-   * @example
-   * stream.on('data', function(item) {
-   *   console.log(item);
-   * });
-   *
-   * @event external:Readable#data
-   * @type {Object}
-   */
-  /**
-   * Error event.
-   *
-   * <p>Called if there is an error while reading data.</p>
-   *
-   * @example
-   * stream.on('error', function(err) {
-   *   console.error(err);
-   * });
-   *
-   * @event external:Readable#error
-   * @type {Error}
-   */
-  /**
-   * End event.
-   *
-   * <p>Called after all data has been read.</p>
-   *
-   * @example
-   * stream.on('end', function(err) {
-   *   console.log('done with my stream');
-   * });
-   *
-   * @event external:Readable#end
-   */
-
-  /**
    * Represents summarized data.
    * @class Summary
    */

@@ -23,6 +23,7 @@
   var ibfBuilder = require('./ibf');
   var emptyFullContent = require('./fullContent');
   var generator = require('./generator');
+  var stream = require('./stream');
 
   function levelToSize(level) {
     return Math.pow(2, level);
@@ -56,14 +57,6 @@
           return emptyFullContent.fromJSON(json);
         }
       });
-    };
-  }
-
-  function fromStream(streamer, serialize, digest, selector) {
-    return function (level) {
-      var size = levelToSize(level);
-      var empty = ibfBuilder(size, digest, selector);
-      return empty.plusStream(streamer(), serialize);
     };
   }
 
@@ -105,7 +98,7 @@
      * @param {bucketSelector} selector - the bucket selector to build summaries.
      * @return {summarizer} a summarizer returning summaries containing emitted items.
      */
-    fromStream : fromStream,
+    fromStream : stream.newSummarizer,
 
     /**
      * Creates summaries representing items yielded by a generator.

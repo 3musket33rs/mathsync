@@ -89,16 +89,6 @@
   /**
    * Adds several items to the summary.
    *
-   * <p>Equivalent to repeatedly calling {@link Summary#plus} for each element, but this method can do optimizations for
-   * batch updates.</p>
-   *
-   * @param {external:Iterator} iterator - an iterator of items to add.
-   * @returns {external:Promise.<Summary>} a promise which will resolve to a summary.
-   * @function Summary#plusIterator
-   */
-  /**
-   * Adds several items to the summary.
-   *
    * <p>Equivalent to repeatedly calling {@link Summary#plus} for each element reported in the updater, but this method
    * can do optimizations for batch updates.</p>
    *

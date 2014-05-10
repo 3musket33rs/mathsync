@@ -129,25 +129,6 @@
         });
       });
     });
-    describe('with added items through iterator', function() {
-      function* generateItems() {
-        yield item1;
-        yield item2;
-      }
-
-      it('has two added elements', function() {
-        return emptyContent.plusIterator(generateItems()).then(function (asyncAdded) {
-          utils.assertThatSetOfArrayEquals(asyncAdded.toDifference().added, [item1, item2]);
-          utils.assertThatSetOfArrayEquals(goThroughJson(asyncAdded).toDifference().added, [item1, item2]);
-        });
-      });
-      it('has no removed element', function() {
-        return emptyContent.plusIterator(generateItems()).then(function (asyncAdded) {
-          utils.assertThatSetOfArrayEquals(asyncAdded.toDifference().removed, []);
-          utils.assertThatSetOfArrayEquals(goThroughJson(asyncAdded).toDifference().removed, []);
-        });
-      });
-    });
     describe('with added items through stream', function() {
       function serialize(item) {
         if (item === 1) {

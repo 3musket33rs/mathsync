@@ -114,10 +114,6 @@
       return modifyManyWithSideEffect(1, updater);
     }
 
-    function plusIterator(iterator) {
-      return modifyWithSideEffect(modifyWithSideEffectFromIterator.bind(null, 1, iterator));
-    }
-
     function plusStream(stream, serialize) {
       return modifyWithSideEffect(modifyWithSideEffectFromStream.bind(null, 1, stream, serialize));
     }
@@ -205,7 +201,6 @@
       toDifference : toDifference,
       plus : plus,
       plusMany : plusMany,
-      plusIterator : plusIterator,
       plusStream : plusStream,
       minus : minus,
       minusMany : minusMany,

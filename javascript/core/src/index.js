@@ -21,6 +21,9 @@
 
   /**
    * Represents summarized data.
+   *
+   * <p>A summary is an immutable data structure, new instances are returned by method but do not modify inner state</p>
+   *
    * @class Summary
    */
   /**

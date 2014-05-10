@@ -70,13 +70,14 @@
   }
 
   /**
-   * @module bucketSelector
+   * @module mathsync/bucketSelector
    */
   module.exports = {
 
     /**
      * Selects multiple buckets to store items in by padding items and digesting them.
      *
+     * @name module:mathsync/bucketSelector.padAndHash
      * @function
      * @param {digester} digest - digester for padded items.
      * @param {number} spread - the number of buckets to return.

@@ -43,36 +43,9 @@
     insert(mayInsert, item);
   }
 
-  function insertOrRemoveMany(mayInsert, mayRemove, items) {
-    function next(resolve, reject) {
-      var result = items.next();
-      if (result.done) {
-        resolve();
-      } else if (typeof result.value.then === 'function') {
-        return result.value.then(function (res) {
-          insertOrRemove(mayInsert, mayRemove, res);
-        }).then(next.bind(null, resolve, reject));
-      } else {
-        insertOrRemove(mayInsert, mayRemove, result.value);
-        return next(resolve,reject);
-      }
-    }
-
-    return new Promise(next);
-  }
-
-  function insertOrRemoveStream(mayInsert, mayRemove, stream, serialize) {
-    return new Promise(function (resolve, reject) {
-      stream.on('data', function (item) {
-        try {
-          insertOrRemove(mayInsert, mayRemove, serialize(item));
-        } catch (err) {
-          reject(err);
-        }
-      });
-      stream.on('error', reject);
-      stream.on('end', resolve);
-    });
+  function insertOrRemoveMany(mayInsert, mayRemove, updater) {
+    var item = insertOrRemove.bind(null, mayInsert, mayRemove);
+    return new Promise(updater.bind(null, item));
   }
 
   function byteArrayComparator(a, b) {
@@ -106,18 +79,10 @@
       return fullContent(addedCopy, removedCopy);
     }
 
-    function plusIterator(iterator) {
+    function plusMany(updater) {
       var addedCopy = copyArray(added);
       var removedCopy = copyArray(removed);
-      return insertOrRemoveMany(addedCopy, removedCopy, iterator).then(function () {
-        return fullContent(addedCopy, removedCopy);
-      });
-    }
-
-    function plusStream(stream, serialize) {
-      var addedCopy = copyArray(added);
-      var removedCopy = copyArray(removed);
-      return insertOrRemoveStream(addedCopy, removedCopy, stream, serialize).then(function () {
+      return insertOrRemoveMany(addedCopy, removedCopy, updater).then(function () {
         return fullContent(addedCopy, removedCopy);
       });
     }
@@ -129,18 +94,10 @@
       return fullContent(addedCopy, removedCopy);
     }
 
-    function minusIterator(iterator) {
+    function minusMany(updater) {
       var addedCopy = copyArray(added);
       var removedCopy = copyArray(removed);
-      return insertOrRemoveMany(removedCopy, addedCopy, iterator).then(function () {
-        return fullContent(addedCopy, removedCopy);
-      });
-    }
-
-    function minusStream(stream, serialize) {
-      var addedCopy = copyArray(added);
-      var removedCopy = copyArray(removed);
-      return insertOrRemoveStream(removedCopy, addedCopy, stream, serialize).then(function () {
+      return insertOrRemoveMany(removedCopy, addedCopy, updater).then(function () {
         return fullContent(addedCopy, removedCopy);
       });
     }
@@ -155,11 +112,9 @@
 
     return {
       plus: plus,
-      plusIterator: plusIterator,
-      plusStream: plusStream,
+      plusMany: plusMany,
       minus: minus,
-      minusIterator: minusIterator,
-      minusStream: minusStream,
+      minusMany: minusMany,
       toDifference: toDifference,
       toJSON: toJSON
     };

@@ -2,7 +2,12 @@
   'use strict';
 
   /**
-   * Function interface - Selects buckets to store items in.
+   * Bucket selector interface.
+   *
+   * @class BucketSelector
+   */
+  /**
+   * Selects buckets to store items in.
    *
    * <p>This interface leaks internal details about summary structure. One can implement and use custom instances to
    * customize settings but be ready for major changes in following versions.</p>
@@ -18,7 +23,7 @@
    * <p>The number of returned buckets may vary for different contents and the returned array may contain
    * duplicates.</p>
    *
-   * @external bucketSelector
+   * @name BucketSelector~Selector
    * @function
    * @param {number} seed a seed preventing items to fall in the same buckets at all compression levels.
    * @param {external:ArrayBuffer} item - the item to serialize.
@@ -65,13 +70,14 @@
   }
 
   /**
-   * @module bucketSelector
+   * @module mathsync/bucketSelector
    */
   module.exports = {
 
     /**
      * Selects multiple buckets to store items in by padding items and digesting them.
      *
+     * @name module:mathsync/bucketSelector.padAndHash
      * @function
      * @param {digester} digest - digester for padded items.
      * @param {number} spread - the number of buckets to return.

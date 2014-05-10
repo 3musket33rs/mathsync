@@ -28,17 +28,36 @@
   }
 
   function assertThatSetOfArrayEquals(arr1, arr2) {
+    return assertSetEquals(arr1, arr2, isEqual);
+  }
+
+  function assertSetEquals(arr1, arr2, eq) {
+    eq = eq || _.isEqual;
     assert.equal(arr1.length, arr2.length);
     assert.ok(_(arr1).every(function (item1) {
       return _(arr2).some(function (item2) {
-        return isEqual(item1, item2);
+        return eq(item1, item2);
       });
     }));
+  }
+
+  function assertSummaryContains(items, summary) {
+    return summary.minusMany(function (item, done) {
+      items.forEach(item);
+      done();
+    }).then(function (emptied) {
+      var diff = emptied.toDifference();
+      assert.equal(0, diff.added.length);
+      assert.equal(0, diff.removed.length);
+      return summary;
+    });
   }
 
   module.exports = {
     assertThatSetOfArrayEquals : assertThatSetOfArrayEquals,
     assertEqual: assertEqual,
-    isEqual : isEqual
+    isEqual : isEqual,
+    assertSetEquals : assertSetEquals,
+    assertSummaryContains : assertSummaryContains
   };
 })();

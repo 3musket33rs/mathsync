@@ -4,7 +4,8 @@
   /**
    * The native promise object.
    *
-   * @external Promise
+   * @class Promise
+   * @external
    * @see {@link https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise Promise on Mozilla Developer Network}
    */
   /**
@@ -17,12 +18,12 @@
    */
 
   /**
-   * Promise implementation chooser.
+   * Promise implementation polyfill.
    *
-   * <p>Either returns the global Promise object or uses the
+   * <p>Either returns the global {@link external:Promise Promise} object or uses the
    * <a href="https://github.com/jakearchibald/es6-promise">polyfill</a>.</p>
    *
-   * @module promise
+   * @module mathsync/promise
    */
   module.exports = (typeof Promise === 'undefined') ? require('es6-promise').Promise : Promise;
 })();

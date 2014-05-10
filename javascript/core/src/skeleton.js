@@ -137,6 +137,11 @@
      * @param {Serial~Serialize} serialize - the item serializer.
      * @param {Serial~Deserialize} deserialize - the item deserializer.
      */
-    newResolver : newResolver
+    newResolver : newResolver,
+
+    defaults : {
+      digester : sha1,
+      selector : defaultSelector
+    }
   };
 })();

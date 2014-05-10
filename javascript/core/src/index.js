@@ -52,22 +52,6 @@
    * @function Summary#plusMany
    */
   /**
-   * Adds several items to the summary.
-   *
-   * <p>Equivalent to repeatedly calling {@link Summary#plus} for each element, but this method can do optimizations for
-   * batch updates.</p>
-   *
-   * <p>Having the serializer passed as an argument is less than optimal because summaries should have to deal only with
-   * <code>ArrayBuffer</code>s, but this allows the library not to have a <code>require('stream')</code> which makes
-   * size of the browser bundle explode for clients not using streams. This workaround may change at some point in the
-   * future.</p>
-   *
-   * @param {external:Readable} stream - a stream of items to add.
-   * @param {Serial~Serialize} serialize - a serializer for items in the array.
-   * @returns {external:Promise.<Summary>} a promise which will resolve to a summary.
-   * @function Summary#plusStream
-   */
-  /**
    * Removes an item from the summary.
    *
    * <p>When both summaries can be {@link Summary#toDifference|viewed as a difference}:

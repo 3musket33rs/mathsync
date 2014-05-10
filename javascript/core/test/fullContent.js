@@ -119,28 +119,6 @@
         });
       });
     });
-    describe('with added items through stream', function() {
-      function serialize(item) {
-        if (item === 1) {
-          return item1;
-        } else if (item === 2) {
-          return item2;
-        }
-      }
-
-      it('has two added elements', function() {
-        return emptyContent.plusStream(new ArrayStream([1, 2]), serialize).then(function (asyncAdded) {
-          utils.assertThatSetOfArrayEquals(asyncAdded.toDifference().added, [item1, item2]);
-          utils.assertThatSetOfArrayEquals(goThroughJson(asyncAdded).toDifference().added, [item1, item2]);
-        });
-      });
-      it('has no removed element', function() {
-        return emptyContent.plusStream(new ArrayStream([1, 2]), serialize).then(function (asyncAdded) {
-          utils.assertThatSetOfArrayEquals(asyncAdded.toDifference().removed, []);
-          utils.assertThatSetOfArrayEquals(goThroughJson(asyncAdded).toDifference().removed, []);
-        });
-      });
-    });
     describe('with removed items', function() {
       function updater(item, done) {
         item(item1);
@@ -156,28 +134,6 @@
       });
       it('has no added element', function() {
         return emptyContent.minusMany(updater).then(function (asyncRemoved) {
-          utils.assertThatSetOfArrayEquals(asyncRemoved.toDifference().added, []);
-          utils.assertThatSetOfArrayEquals(goThroughJson(asyncRemoved).toDifference().added, []);
-        });
-      });
-    });
-    describe('with removed items through stream', function() {
-      function serialize(item) {
-        if (item === 1) {
-          return item1;
-        } else if (item === 2) {
-          return item2;
-        }
-      }
-
-      it('has two removed elements', function() {
-        return emptyContent.minusStream(new ArrayStream([1, 2]), serialize).then(function (asyncRemoved) {
-          utils.assertThatSetOfArrayEquals(asyncRemoved.toDifference().removed, [item1, item2]);
-          utils.assertThatSetOfArrayEquals(goThroughJson(asyncRemoved).toDifference().removed, [item1, item2]);
-        });
-      });
-      it('has no added element', function() {
-        return emptyContent.minusStream(new ArrayStream([1, 2]), serialize).then(function (asyncRemoved) {
           utils.assertThatSetOfArrayEquals(asyncRemoved.toDifference().added, []);
           utils.assertThatSetOfArrayEquals(goThroughJson(asyncRemoved).toDifference().added, []);
         });

@@ -105,10 +105,6 @@
       return modifyManyWithSideEffect(1, updater);
     }
 
-    function plusStream(stream, serialize) {
-      return modifyWithSideEffect(modifyWithSideEffectFromStream.bind(null, 1, stream, serialize));
-    }
-
     function minus(content) {
       if (!(content instanceof ArrayBuffer)) {
         throw new TypeError('Ibf#minus takes an ArrayBuffer, given ' + content);
@@ -188,7 +184,6 @@
       toDifference : toDifference,
       plus : plus,
       plusMany : plusMany,
-      plusStream : plusStream,
       minus : minus,
       minusMany : minusMany,
       minusStream : minusStream,

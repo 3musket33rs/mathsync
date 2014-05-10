@@ -101,14 +101,6 @@
       });
     }
 
-    function plusStream(stream, serialize) {
-      var addedCopy = copyArray(added);
-      var removedCopy = copyArray(removed);
-      return insertOrRemoveStream(addedCopy, removedCopy, stream, serialize).then(function () {
-        return fullContent(addedCopy, removedCopy);
-      });
-    }
-
     function minus(item) {
       var addedCopy = copyArray(added);
       var removedCopy = copyArray(removed);
@@ -143,7 +135,6 @@
     return {
       plus: plus,
       plusMany: plusMany,
-      plusStream: plusStream,
       minus: minus,
       minusMany: minusMany,
       minusStream: minusStream,

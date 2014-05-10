@@ -149,16 +149,6 @@
    * <p>Equivalent to repeatedly calling {@link Summary#minus} for each element, but this method can do optimizations
    * for batch updates.</p>
    *
-   * @param {external:Iterator} iterator - an iterator of items to remove.
-   * @returns {external:Promise.<Summary>} a promise which will resolve to a summary.
-   * @function Summary#minusIterator
-   */
-  /**
-   * Removes several items from the summary.
-   *
-   * <p>Equivalent to repeatedly calling {@link Summary#minus} for each element, but this method can do optimizations
-   * for batch updates.</p>
-   *
    * <p>Having the serializer passed as an argument is less than optimal because summaries should have to deal only with
    * <code>ArrayBuffer</code>s, but this allows the library not to have a <code>require('stream')</code> which makes
    * size of the browser bundle explode for clients not using streams. This workaround may change at some point in the

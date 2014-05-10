@@ -48,24 +48,6 @@
     return new Promise(updater.bind(null, item));
   }
 
-  function insertOrRemoveIterator(mayInsert, mayRemove, items) {
-    function next(resolve, reject) {
-      var result = items.next();
-      if (result.done) {
-        resolve();
-      } else if (typeof result.value.then === 'function') {
-        return result.value.then(function (res) {
-          insertOrRemove(mayInsert, mayRemove, res);
-        }).then(next.bind(null, resolve, reject));
-      } else {
-        insertOrRemove(mayInsert, mayRemove, result.value);
-        return next(resolve,reject);
-      }
-    }
-
-    return new Promise(next);
-  }
-
   function insertOrRemoveStream(mayInsert, mayRemove, stream, serialize) {
     return new Promise(function (resolve, reject) {
       stream.on('data', function (item) {
@@ -142,14 +124,6 @@
       });
     }
 
-    function minusIterator(iterator) {
-      var addedCopy = copyArray(added);
-      var removedCopy = copyArray(removed);
-      return insertOrRemoveIterator(removedCopy, addedCopy, iterator).then(function () {
-        return fullContent(addedCopy, removedCopy);
-      });
-    }
-
     function minusStream(stream, serialize) {
       var addedCopy = copyArray(added);
       var removedCopy = copyArray(removed);
@@ -172,7 +146,6 @@
       plusStream: plusStream,
       minus: minus,
       minusMany: minusMany,
-      minusIterator: minusIterator,
       minusStream: minusStream,
       toDifference: toDifference,
       toJSON: toJSON

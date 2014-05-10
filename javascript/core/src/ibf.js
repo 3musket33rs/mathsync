@@ -78,15 +78,6 @@
       });
     }
 
-    function modifyWithSideEffectFromIterator(variation, iterator, bucketsCopy) {
-      var result = iterator.next();
-      while(!result.done) {
-        modifyOneWithSideEffect(bucketsCopy, variation, result.value);
-        result = iterator.next();
-      }
-      return bucketsCopy;
-    }
-
     function modifyWithSideEffectFromStream(variation, stream, serialize, bucketsCopy) {
       return new Promise(function (resolve, reject) {
         stream.on('data', function (item) {
@@ -129,10 +120,6 @@
 
     function minusMany(updater) {
       return modifyManyWithSideEffect(-1, updater);
-    }
-
-    function minusIterator(iterator) {
-      return modifyWithSideEffect(modifyWithSideEffectFromIterator.bind(null, -1, iterator));
     }
 
     function minusStream(stream, serialize) {
@@ -204,7 +191,6 @@
       plusStream : plusStream,
       minus : minus,
       minusMany : minusMany,
-      minusIterator : minusIterator,
       minusStream : minusStream,
       toJSON : toJSON
     };

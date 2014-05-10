@@ -3,8 +3,6 @@
   'use strict';
 
   var utils = require('./utils');
-  var Readable = require('stream').Readable;
-  var util = require('util');
 
   var emptyContent = require('../src/fullContent');
 
@@ -14,21 +12,6 @@
   function goThroughJson(origin) {
     return emptyContent.fromJSON(origin.toJSON());
   }
-
-  function ArrayStream(items) {
-    Readable.call(this, { objectMode: true });
-    this._index = 0;
-    this._items = items;
-  }
-  util.inherits(ArrayStream, Readable);
-  ArrayStream.prototype._read = function() {
-    if (this._index >= this._items.length) {
-      this.push(null);
-    } else {
-      this.push(this._items[this._index]);
-      this._index++;
-    }
-  };
 
   describe('Full content', function() {
     describe('empty', function() {

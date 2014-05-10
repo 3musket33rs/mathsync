@@ -80,22 +80,6 @@
    * @function Summary#minusMany
    */
   /**
-   * Removes several items from the summary.
-   *
-   * <p>Equivalent to repeatedly calling {@link Summary#minus} for each element, but this method can do optimizations
-   * for batch updates.</p>
-   *
-   * <p>Having the serializer passed as an argument is less than optimal because summaries should have to deal only with
-   * <code>ArrayBuffer</code>s, but this allows the library not to have a <code>require('stream')</code> which makes
-   * size of the browser bundle explode for clients not using streams. This workaround may change at some point in the
-   * future.</p>
-   *
-   * @param {external:Readable<external:ArrayBuffer>} stream - a stream of items to remove.
-   * @param {Serial~Serialize} serialize - a serializer for items in the array.
-   * @returns {external:Promise.<Summary>} a promise which will resolve to a summary.
-   * @function Summary#minusStream
-   */
-  /**
    * Retrieves a view of the summary as a difference.
    *
    * @returns {Difference.<external:ArrayBuffer>} a difference view of the summary or <code>null</code> if it cannot be resolved with the information it contains.

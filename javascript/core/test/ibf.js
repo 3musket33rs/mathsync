@@ -3,8 +3,6 @@
   'use strict';
 
   var utils = require('./utils');
-  var Readable = require('stream').Readable;
-  var util = require('util');
 
   var item1 = new Int8Array([5]).buffer;
   var item2 = new Int8Array([6]).buffer;
@@ -34,21 +32,6 @@
   function goThroughJson(origin) {
     return ibf.fromJSON(origin.toJSON(), digester, selector);
   }
-
-  function ArrayStream(items) {
-    Readable.call(this, { objectMode: true });
-    this._index = 0;
-    this._items = items;
-  }
-  util.inherits(ArrayStream, Readable);
-  ArrayStream.prototype._read = function() {
-    if (this._index >= this._items.length) {
-      this.push(null);
-    } else {
-      this.push(this._items[this._index]);
-      this._index++;
-    }
-  };
 
   describe('IBF', function() {
     describe('empty', function() {

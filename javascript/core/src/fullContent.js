@@ -48,20 +48,6 @@
     return new Promise(updater.bind(null, item));
   }
 
-  function insertOrRemoveStream(mayInsert, mayRemove, stream, serialize) {
-    return new Promise(function (resolve, reject) {
-      stream.on('data', function (item) {
-        try {
-          insertOrRemove(mayInsert, mayRemove, serialize(item));
-        } catch (err) {
-          reject(err);
-        }
-      });
-      stream.on('error', reject);
-      stream.on('end', resolve);
-    });
-  }
-
   function byteArrayComparator(a, b) {
     var
       al = a.byteLength,
@@ -116,14 +102,6 @@
       });
     }
 
-    function minusStream(stream, serialize) {
-      var addedCopy = copyArray(added);
-      var removedCopy = copyArray(removed);
-      return insertOrRemoveStream(removedCopy, addedCopy, stream, serialize).then(function () {
-        return fullContent(addedCopy, removedCopy);
-      });
-    }
-
     function toDifference() {
       return { added: added, removed: removed };
     }
@@ -137,7 +115,6 @@
       plusMany: plusMany,
       minus: minus,
       minusMany: minusMany,
-      minusStream: minusStream,
       toDifference: toDifference,
       toJSON: toJSON
     };

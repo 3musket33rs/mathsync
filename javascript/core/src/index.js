@@ -202,6 +202,19 @@
    */
 
   /**
+   * Resolver interface.
+   *
+   * @class Resolver
+   */
+  /**
+   * Provides differences between a local and remove view.
+   *
+   * @name Resolver~Resolver
+   * @function
+   * @return {external:Promise.<external:Difference.<T>>} a promise resolving to a view of the difference.
+   */
+
+  /**
    * Entry point aggregating all features.
    *
    * <p>Using this module forces dependencies to all submodules, this should not be an issue for Node targets but it may
@@ -245,13 +258,6 @@
      *
      * @name module:mathsync.string
      */
-    string: require('./string'),
-
-    /**
-     * Exposes {@link module:resolver}.
-     *
-     * @member
-     */
-    resolver: require('./resolver')
+    string: require('./string')
   };
 })();

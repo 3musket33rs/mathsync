@@ -20,6 +20,40 @@
    */
 
   /**
+   * Serializer and deserializer interfaces.
+   *
+   * @class Serial
+   */
+  /**
+   * Serializes objects to arrays of bytes.
+   *
+   * <p>Any instance of <code>T</code> must be accepted and have a non <code>null</code> return value:
+   * for any <code>o</code>, <code>o instanceof T</code> implies <code>serialize(o) != null</code>.</p>
+   *
+   * <p>The output must be consistent, an identical output should be returned if called twice on the equal
+   * objects.</p>
+   *
+   * @name Serial~Serialize
+   * @function
+   * @param {T} item - the item to serialize.
+   * @return {external:ArrayBuffer} the serialized item.
+   */
+  /**
+   * Deserializes an array of bytes back to an object.
+   *
+   * <p>Any array of bytes should lead to either a non <code>null</code> value or throw.</p>
+   *
+   * <p>The output must be consistent, an identical output should be returned if called twice
+   * on the identical arrays.</p>
+   *
+   * @name Serial~Deserialize
+   * @function
+   * @param {external:ArrayBuffer} content - the array of bytes representing an object.
+   * @return {T} the object deserialized from the array of bytes.
+   * @throws {external:Error} in case the buffer cannot be read.
+   */
+
+  /**
    * Represents summarized data.
    *
    * <p>A summary is an immutable data structure, new instances are returned by method but do not modify inner state</p>
@@ -191,12 +225,12 @@
        * @example <caption>Simple strings in an array</caption>
        * var ms = require('mathsync');
        * var data = ["aaa", "bbb", "ccc"];
-       * var summarizer = ms.summarizer.fromItems(data, ms.serialize.fromString());
+       * var summarizer = ms.summarizer.fromItems(data, ms.string.newSerializer());
        *
        * @example <caption>More complex objects with custom serializer</caption>
        * var ms = require('mathsync');
        * var data = [{ id: 1, value: 5 }, { id: 10, value: 50 }];
-       * var serializer = ms.serialize.fromString(function (item) {
+       * var serializer = ms.string.newSerializer()(function (item) {
        *   var buffer = new ArrayBuffer(8);
        *   var dv = new DataView(buffer);
        *   dv.setInt32(0, item.id);
@@ -289,7 +323,7 @@
        * var db = levelup(name, { db : leveljs });
        * var summarizer = ms.summarizer.fromStream(function () {
        *   return db.createReadStream();
-       * }, ms.serialize.fromString(function (d) {
+       * }, ms.string.newSerializer()(function (d) {
        *   return d.key + ':' + d.value;
        * }));
        *
@@ -315,7 +349,7 @@
        *       yield k + ':' + data[k];
        *     }
        *   }
-       * }, ms.serialize.fromString());
+       * }, ms.string.newSerializer());
        *
        * @function summarizer.fromGenerator
        * @param {external:Generator} generator - the generator that will yield all items.
@@ -333,7 +367,7 @@
      *
      * @member
      */
-    serialize: require('./serialize'),
+    string: require('./string'),
 
     /**
      * Exposes {@link module:resolver}.

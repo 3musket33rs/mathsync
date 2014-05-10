@@ -5,8 +5,8 @@ var ms = require('mathsync');
 /* Local data */
 var data = {};
 
-var serialize = ms.serialize.fromString();
-var deserialize = ms.serialize.toString();
+var serialize = ms.string.newSerializer();
+var deserialize = ms.string.newDeserializer();
 
 function* localItems() {
   for (var k in data) {

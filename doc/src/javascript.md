@@ -28,10 +28,10 @@ var ms = require('mathsync');
 
 var data = [/* where do your items come from? */];
 
-var serialize = ms.serialize.fromString(function (item) {
+var serialize = ms.string.newSerializer(function (item) {
   /* how to serialize your item to string? */
 });
-var summarizer = ms.summarizer.fromItems(data, serialize);
+var summarizer = ms.array.newSummarizer(data, serialize);
 
 var app = require('koa')();
 var route = require('koa-route');
@@ -67,10 +67,10 @@ var q = require('q');
 
 var data = [/* where do your items come from? */];
 
-var serialize = ms.serialize.fromString(function (item) {
+var serialize = ms.string.newSerializer(function (item) {
   /* how to serialize your item? */
 });
-var local = ms.summarizer.fromItems(data, serialize);
+var local = ms.array.newSummarizer(data, serialize);
 
 function fetchSummary(level) {
   var deferred = q.defer();
@@ -87,12 +87,12 @@ function fetchSummary(level) {
 
   return deferred.promise.then(Buffer.concat).then(JSON.parse);
 }
-var remote = ms.summarizer.fromJSON(fetchSummary);
+var remote = ms.json.newSummarizer(fetchSummary);
 
-var deserialize = ms.serialize.toString(function (str) {
+var serialize = ms.string.newSerializer(function (item) {
   /* how to deserialize your item? */
 });
-var resolve = ms.resolver.fromItems(data, remote, serialize, deserialize);
+var resolve = ms.array.newSummarizer(data, remote, serialize, deserialize);
 {% endhighlight %}
 
 and then call it whenever you want to synchronize wit the server:
@@ -110,16 +110,16 @@ resolve().then(function (difference) {
 
 ## Generator
 
-The library supports the use of [generator functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Iterators_and_Generators#Generators.3A_a_better_way_to_build_Iterators) as iterator where one is expected to and `yield` all items:
+The library supports the use of [generator functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*) as iterator where one is expected to and `yield` all items:
 
 {% highlight javascript %}
 var ms = require('mathsync');
 
 var data = {};
 
-var serialize = ms.serialize.fromString();
+var serialize = ms.string.newSerializer();
 
-var local = ms.summarizer.fromGenerator(function* () {
+var local = ms.generator.newSummarizer(function* () {
   for (var k in data) {
     yield (k + ':' + data[k]);
   }

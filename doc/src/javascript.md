@@ -5,7 +5,7 @@ title: Javascript
 
 # Javascript
 
-[Full API doc](/jsdoc) is available.
+[Full API doc](/jsdoc/module-mathsync.html) is available.
 
 [![NPM](https://nodei.co/npm/mathsync.png)](https://nodei.co/npm/mathsync/)
 

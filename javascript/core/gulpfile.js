@@ -33,7 +33,7 @@
       .pipe(clean());
   });
   gulp.task('apidoc', ['clean-apidoc'], function() {
-    return gulp.src(['src/README.md', 'src/**/*.js'])
+    return gulp.src('src/**/*.js')
       .pipe(jsdoc('apidocs'));
   });
 

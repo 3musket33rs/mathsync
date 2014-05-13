@@ -6,6 +6,7 @@
     "type": "git",
     "url": "git@github.com:3musket33rs/mathsync.git"
   },
+  "files": ["src", "browser"],
   "author": "Mathieu Bruyen <code@mais-h.eu>",
   "license": "Apache",
   "main": "src/index.js",

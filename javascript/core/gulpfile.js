@@ -16,7 +16,7 @@
   });
   gulp.task('browser', ['clean-browser'], function() {
     return browserify('./src/index.js')
-      .bundle()
+      .bundle({ standalone : 'mathsync' })
       .pipe(source('browser.js'))
       .pipe(gulp.dest('browser'));
   });

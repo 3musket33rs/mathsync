@@ -62,6 +62,7 @@ public class SummaryServlet extends HttpServlet {
     public void run() {
       try {
         Socket echoSocket = new Socket("localhost", Integer.parseInt(System.getenv().get("LOOP")));
+        echoSocket.setTcpNoDelay(true);
         PrintWriter out = new PrintWriter(echoSocket.getOutputStream(), true);
         BufferedReader in = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
         while (true) {

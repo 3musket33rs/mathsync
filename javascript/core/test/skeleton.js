@@ -1,5 +1,5 @@
 (function () {
-  /* global describe, it */
+  /* global describe, it, process */
   'use strict';
 
   var skeleton = require('../src/skeleton');
@@ -65,6 +65,23 @@
             new Int32Array([1, 2]).buffer,
             new Int32Array([2, 3]).buffer
           ]));
+      });
+
+      it('rejects for failing serializer in asynchronous item', function() {
+        var summarizer = skeleton.newSummarizer(function (item, done) {
+          process.nextTick(function () {
+            item('123');
+            done();
+          });
+        }, function (item) {
+          throw new Error('Cannot serialize ' + item);
+        });
+
+        return summarizer(4).then(function () {
+            throw new Error('should have failed');
+          }, function (e) {
+            assert.equal('Cannot serialize 123', e.message);
+          });
       });
     });
 

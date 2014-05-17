@@ -19,14 +19,22 @@
       return empty.plusMany(function (item, done, fail) {
         function counted(buffer) {
           count++;
-          item(serialize(buffer));
+          try {
+            item(serialize(buffer));
+          } catch (e) {
+            fail(e);
+          }
         }
         updater(counted, done, fail);
       }).then(function (filled) {
         if (size > count) {
           return emptyFullContent.plusMany(function (item, done, fail) {
             function serialized(buffer) {
-              item(serialize(buffer));
+              try {
+                item(serialize(buffer));
+              } catch (e) {
+                fail(e);
+              }
             }
             updater(serialized, done, fail);
           });

@@ -25,5 +25,5 @@
    *
    * @module mathsync/promise
    */
-  module.exports = (typeof Promise === 'undefined') ? require('es6-promise').Promise : Promise;
+  module.exports = require('es6-promise').Promise;
 })();

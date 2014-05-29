@@ -11,16 +11,33 @@
    * @see {@link http://nodejs.org/api/stream.html#stream_class_stream_readable stream.Readable on Node.js}
    */
   /**
-   * Data event.
+   * Reads the next available item.
    *
-   * <p>Called as soon as data is available, with one item.</p>
+   * <p>To be repeatedly called until it returns <code>null</code> after the stream emits <code>readable</code>.<p>
    *
    * @example
-   * stream.on('data', function(item) {
-   *   console.log(item);
+   * stream.on('readable', function() {
+   *   var item;
+   *   while (null !== (item = stream.read())) {
+   *     // handle item
+   *   }
    * });
    *
-   * @event external:Readable#data
+   * @name external:Readable#read
+   * @function
+   * @return {Object} next available item or <code>null</code> if no item is currently available.
+   */
+  /**
+   * Readable event.
+   *
+   * <p>Notifies the stream can be read again.</p>
+   *
+   * @example
+   * stream.on('readable', function() {
+   *   // use stream.read() until it returns null
+   * });
+   *
+   * @event external:Readable#readable
    * @type {Object}
    */
   /**
@@ -54,7 +71,12 @@
   function updaterFromStreamBuilder(streamProducer) {
     function updater(item, done, fail) {
       var stream = streamProducer();
-      stream.on('data', item);
+      stream.on('readable', function() {
+        var i;
+        while (null !== (i = stream.read())) {
+          item(i);
+        }
+      });
       stream.on('error', fail);
       stream.on('end', done);
     }

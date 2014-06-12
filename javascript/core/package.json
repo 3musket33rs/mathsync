@@ -12,18 +12,18 @@
   "main": "src/index.js",
   "dependencies": {
     "rusha": ">=0.7.3",
-    "es6-promise": "0.1.x",
+    "es6-promise": "~1.0.0",
     "base64-arraybuffer": ">=0.1.2"
   },
   "devDependencies": {
-    "mocha": "1.18.x",
-    "underscore": "1.5.x",
-    "gulp": "~3.6.0",
-    "gulp-jshint": "~1.5.3",
-    "gulp-clean": "~0.2.4",
+    "mocha": "~1.20.1",
+    "underscore": "~1.6.0",
+    "gulp": "~3.8.0",
+    "gulp-jshint": "~1.6.2",
+    "gulp-clean": "~0.3.0",
     "gulp-jsdoc": "~0.1.4",
     "gulp-mocha": "~0.4.1",
-    "browserify": "~3.41.0",
+    "browserify": "~4.1.9",
     "vinyl-source-stream": "~0.1.1"
   }
 }

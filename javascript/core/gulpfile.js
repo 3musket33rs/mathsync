@@ -15,7 +15,7 @@
       .pipe(clean());
   });
   gulp.task('browser', ['clean-browser'], function() {
-    return browserify('./src/index.js')
+    return browserify('./index.js')
       .bundle({ standalone : 'mathsync' })
       .pipe(source('browser.js'))
       .pipe(gulp.dest('browser'));
@@ -33,13 +33,13 @@
       .pipe(clean());
   });
   gulp.task('apidoc', ['clean-apidoc'], function() {
-    return gulp.src('src/**/*.js')
+    return gulp.src(['*.js', 'lib/*.js'])
       .pipe(jsdoc('apidocs'));
   });
 
   // Linter
   gulp.task('lint', function() {
-    return gulp.src(['gulpfile.js', 'src/**/*.js', 'test/**/*.js'])
+    return gulp.src(['gulpfile.js', '*.js', 'lib/*.js', 'test/**/*.js'])
       .pipe(jshint())
       .pipe(jshint.reporter('default'));
   });

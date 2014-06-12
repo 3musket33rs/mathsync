@@ -3,7 +3,7 @@
   'use strict';
 
   var assert = require('assert');
-  var sha1 = require('../src/sha1');
+  var sha1 = require('../lib/sha1');
   var utils = require('./utils');
 
   describe('SHA-1', function() {

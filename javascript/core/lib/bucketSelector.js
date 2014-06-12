@@ -69,9 +69,6 @@
     };
   }
 
-  /**
-   * @module mathsync/bucketSelector
-   */
   module.exports = {
 
     /**

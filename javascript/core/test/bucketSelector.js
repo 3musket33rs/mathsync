@@ -4,7 +4,7 @@
 
   var utils = require('./utils');
   var assert = require('assert');
-  var selector = require('../src/bucketSelector');
+  var selector = require('../lib/bucketSelector');
 
   describe('Bucket selector', function() {
     describe('pad and hash', function() {

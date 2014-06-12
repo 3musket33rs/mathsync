@@ -2,7 +2,7 @@
   /* global describe, it */
   'use strict';
 
-  var string = require('../src/string');
+  var string = require('../string');
 
   var assert = require('assert');
   var utils = require('./utils');

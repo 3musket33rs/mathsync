@@ -1,10 +1,10 @@
 (function () {
   'use strict';
 
-  var ibf = require('./ibf');
-  var emptyFullContent = require('./fullContent');
-  var sha1 = require('./sha1');
-  var defaultSelector = require('./bucketSelector').padAndHash(sha1, 3);
+  var ibf = require('./lib/ibf');
+  var emptyFullContent = require('./lib/fullContent');
+  var sha1 = require('./lib/sha1');
+  var defaultSelector = require('./lib/bucketSelector').padAndHash(sha1, 3);
 
   function levelToSize(level) {
     return Math.pow(2, level);

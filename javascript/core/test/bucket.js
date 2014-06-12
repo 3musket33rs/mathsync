@@ -4,7 +4,7 @@
 
   var assert = require('assert');
 
-  var emptyBucket = require('../src/bucket');
+  var emptyBucket = require('../lib/bucket');
   var utils = require('./utils');
 
   var content1 = new Int8Array([1, 2]).buffer;

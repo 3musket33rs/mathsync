@@ -2,11 +2,11 @@
   /* global describe, it, process */
   'use strict';
 
-  var skeleton = require('../src/skeleton');
+  var skeleton = require('../skeleton');
 
-  var ibf = require('../src/ibf');
-  var sha1 = require('../src/sha1');
-  var defaultSelector = require('../src/bucketSelector').padAndHash(sha1, 3);
+  var ibf = require('../lib/ibf');
+  var sha1 = require('../lib/sha1');
+  var defaultSelector = require('../lib/bucketSelector').padAndHash(sha1, 3);
 
   var assert = require('assert');
   var assertSetEquals = require('./utils').assertSetEquals;

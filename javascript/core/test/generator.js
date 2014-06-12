@@ -2,7 +2,7 @@
   /* global describe, it */
   'use strict';
 
-  var generator = require('../src/generator');
+  var generator = require('../generator');
 
   var assertSetEquals = require('./utils').assertSetEquals;
   var assertSummaryContains = require('./utils').assertSummaryContains;

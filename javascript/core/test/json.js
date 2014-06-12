@@ -2,12 +2,12 @@
   /* global describe, it */
   'use strict';
 
-  var json = require('../src/json');
+  var json = require('../json');
 
-  var ibfBuilder = require('../src/ibf');
-  var empty = require('../src/fullContent');
-  var sha1 = require('../src/sha1');
-  var selector = require('../src/bucketSelector').padAndHash(sha1, 2);
+  var ibfBuilder = require('../lib/ibf');
+  var empty = require('../lib/fullContent');
+  var sha1 = require('../lib/sha1');
+  var selector = require('../lib/bucketSelector').padAndHash(sha1, 2);
 
   var assertSummaryContains = require('./utils').assertSummaryContains;
   var assert = require('assert');

@@ -17,13 +17,5 @@
    * @function external:Promise#then
    */
 
-  /**
-   * Promise implementation polyfill.
-   *
-   * <p>Either returns the global {@link external:Promise Promise} object or uses the
-   * <a href="https://github.com/jakearchibald/es6-promise">polyfill</a>.</p>
-   *
-   * @module mathsync/promise
-   */
   module.exports = require('es6-promise').Promise;
 })();

@@ -2,9 +2,9 @@
   'use strict';
 
   var defaults = require('./skeleton').defaults;
-  var ibfBuilder = require('./ibf');
-  var emptyFullContent = require('./fullContent');
-  var Promise = require('./promise');
+  var ibfBuilder = require('./lib/ibf');
+  var emptyFullContent = require('./lib/fullContent');
+  var Promise = require('./lib/promise');
 
   function newSummarizer(producer, digester, selector) {
     return function (level) {

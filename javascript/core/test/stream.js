@@ -2,7 +2,7 @@
   /* global describe, it */
   'use strict';
 
-  var stream = require('../src/stream');
+  var stream = require('../stream');
 
   var assertSetEquals = require('./utils').assertSetEquals;
   var assertSummaryContains = require('./utils').assertSummaryContains;

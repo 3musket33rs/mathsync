@@ -2,7 +2,7 @@
   /* global describe, it */
   'use strict';
 
-  var array = require('../src/array');
+  var array = require('../array');
 
   var assertSetEquals = require('./utils').assertSetEquals;
   var assertSummaryContains = require('./utils').assertSummaryContains;

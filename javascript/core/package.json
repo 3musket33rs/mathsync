@@ -6,10 +6,10 @@
     "type": "git",
     "url": "git@github.com:3musket33rs/mathsync.git"
   },
-  "files": ["src", "browser"],
+  "files": ["*.js", "lib", "browser/*.js"],
   "author": "Mathieu Bruyen <code@mais-h.eu>",
   "license": "Apache",
-  "main": "src/index.js",
+  "main": "index.js",
   "dependencies": {
     "rusha": ">=0.7.3",
     "es6-promise": "~1.0.0",

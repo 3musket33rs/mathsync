@@ -26,7 +26,7 @@
     }
   }
 
-  var ibf = require('../src/ibf');
+  var ibf = require('../lib/ibf');
   var emptyContent = ibf(5, digester, selector);
 
   function goThroughJson(origin) {

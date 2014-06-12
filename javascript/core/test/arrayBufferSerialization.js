@@ -4,7 +4,7 @@
 
   var assert = require('assert');
   var utils = require('./utils');
-  var arrayBufferSerialization = require('../src/arrayBufferSerialization');
+  var arrayBufferSerialization = require('../lib/arrayBufferSerialization');
 
   describe('ArrayBuffer serialization', function() {
     describe('toString', function() {

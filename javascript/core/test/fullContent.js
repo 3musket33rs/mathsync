@@ -4,7 +4,7 @@
 
   var utils = require('./utils');
 
-  var emptyContent = require('../src/fullContent');
+  var emptyContent = require('../lib/fullContent');
 
   var item1 = new Int8Array([5]).buffer;
   var item2 = new Int8Array([6]).buffer;

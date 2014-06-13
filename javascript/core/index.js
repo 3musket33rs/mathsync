@@ -258,6 +258,16 @@
      *
      * @name module:mathsync.string
      */
-    string: require('./string')
+    string: require('./string'),
+
+    /**
+     * Promise implementation polyfill.
+     *
+     * <p>Either returns the global {@link external:Promise Promise} object or uses the
+     * <a href="https://github.com/jakearchibald/es6-promise">polyfill</a>.</p>
+     *
+     * @name module:mathsync.Promise
+     */
+     Promise: require('./lib/promise')
   };
 })();

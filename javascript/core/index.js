@@ -268,6 +268,6 @@
      *
      * @name module:mathsync.Promise
      */
-     Promise: require('./lib/promise')
+    Promise: require('./lib/promise')
   };
 })();

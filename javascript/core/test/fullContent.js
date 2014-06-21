@@ -122,5 +122,22 @@
         });
       });
     });
+    describe('updater safeness', function () {
+      it('ignores added items on done updater', function () {
+        var contentPromise;
+        return new Promise(function (resolve) {
+          contentPromise = emptyContent.plusMany(function (item, done) {
+            item(item1);
+            done();
+            item(item2);
+            resolve();
+          });
+        }).then(function () {
+          return contentPromise;
+        }).then(function (content) {
+          utils.assertThatSetOfArrayEquals(content.toDifference().added, [item1]);
+        });
+      });
+    });
   });
 })();

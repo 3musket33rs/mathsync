@@ -3,6 +3,7 @@
   'use strict';
 
   var utils = require('./utils');
+  var Promise = require('../lib/promise');
 
   var item1 = new Int8Array([5]).buffer;
   var item2 = new Int8Array([6]).buffer;
@@ -129,6 +130,23 @@
         return emptyContent.minusMany(updater).then(function (asyncRemoved) {
           utils.assertThatSetOfArrayEquals(asyncRemoved.toDifference().added, []);
           utils.assertThatSetOfArrayEquals(goThroughJson(asyncRemoved).toDifference().added, []);
+        });
+      });
+    });
+    describe('updater safeness', function () {
+      it('ignores added items on done updater', function () {
+        var contentPromise;
+        return new Promise(function (resolve) {
+          contentPromise = emptyContent.plusMany(function (item, done) {
+            item(item1);
+            done();
+            item(item2);
+            resolve();
+          });
+        }).then(function () {
+          return contentPromise;
+        }).then(function (content) {
+          utils.assertThatSetOfArrayEquals(content.toDifference().added, [item1]);
         });
       });
     });

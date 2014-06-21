@@ -44,8 +44,19 @@
   }
 
   function insertOrRemoveMany(mayInsert, mayRemove, updater) {
-    var item = insertOrRemove.bind(null, mayInsert, mayRemove);
-    return new Promise(updater.bind(null, item));
+    return new Promise(function (resolve, reject) {
+      var isClosed = false;
+      function item(i) {
+        if (!isClosed) {
+          insertOrRemove(mayInsert, mayRemove, i);
+        }
+      }
+      function done() {
+        isClosed = true;
+        resolve();
+      }
+      updater(item, done, reject);
+    });
   }
 
   function byteArrayComparator(a, b) {

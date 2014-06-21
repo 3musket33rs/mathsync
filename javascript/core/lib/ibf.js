@@ -61,12 +61,19 @@
     }
 
     function modifyManyWithSideEffect(variation, updater) {
-      return Promise.resolve(copyBuckets()).then(function (bucketsCopy) {
-        return new Promise(function (resolve, reject) {
-          var item = modifyOneWithSideEffect.bind(null, bucketsCopy, variation);
-          var done = resolve.bind(null, bucketsCopy);
-          updater(item, done, reject);
-        });
+      return new Promise(function (resolve, reject) {
+        var bucketsCopy = copyBuckets();
+        var isClosed = false;
+        function item(i) {
+          if (!isClosed) {
+            modifyOneWithSideEffect(bucketsCopy, variation, i);
+          }
+        }
+        function done() {
+          isClosed = true;
+          resolve(bucketsCopy);
+        }
+        updater(item, done, reject);
       }).then(function (modified) {
         return ibfFromBuckets(modified, digest, selector);
       });

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>loading</title>
+    <script src="node_modules/mathsync/browser/browser.js"></script>
+    <script>
+(function(global) {
+  if (!Function.prototype.bind) {
+    Function.prototype.bind = function (oThis) {
+      if (typeof this !== "function") {
+        // closest thing possible to the ECMAScript 5
+        // internal IsCallable function
+        throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
+      }
+
+      var aArgs = Array.prototype.slice.call(arguments, 1),
+          fToBind = this,
+          fNOP = function () {},
+          fBound = function () {
+            return fToBind.apply(this instanceof fNOP && oThis
+                   ? this
+                   : oThis,
+                   aArgs.concat(Array.prototype.slice.call(arguments)));
+          };
+
+      fNOP.prototype = this.prototype;
+      fBound.prototype = new fNOP();
+
+      return fBound;
+    };
+  }
+}(this));
+    </script>
+    <script>
+(function(global) {
+  if (!ArrayBuffer.prototype.slice) {
+    ArrayBuffer.prototype.slice = function (begin, end) {
+      var len = this.byteLength;
+
+      var idx = 0;
+      var k = (begin < 0) ? Math.max(len + begin, 0) : Math.min(begin, len);
+      var stop = (end < 0) ? Math.max(len + end, 0) : Math.min(end, len);
+
+      var copy = new Int8Array(stop - k);
+      var view = new Int8Array(this);
+      while (k < stop) {
+        copy[idx++] = view[k++];
+      }
+
+      return copy.buffer;
+    };
+  }
+}(this));
+    </script>
+  </head>
+  <body>
+  <script>
+(function (window) {
+  var ms = window.mathsync;
+
+  var data = {};
+
+  function clear() {
+    data = {};
+  }
+
+  function get() {
+    return data;
+  }
+
+  function sync(serverport) {
+    document.title = 'sync ongoing';
+
+    function localItems() {
+      var keys = Object.keys(data);
+      var i = 0;
+      function next() {
+        if (i < keys.length) {
+          var k = keys[i];
+          res = { done : false, value : k + ':' + data[k] };
+        } else {
+          res = { done : true };
+        }
+        i++;
+        return res;
+      }
+
+      return { next: next };
+    }
+
+    function fetchSummary(level) {
+      var p = new ms.Promise(function (resolve, reject) {
+        var req, url = 'http://localhost:' + serverport + '/summary/' + level;
+        function ready() {
+          if (req.status === 200) {
+            resolve(req.responseText);
+          } else {
+            reject(new Error('Failed to get summary from ' + url));
+          }
+        }
+        function stateChange() {
+          if (req.readyState === 4) {
+            ready();
+          }
+        }
+        req = new XMLHttpRequest();
+        req.onreadystatechange = stateChange;
+        req.open('GET', url);
+        req.send(null);
+      });
+      return p.then(JSON.parse);
+    };
+
+    var serialize = ms.string.newSerializer();
+    var deserialize = ms.string.newDeserializer();
+    var remote = ms.json.newSummarizer(fetchSummary);
+    var resolve = ms.generator.newResolver(localItems, remote, serialize, deserialize);
+
+    resolve().then(function (difference) {
+      difference.removed.forEach(function (i) {
+        var item = i.split(':');
+        delete data[item[0]];
+      });
+      difference.added.forEach(function (i) {
+        var item = i.split(':');
+        data[item[0]] = item[1];
+      });
+      document.title = 'sync done';
+    }, function (err) {
+      document.title = 'sync failed: ' + err;
+    });
+  }
+
+  window.api = {
+    clear: clear,
+    sync: sync,
+    get: get
+  }
+
+  document.title = 'loaded';
+})(this);
+  </script>
+  </body>
+</html>

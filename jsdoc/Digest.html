@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Class: Digest</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Class: Digest</h1>
+
+    
+
+
+
+<section>
+
+<header>
+    <h2>
+    Digest
+    </h2>
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+
+    
+        
+<dt>
+    <h4 class="name" id="Digest"><span class="type-signature"></span>new Digest<span class="signature">()</span><span class="type-signature"></span></h4>
+
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Digester interface.
+    </div>
+    
+
+    
+
+    
+
+    
+
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="sha1.js.html">lib/sha1.js</a>, <a href="sha1.js.html#line4">line 4</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dd>
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+            
+<dt>
+    <h4 class="name" id="Digester"><span class="type-signature">&lt;inner> </span>Digester<span class="signature">(item)</span><span class="type-signature"> &rarr; {<a href="external-ArrayBuffer.html">external:ArrayBuffer</a>}</span></h4>
+
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Digests an item serialized as an array of bytes.
+
+<p>Any byte array value must be accepted and have a non <code>null</code> return value: for any <code>a</code>,
+<code>digester(a) != null</code>.</p>
+
+<p>All valid inputs should produce in output an array of the same size:for any <code>a1</code> and
+<code>a2</code>, <code>digester(a1).byteLength == digester(a2).byteLength</code>.</p>
+
+<p>The output must be consistent, an identical output should be returned if called twice on the same array: for
+any <code>a1</code> and <code>a2</code>, <code>Arrays.equals(a1, a2)</code> implies
+<code>Arrays.equals(digester(a1), digester(a2))</code>.</p>
+
+<p>In addition to those constrains, it is recommended that it has the properties of a
+<a href="http://en.wikipedia.org/wiki/Cryptographic_hash_function">cryptographic hash function</a>.</p>
+    </div>
+    
+
+    
+
+    
+
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>item</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type"><a href="external-ArrayBuffer.html">external:ArrayBuffer</a></span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">the item to digest.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+    
+
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="sha1.js.html">lib/sha1.js</a>, <a href="sha1.js.html#line9">line 9</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    the message digest of the item.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="external-ArrayBuffer.html">external:ArrayBuffer</a></span>
+
+
+    </dd>
+</dl>
+
+        
+
+    
+</dd>
+
+        </dl>
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-mathsync.html">mathsync</a></li><li><a href="array.html">mathsync/array</a></li><li><a href="generator.html">mathsync/generator</a></li><li><a href="json.html">mathsync/json</a></li><li><a href="skeleton.html">mathsync/skeleton</a></li><li><a href="stream.html">mathsync/stream</a></li><li><a href="string.html">mathsync/string</a></li></ul><h3>Externals</h3><ul><li><a href="external-ArrayBuffer.html">ArrayBuffer</a></li><li><a href="external-Error.html">Error</a></li><li><a href="external-Generator.html">Generator</a></li><li><a href="external-Iterator.html">Iterator</a></li><li><a href="external-Promise.html">Promise</a></li><li><a href="external-Readable.html">Readable</a></li></ul><h3>Classes</h3><ul><li><a href="BucketSelector.html">BucketSelector</a></li><li><a href="Difference.html">Difference</a></li><li><a href="Digest.html">Digest</a></li><li><a href="Resolver.html">Resolver</a></li><li><a href="Serial.html">Serial</a></li><li><a href="Summarizer.html">Summarizer</a></li><li><a href="Summary.html">Summary</a></li></ul><h3>Events</h3><ul><li><a href="external-Readable.html#event:end">end</a></li><li><a href="external-Readable.html#event:error">error</a></li><li><a href="external-Readable.html#event:readable">readable</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha5</a> on Sat Jun 21 2014 11:45:16 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

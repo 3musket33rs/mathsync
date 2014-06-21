@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: json.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: json.js</h1>
+
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>(function () {
+  'use strict';
+
+  var defaults = require('./skeleton').defaults;
+  var ibfBuilder = require('./lib/ibf');
+  var emptyFullContent = require('./lib/fullContent');
+  var Promise = require('./lib/promise');
+
+  function newSummarizer(producer, digester, selector) {
+    return function (level) {
+      return Promise.resolve(producer(level)).then(function (json) {
+        if (Array.isArray(json)) {
+          return ibfBuilder.fromJSON(json, digester || defaults.digester, selector || defaults.selector);
+        } else {
+          return emptyFullContent.fromJSON(json);
+        }
+      });
+    };
+  }
+
+  /**
+   * Summarizer deserializing JSON content.
+   *
+   * &lt;p>When synchroniwing a client and a server, the client asks a JSON summary to the server and then has to
+   * deserialize it.&lt;/p>
+   *
+   * @module mathsync/json
+   */
+  module.exports = {
+
+    /**
+     * Deserializes JSON views of summaries, likely obtained throught the network.
+     *
+     * @example &lt;caption>From an HTTP endpoint using XMLHttpRequest&lt;/caption>
+     * var Promise = require('mathsync/promise'); // polyfill
+     * function fetchSummary(level) {
+     *   var p = new Promise(function (resolve, reject) {
+     *     var req, url = 'http://localhost:4000/api/summary/' + level;
+     *     function ready() {
+     *       if (req.status === 200) {
+     *         resolve(req.responseText);
+     *       } else {
+     *         reject(new Error('Failed to get summary from ' + url));
+     *       }
+     *     }
+     *     function stateChange() {
+     *       if (req.readyState === 4) {
+     *         ready();
+     *       }
+     *     }
+     *     req = new XMLHttpRequest();
+     *     req.onreadystatechange = stateChange;
+     *     req.open('GET', url);
+     *     req.send(null);
+     *   });
+     *   return p.then(JSON.parse);
+     * }
+     * var summarizer = require('mathsync/json').newSummarizer(fetchSummary);
+     *
+     * @example &lt;caption>From an HTTP endpoint using jQuery&lt;/caption>
+     * var Promise = require('mathsync/src/promise'); // polyfill
+     * function fetchSummary(level) {
+     *   return Promise.resolve($.getJSON('http://localhost:4000/api/summary/' + level));
+     * }
+     * var summarizer = require('mathsync/json').newSummarizer(fetchSummary);
+     *
+     * @example &lt;caption>From an HTTP endpoint using Node's http&lt;/caption>
+     * var Promise = require('mathsync/src/promise'); // polyfill
+     * var http = require('http');
+     * function fetchSummary(level) {
+     *   var p = new Promise(function (resolve, reject) {
+     *     http.get('http://localhost:4000/api/summary/' + level, function (res) {
+     *       var chunks = [];
+     *       res.on('data', function(chunk) {
+     *         chunks.push(chunk);
+     *       });
+     *       res.on('end', function() {
+     *         resolve(chunks);
+     *       });
+     *     }).on('error', reject);
+     *   });
+     *   return p.then(Buffer.concat).then(JSON.parse);
+     * }
+     * var summarizer = require('mathsync/json').newSummarizer(fetchSummary);
+     *
+     * @function
+     * @param {function} producer - the producer of JSON summaries, returns {@link external:Promise promises} resolving to JSON content.
+     * @param {Digest~Digester} [digester] - the digester to use, defaults to SHA-1.
+     * @param {BucketSelector~Selector} [selector] - how to place items in IBF buckets, uses 3 buckets by default.
+     * @return {summarizer} a summarizer returning deserialized summaries.
+     */
+    newSummarizer : newSummarizer
+  };
+})();
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-mathsync.html">mathsync</a></li><li><a href="array.html">mathsync/array</a></li><li><a href="generator.html">mathsync/generator</a></li><li><a href="json.html">mathsync/json</a></li><li><a href="skeleton.html">mathsync/skeleton</a></li><li><a href="stream.html">mathsync/stream</a></li><li><a href="string.html">mathsync/string</a></li></ul><h3>Externals</h3><ul><li><a href="external-ArrayBuffer.html">ArrayBuffer</a></li><li><a href="external-Error.html">Error</a></li><li><a href="external-Generator.html">Generator</a></li><li><a href="external-Iterator.html">Iterator</a></li><li><a href="external-Promise.html">Promise</a></li><li><a href="external-Readable.html">Readable</a></li></ul><h3>Classes</h3><ul><li><a href="BucketSelector.html">BucketSelector</a></li><li><a href="Difference.html">Difference</a></li><li><a href="Digest.html">Digest</a></li><li><a href="Resolver.html">Resolver</a></li><li><a href="Serial.html">Serial</a></li><li><a href="Summarizer.html">Summarizer</a></li><li><a href="Summary.html">Summary</a></li></ul><h3>Events</h3><ul><li><a href="external-Readable.html#event:end">end</a></li><li><a href="external-Readable.html#event:error">error</a></li><li><a href="external-Readable.html#event:readable">readable</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha5</a> on Sat Jun 21 2014 11:45:16 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

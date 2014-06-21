@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Module: mathsync/string</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Module: mathsync/string</h1>
+
+    
+
+
+
+<section>
+
+<header>
+    <h2>
+    mathsync/string
+    </h2>
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+
+    
+        
+            <div class="description">String based serialization and deserialization.</div>
+        
+
+        
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="string.js.html">string.js</a>, <a href="string.js.html#line34">line 34</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        <dl>
+            
+<dt>
+    <h4 class="name" id="newDeserializer"><span class="type-signature">&lt;static> </span>newDeserializer<span class="signature">(<span class="optional">func</span>)</span><span class="type-signature"> &rarr; {<a href="Serial.html#Deserialize">Serial~Deserialize</a>}</span></h4>
+
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Deserializes objects from bytes to a string view.
+    </div>
+    
+
+    
+
+    
+
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Argument</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>func</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">retrieves an object corresponding to the input string view, can be skipped if target type is string.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+    
+
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="string.js.html">string.js</a>, <a href="string.js.html#line57">line 57</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    a deserializer function which reads strings from byte arrays and converts them to objects.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Serial.html#Deserialize">Serial~Deserialize</a></span>
+
+
+    </dd>
+</dl>
+
+        
+
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="newSerializer"><span class="type-signature">&lt;static> </span>newSerializer<span class="signature">(<span class="optional">func</span>)</span><span class="type-signature"> &rarr; {<a href="Serial.html#Serialize">Serial~Serialize</a>}</span></h4>
+
+    
+</dt>
+<dd>
+
+    
+    <div class="description">
+        Serializes string view of objects to bytes.
+    </div>
+    
+
+    
+
+    
+
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+        <th>Argument</th>
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>func</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">function</span>
+
+
+            
+            </td>
+
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+
+                
+
+                
+                </td>
+            
+
+            
+
+            <td class="description last">translates objects to string before serializing them, can be skipped if the item is already a string.</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+    
+
+    
+<dl class="details">
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="string.js.html">string.js</a>, <a href="string.js.html#line48">line 48</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <h5>Returns:</h5>
+    
+            
+<div class="param-desc">
+    a serializer function which converts objects to string and take the bytes out of the string.
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type"><a href="Serial.html#Serialize">Serial~Serialize</a></span>
+
+
+    </dd>
+</dl>
+
+        
+
+    
+</dd>
+
+        </dl>
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-mathsync.html">mathsync</a></li><li><a href="array.html">mathsync/array</a></li><li><a href="generator.html">mathsync/generator</a></li><li><a href="json.html">mathsync/json</a></li><li><a href="skeleton.html">mathsync/skeleton</a></li><li><a href="stream.html">mathsync/stream</a></li><li><a href="string.html">mathsync/string</a></li></ul><h3>Externals</h3><ul><li><a href="external-ArrayBuffer.html">ArrayBuffer</a></li><li><a href="external-Error.html">Error</a></li><li><a href="external-Generator.html">Generator</a></li><li><a href="external-Iterator.html">Iterator</a></li><li><a href="external-Promise.html">Promise</a></li><li><a href="external-Readable.html">Readable</a></li></ul><h3>Classes</h3><ul><li><a href="BucketSelector.html">BucketSelector</a></li><li><a href="Difference.html">Difference</a></li><li><a href="Digest.html">Digest</a></li><li><a href="Resolver.html">Resolver</a></li><li><a href="Serial.html">Serial</a></li><li><a href="Summarizer.html">Summarizer</a></li><li><a href="Summary.html">Summary</a></li></ul><h3>Events</h3><ul><li><a href="external-Readable.html#event:end">end</a></li><li><a href="external-Readable.html#event:error">error</a></li><li><a href="external-Readable.html#event:readable">readable</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha5</a> on Sat Jun 21 2014 11:45:16 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

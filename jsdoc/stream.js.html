@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: stream.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: stream.js</h1>
+
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>(function () {
+  'use strict';
+
+  /**
+   * Node's readable stream.
+   *
+   * &lt;p>Only to be used in object mode.&lt;/p>
+   *
+   * @class Readable
+   * @external
+   * @see {@link http://nodejs.org/api/stream.html#stream_class_stream_readable stream.Readable on Node.js}
+   */
+  /**
+   * Reads the next available item.
+   *
+   * &lt;p>To be repeatedly called until it returns &lt;code>null&lt;/code> after the stream emits &lt;code>readable&lt;/code>.&lt;p>
+   *
+   * @example
+   * stream.on('readable', function() {
+   *   var item;
+   *   while (null !== (item = stream.read())) {
+   *     // handle item
+   *   }
+   * });
+   *
+   * @name external:Readable#read
+   * @function
+   * @return {Object} next available item or &lt;code>null&lt;/code> if no item is currently available.
+   */
+  /**
+   * Readable event.
+   *
+   * &lt;p>Notifies the stream can be read again.&lt;/p>
+   *
+   * @example
+   * stream.on('readable', function() {
+   *   // use stream.read() until it returns null
+   * });
+   *
+   * @event external:Readable#readable
+   * @type {Object}
+   */
+  /**
+   * Error event.
+   *
+   * &lt;p>Called if there is an error while reading data.&lt;/p>
+   *
+   * @example
+   * stream.on('error', function(err) {
+   *   console.error(err);
+   * });
+   *
+   * @event external:Readable#error
+   * @type {Error}
+   */
+  /**
+   * End event.
+   *
+   * &lt;p>Called after all data has been read.&lt;/p>
+   *
+   * @example
+   * stream.on('end', function(err) {
+   *   console.log('done with my stream');
+   * });
+   *
+   * @event external:Readable#end
+   */
+
+  var skeleton = require('./skeleton');
+
+  function updaterFromStreamBuilder(streamProducer) {
+    function updater(item, done, fail) {
+      var stream = streamProducer();
+      stream.on('readable', function() {
+        var i;
+        while (null !== (i = stream.read())) {
+          item(i);
+        }
+      });
+      stream.on('error', fail);
+      stream.on('end', done);
+    }
+
+    return updater;
+  }
+
+  function newSummarizer(streamProducer, serialize, digest, selector) {
+    return skeleton.newSummarizer(updaterFromStreamBuilder(streamProducer), serialize, digest, selector);
+  }
+
+  function newResolver(streamProducer, remote, serialize, deserialize) {
+    return skeleton.newResolver(updaterFromStreamBuilder(streamProducer), remote, serialize, deserialize);
+  }
+
+  /**
+   * Stream handling.
+   *
+   * @module mathsync/stream
+   */
+  module.exports = {
+
+    /**
+     * Creates a new summarizer.
+     *
+     * @example &lt;caption>Taking items from a {@link https://github.com/maxogden/level.js level.js} database&lt;/caption>
+     * var levelup = require('levelup');
+     * var leveljs = require('level-js');
+     * var db = levelup(name, { db : leveljs });
+     * function serialize(item) {
+     *   // ...
+     * }
+     * var summarizer = require('mathsync/stream').newSummarizer(function () {
+     *   return db.createReadStream();
+     * }, serialize);
+     *
+     * @name module:mathsync/stream.newSummarizer
+     * @function
+     * @param {function} streamProducer - the no-arg function returning a fresh {@link external:Readable stream} emitting local items each time it is called.
+     * @param {Serial~Serialize} serialize - the item serializer.
+     * @param {Digest~Digester} [digester] - the digester to use, defaults to SHA-1.
+     * @param {BucketSelector~Selector} [selector] - how to place items in IBF buckets, uses 3 buckets by default.
+     */
+    newSummarizer : newSummarizer,
+
+    /**
+     * Creates a new resolver.
+     *
+     *
+     * @example &lt;caption>Taking items from a {@link https://github.com/maxogden/level.js level.js} database&lt;/caption>
+     * var remote = ...
+     * var levelup = require('levelup');
+     * var leveljs = require('level-js');
+     * var db = levelup(name, { db : leveljs });
+     * function serialize(item) {
+     *   // ...
+     * }
+     * function deserialize(buffer) {
+     *   // ...
+     * }
+     * var resolver = require('mathsync/stream').newResolver(function () {
+     *   return db.createReadStream();
+     * }, remote, serialize, deserialize);
+     *
+     * @name module:mathsync/stream.newResolver
+     * @function
+     * @param {function} streamProducer - the no-arg function returning a fresh {@link external:Readable stream} emitting local items each time it is called.
+     * @param {Summarizer} remote - summarizer producing summaires of the remote side.
+     * @param {Serial~Serialize} serialize - the item serializer.
+     * @param {Serial~Deserialize} deserialize - the item deserializer.
+     */
+    newResolver : newResolver
+  };
+})();
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Modules</h3><ul><li><a href="module-mathsync.html">mathsync</a></li><li><a href="array.html">mathsync/array</a></li><li><a href="generator.html">mathsync/generator</a></li><li><a href="json.html">mathsync/json</a></li><li><a href="skeleton.html">mathsync/skeleton</a></li><li><a href="stream.html">mathsync/stream</a></li><li><a href="string.html">mathsync/string</a></li></ul><h3>Externals</h3><ul><li><a href="external-ArrayBuffer.html">ArrayBuffer</a></li><li><a href="external-Error.html">Error</a></li><li><a href="external-Generator.html">Generator</a></li><li><a href="external-Iterator.html">Iterator</a></li><li><a href="external-Promise.html">Promise</a></li><li><a href="external-Readable.html">Readable</a></li></ul><h3>Classes</h3><ul><li><a href="BucketSelector.html">BucketSelector</a></li><li><a href="Difference.html">Difference</a></li><li><a href="Digest.html">Digest</a></li><li><a href="Resolver.html">Resolver</a></li><li><a href="Serial.html">Serial</a></li><li><a href="Summarizer.html">Summarizer</a></li><li><a href="Summary.html">Summary</a></li></ul><h3>Events</h3><ul><li><a href="external-Readable.html#event:end">end</a></li><li><a href="external-Readable.html#event:error">error</a></li><li><a href="external-Readable.html#event:readable">readable</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.3.0-alpha5</a> on Sat Jun 21 2014 11:45:16 GMT+0200 (CEST)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

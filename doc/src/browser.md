@@ -17,7 +17,6 @@ The whole library is available as a [umd](https://github.com/forbeslindesay/umd)
 (function (global) {
   var ms = global.mathsync;
   var http = require('http');
-  var Promise = require('mathsync/src/promise');
 
   var data = [/* where do your items come from? */];
 
@@ -27,7 +26,7 @@ The whole library is available as a [umd](https://github.com/forbeslindesay/umd)
   var local = ms.array.newSummarizer(data, serialize);
 
   function fetchSummary(level) {
-    var p = new Promise(function (resolve, reject) {
+    var p = new ms.Promise(function (resolve, reject) {
       var req, url = 'http://localhost:4000/api/summary/' + level;
       function ready() {
         if (req.status === 200) {
@@ -74,7 +73,7 @@ Using [jQuery](http://jquery.com/) fetching the JSON can be more concise:
 
 {% highlight javascript %}
 function fetchSummary(level) {
-  return Promise.resolve($.getJSON('http://localhost:4000/api/summary/' + level));
+  return ms.Promise.resolve($.getJSON('http://localhost:4000/api/summary/' + level));
 }
 {% endhighlight %}
 

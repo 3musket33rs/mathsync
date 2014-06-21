@@ -1,12 +1,16 @@
 {
   "name": "mathsync",
-  "version": "0.6.0-alpha",
+  "version": "0.6.0",
   "description": "Data synchronization using a mathematical aproach",
   "repository": {
     "type": "git",
     "url": "git@github.com:3musket33rs/mathsync.git"
   },
-  "files": ["*.js", "lib", "browser/*.js"],
+  "files": [
+    "*.js",
+    "lib",
+    "browser/*.js"
+  ],
   "author": "Mathieu Bruyen <code@mais-h.eu>",
   "license": "Apache",
   "main": "index.js",

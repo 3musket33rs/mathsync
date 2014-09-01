@@ -1,70 +1,68 @@
-(function () {
-  /* global describe, it */
-  'use strict';
+/* global describe, it */
+'use strict';
 
-  var array = require('../array');
+var array = require('../array');
 
-  var assertSetEquals = require('./utils').assertSetEquals;
-  var assertSummaryContains = require('./utils').assertSummaryContains;
+var assertSetEquals = require('./utils').assertSetEquals;
+var assertSummaryContains = require('./utils').assertSummaryContains;
 
-  describe('Array', function() {
+describe('Array', function() {
 
-    describe('summarizer', function() {
+  describe('summarizer', function() {
 
-      it('builds summary with items', function() {
-        var summarizer = array.newSummarizer([
-          { from: 1, to: 2 },
-          { from: 2, to: 3 },
-          { from: 3, to: 4 },
-          { from: 4, to: 5 },
-          { from: 5, to: 6 }
-        ], function (item) {
-          return new Int32Array([item.from, item.to]).buffer;
-        });
-
-        return summarizer(2).then(assertSummaryContains.bind(null, [
-            new Int32Array([1, 2]).buffer,
-            new Int32Array([2, 3]).buffer,
-            new Int32Array([3, 4]).buffer,
-            new Int32Array([4, 5]).buffer,
-            new Int32Array([5, 6]).buffer
-          ]));
+    it('builds summary with items', function() {
+      var summarizer = array.newSummarizer([
+        { from: 1, to: 2 },
+        { from: 2, to: 3 },
+        { from: 3, to: 4 },
+        { from: 4, to: 5 },
+        { from: 5, to: 6 }
+      ], function (item) {
+        return new Int32Array([item.from, item.to]).buffer;
       });
+
+      return summarizer(2).then(assertSummaryContains.bind(null, [
+          new Int32Array([1, 2]).buffer,
+          new Int32Array([2, 3]).buffer,
+          new Int32Array([3, 4]).buffer,
+          new Int32Array([4, 5]).buffer,
+          new Int32Array([5, 6]).buffer
+        ]));
     });
+  });
 
-    describe('resolver', function() {
+  describe('resolver', function() {
 
-      it('generates difference', function() {
-        function serialize(item) {
-          return new Int32Array([item.from, item.to]).buffer;
-        }
+    it('generates difference', function() {
+      function serialize(item) {
+        return new Int32Array([item.from, item.to]).buffer;
+      }
 
-        function deserialize(buffer) {
-          var arr = new Int32Array(buffer);
-          return { from: arr[0], to: arr[1] };
-        }
+      function deserialize(buffer) {
+        var arr = new Int32Array(buffer);
+        return { from: arr[0], to: arr[1] };
+      }
 
-        var summarizer = array.newSummarizer([
-          { from: 3, to: 4 },
-          { from: 4, to: 5 },
-          { from: 5, to: 6 },
-          { from: 6, to: 7 },
-          { from: 7, to: 8 }
-        ], serialize);
+      var summarizer = array.newSummarizer([
+        { from: 3, to: 4 },
+        { from: 4, to: 5 },
+        { from: 5, to: 6 },
+        { from: 6, to: 7 },
+        { from: 7, to: 8 }
+      ], serialize);
 
-        var resolve = array.newResolver([
-          { from: 1, to: 2 },
-          { from: 2, to: 3 },
-          { from: 3, to: 4 },
-          { from: 4, to: 5 },
-          { from: 5, to: 6 }
-        ], summarizer, serialize, deserialize);
+      var resolve = array.newResolver([
+        { from: 1, to: 2 },
+        { from: 2, to: 3 },
+        { from: 3, to: 4 },
+        { from: 4, to: 5 },
+        { from: 5, to: 6 }
+      ], summarizer, serialize, deserialize);
 
-        return resolve().then(function (diff) {
-          assertSetEquals(diff.added, [{ from: 6, to: 7 }, { from: 7, to: 8 }]);
-          assertSetEquals(diff.removed, [{ from: 1, to: 2 }, { from: 2, to: 3 }]);
-        });
+      return resolve().then(function (diff) {
+        assertSetEquals(diff.added, [{ from: 6, to: 7 }, { from: 7, to: 8 }]);
+        assertSetEquals(diff.removed, [{ from: 1, to: 2 }, { from: 2, to: 3 }]);
       });
     });
   });
-})();
+});

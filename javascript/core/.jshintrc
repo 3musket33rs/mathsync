@@ -16,7 +16,7 @@
   "undef" : true,
   "quotmark" : "single",
   "unused" : true,
-  "strict" : true,
+  "globalstrict" : true,
   "trailing" : true,
   "esnext" : true,
   "globals" : {

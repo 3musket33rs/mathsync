@@ -4,6 +4,8 @@
 var utils = require('./utils');
 var Promise = require('../lib/promise');
 
+var assert = require('assert');
+
 var item1 = new Int8Array([5]).buffer;
 var item2 = new Int8Array([6]).buffer;
 
@@ -130,6 +132,23 @@ describe('IBF', function() {
         utils.assertThatSetOfArrayEquals(asyncRemoved.toDifference().added, []);
         utils.assertThatSetOfArrayEquals(goThroughJson(asyncRemoved).toDifference().added, []);
       });
+    });
+  });
+  describe('merge with other', function() {
+    var withItem1 = emptyContent.plus(item1);
+    var withItem2 = emptyContent.plus(item2);
+
+    it('has elements from both', function() {
+      var both = withItem1.plusIbf(withItem2);
+      utils.assertThatSetOfArrayEquals(both.toDifference().added, [item1, item2]);
+      utils.assertThatSetOfArrayEquals(both.toDifference().removed, []);
+    });
+    it('fails with ibf of different sizes', function() {
+      var size5 = ibf(5, digester, selector);
+      var size7 = ibf(7, digester, selector);
+      assert.throws(function () {
+        size7.plusIbf(size5);
+      }, /Cannot merge IBF of different sizes/);
     });
   });
   describe('updater safeness', function () {

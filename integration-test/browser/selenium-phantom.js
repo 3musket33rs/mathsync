@@ -43,7 +43,7 @@
     }
 
     function newDriver() {
-      return new webdriver.Builder().usingServer('http://localhost:' + port).build();
+      return new webdriver.Builder().withCapabilities(webdriver.Capabilities.phantomjs()).usingServer('http://localhost:' + port).build();
     }
 
     return {

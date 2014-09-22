@@ -14,6 +14,7 @@
 
     function stop() {
       var d = q.defer();
+      connection.destroy();
       child.once('error', d.reject);
       child.once('close', d.resolve);
       child.kill('SIGKILL');

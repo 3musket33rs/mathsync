@@ -87,6 +87,17 @@ function ibfFromBuckets(buckets, digest, selector) {
     return modifyManyWithSideEffect(1, updater);
   }
 
+  function plusIbf(other) {
+    var merged = other._copyBuckets();
+    if (merged.length !== buckets.length) {
+      throw new Error('Cannot merge IBF of different sizes');
+    }
+    for (var i = 0; i < merged.length; i++) {
+      merged[i] = merged[i].group(buckets[i]);
+    }
+    return ibfFromBuckets(merged, digest, selector);
+  }
+
   function minus(content) {
     if (!(content instanceof ArrayBuffer)) {
       throw new TypeError('Ibf#minus takes an ArrayBuffer, given ' + content);
@@ -162,9 +173,11 @@ function ibfFromBuckets(buckets, digest, selector) {
     toDifference : toDifference,
     plus : plus,
     plusMany : plusMany,
+    plusIbf : plusIbf,
     minus : minus,
     minusMany : minusMany,
-    toJSON : toJSON
+    toJSON : toJSON,
+    _copyBuckets : copyBuckets
   };
 
   return that;

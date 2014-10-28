@@ -1,0 +1,6 @@
+{
+  "private": true,
+  "dependencies": {
+    "q": "0.9.x"
+  }
+}

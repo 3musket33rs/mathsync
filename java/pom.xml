@@ -23,6 +23,7 @@
 
   <modules>
     <module>core</module>
+    <module>core-uber</module>
   </modules>
 
   <description>Helping synchronization between clients and servers accross a network. The client is expected to have pushed its changes to the server and then requests the library to pull changes from the server. Clients of the library must provide on the server a way to serialize items and an endpoint, as well as a way to deserialize  items and to access the server endpoint on the client. The algorithm requires O(log(n)) roundtrips to the server and consumes a total bandwidth of O(n) where n is the number of items which changed on the server since the last synchronization</description>

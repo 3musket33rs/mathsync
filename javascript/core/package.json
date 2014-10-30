@@ -6,6 +6,7 @@
     "type": "git",
     "url": "git@github.com:3musket33rs/mathsync.git"
   },
+  "homepage": "http://mathsync.mais-h.eu/",
   "files": [
     "*.js",
     "lib",

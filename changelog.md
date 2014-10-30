@@ -3,17 +3,14 @@ layout: default
 title: Changelog
 ---
 
-# Pipe
+# 0.6.1
 
-* refine design to get back pre-`0.4.x` symmetry (prevent the need for implementing both a summarizer and a resolver)
-* ProtocolBuffer serialization
-* difference view indexed by key (allows to view updates in a different collection)
+* additional uber-artifact with shaded dependencies in java to allow safe inclusion in any application
 
-# On the road to 0.6.0
+# 0.6.0
 
 * seed bucket selector
 * rework addition of many items at a time in a summary, not to have to extend all summaries every time a new type is needed
-* rework library layout in javascript (group related summarizer and resolver, put each in a dedicated npm module)
 
 # 0.5.0
 

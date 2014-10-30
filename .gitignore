@@ -12,6 +12,7 @@ javascript/generator/browser
 
 # java
 target
+dependency-reduced-pom.xml
 
 # vagrant
 .vagrant

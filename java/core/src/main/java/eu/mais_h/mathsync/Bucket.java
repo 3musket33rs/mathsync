@@ -73,6 +73,6 @@ class Bucket {
 
   @Override
   public final String toString() {
-    return "Bucket holding " + items + " items, hashed=" + Hex.encodeHexString(hashed) + ", xored=" + Hex.encodeHexString(xored);
+    return "Bucket holding " + items + " items, hashed=" + new String(Hex.encodeHex(hashed)) + ", xored=" + new String(Hex.encodeHex(xored));
   }
 }

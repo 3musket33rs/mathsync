@@ -1,9 +1,9 @@
 package eu.mais_h.mathsync;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.codec.binary.StringUtils;
 
 import eu.mais_h.mathsync.digest.Sha1Digester;
+import eu.mais_h.mathsync.util.StringUtils;
 
 class Defaults {
 
@@ -22,6 +22,6 @@ class Defaults {
   }
 
   static byte[] deserialize(String serialized) {
-    return Base64.decodeBase64(serialized);
+    return Base64.decodeBase64(serialized.getBytes());
   }
 }

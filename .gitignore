@@ -9,6 +9,7 @@ es5
 javascript/core/browser
 javascript/core/apidocs
 javascript/generator/browser
+npm-shrinkwrap.json
 
 # java
 target

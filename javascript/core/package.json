@@ -7,6 +7,7 @@
     "url": "git@github.com:3musket33rs/mathsync.git"
   },
   "files": [
+    "npm-shrinkwrap.json",
     "*.js",
     "lib",
     "browser/*.js"

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Module: mathsync/skeleton</title>
+    <title>JSDoc: Module: mathsync/observable</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,7 +17,7 @@
 
 <div id="main">
 
-    <h1 class="page-title">Module: mathsync/skeleton</h1>
+    <h1 class="page-title">Module: mathsync/observable</h1>
 
     
 
@@ -27,7 +27,7 @@
 
 <header>
     <h2>
-    mathsync/skeleton
+    mathsync/observable
     </h2>
     
 </header>
@@ -38,7 +38,7 @@
 
     
         
-            <div class="description">Skeleton summarizer/resolver implementation.</div>
+            <div class="description">Observable handling.</div>
         
 
         
@@ -64,7 +64,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="skeleton.js.html">skeleton.js</a>, <a href="skeleton.js.html#line89">line 89</a>
+        <a href="observable.js.html">observable.js</a>, <a href="observable.js.html#line45">line 45</a>
     </li></ul></dd>
     
 
@@ -98,7 +98,7 @@
         <dl>
             
 <dt>
-    <h4 class="name" id="newResolver"><span class="type-signature">&lt;static> </span>newResolver<span class="signature">(updater, remote, serialize, deserialize)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="newResolver"><span class="type-signature">&lt;static> </span>newResolver<span class="signature">(observable, remote, serialize, deserialize)</span><span class="type-signature"></span></h4>
 
     
 </dt>
@@ -107,6 +107,8 @@
     
     <div class="description">
         Creates a new resolver.
+
+<p>Each summary creates a new subscription to the observable and drains it until it reports being completed.</p>
     </div>
     
 
@@ -140,13 +142,13 @@
 
         <tr>
             
-                <td class="name"><code>updater</code></td>
+                <td class="name"><code>observable</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="Summary.html#SummaryBatchUpdater">Summary~SummaryBatchUpdater</a></span>
+<span class="param-type"><a href="external-Observable.html">external:Observable</a></span>
 
 
             
@@ -156,7 +158,7 @@
 
             
 
-            <td class="description last">the updater giving local items.</td>
+            <td class="description last">the observable to read local items from.</td>
         </tr>
 
     
@@ -256,7 +258,7 @@
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="skeleton.js.html">skeleton.js</a>, <a href="skeleton.js.html#line147">line 147</a>
+        <a href="observable.js.html">observable.js</a>, <a href="observable.js.html#line78">line 78</a>
     </li></ul></dd>
     
 
@@ -283,22 +285,21 @@
     
         <h5>Example</h5>
         
-        <p class="code-caption">Items from an array.</p>
+        <p class="code-caption">Taking items from local storage</p>
     
-    <pre class="prettyprint"><code>var remote = ...
-var items = [{ from: 1, to: 2 }, { from: 2, to: 5}];
-function updater(item, done) {
- items.forEach(item);
- done();
+    <pre class="prettyprint"><code>var local = Rx.Observable.create(function (observer) {
+ for (var i = 0; i &lt; localStorage.length; i++) {
+   observer.onNext(JSON.parse(localStorage.getItem(key)));
+ }
+ observer.onCompleted();
 }
 function serialize(item) {
- return new Int32Array([item.from, item.to]).buffer;
+ // ...
 }
 function deserialize(buffer) {
- var arr = new Int32Array(buffer);
- return { from: arr[0], to: arr[1] };
+ // ...
 }
-var resolver = require('mathsync/skeleton').newResolver(updater, remote, serialize, deserialize);</code></pre>
+var resolver = require('mathsync/observable').newResolver(local, remote, serialize, deserialize);</code></pre>
 
     
 </dd>
@@ -306,7 +307,7 @@ var resolver = require('mathsync/skeleton').newResolver(updater, remote, seriali
         
             
 <dt>
-    <h4 class="name" id="newSummarizer"><span class="type-signature">&lt;static> </span>newSummarizer<span class="signature">(updater, serialize, <span class="optional">digester</span>, <span class="optional">selector</span>)</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="newSummarizer"><span class="type-signature">&lt;static> </span>newSummarizer<span class="signature">(observable, serialize, <span class="optional">digester</span>, <span class="optional">selector</span>)</span><span class="type-signature"></span></h4>
 
     
 </dt>
@@ -316,9 +317,7 @@ var resolver = require('mathsync/skeleton').newResolver(updater, remote, seriali
     <div class="description">
         Creates a new summarizer.
 
-<p>The summarizer first counts the items as it builds an IBF, and then if the IBF is larger than the total number
-of items restart building a full content summary. This prevents infinite loops over the level in case of issue,
-like the same item added twice.</p>
+<p>Each summary creates a new subscription to the observable and drains it until it reports being completed.</p>
     </div>
     
 
@@ -354,13 +353,13 @@ like the same item added twice.</p>
 
         <tr>
             
-                <td class="name"><code>updater</code></td>
+                <td class="name"><code>observable</code></td>
             
 
             <td class="type">
             
                 
-<span class="param-type"><a href="Summary.html#SummaryBatchUpdater">Summary~SummaryBatchUpdater</a></span>
+<span class="param-type"><a href="external-Observable.html">external:Observable</a></span>
 
 
             
@@ -378,7 +377,7 @@ like the same item added twice.</p>
 
             
 
-            <td class="description last">the updater giving local items.</td>
+            <td class="description last">the observable to read local items from.</td>
         </tr>
 
     
@@ -506,7 +505,7 @@ like the same item added twice.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="skeleton.js.html">skeleton.js</a>, <a href="skeleton.js.html#line120">line 120</a>
+        <a href="observable.js.html">observable.js</a>, <a href="observable.js.html#line52">line 52</a>
     </li></ul></dd>
     
 
@@ -533,17 +532,18 @@ like the same item added twice.</p>
     
         <h5>Example</h5>
         
-        <p class="code-caption">Items from an array.</p>
+        <p class="code-caption">Taking items from local storage</p>
     
-    <pre class="prettyprint"><code>var items = [{ from: 1, to: 2 }, { from: 2, to: 5}];
-function updater(item, done) {
- items.forEach(item);
- done();
+    <pre class="prettyprint"><code>var local = Rx.Observable.create(function (observer) {
+ for (var i = 0; i &lt; localStorage.length; i++) {
+   observer.onNext(JSON.parse(localStorage.getItem(key)));
+ }
+ observer.onCompleted();
 }
 function serialize(item) {
- return new Int32Array([item.from, item.to]).buffer;
+ // ...
 }
-var summarizer = require('mathsync/skeleton').newSummarizer(updater, serialize);</code></pre>
+var summarizer = require('mathsync/observable').newSummarizer(local, serialize);</code></pre>
 
     
 </dd>

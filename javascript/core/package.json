@@ -21,14 +21,15 @@
     "base64-arraybuffer": ">=0.1.2"
   },
   "devDependencies": {
-    "mocha": "~1.20.1",
-    "underscore": "~1.6.0",
+    "browserify": "~4.1.9",
     "gulp": "~3.8.0",
-    "gulp-jshint": "~1.6.2",
     "gulp-clean": "~0.3.0",
     "gulp-jsdoc": "~0.1.4",
+    "gulp-jshint": "~1.6.2",
     "gulp-mocha": "~0.4.1",
-    "browserify": "~4.1.9",
+    "mocha": "~1.20.1",
+    "rx": "^2.3.20",
+    "underscore": "~1.6.0",
     "vinyl-source-stream": "~0.1.1"
   }
 }

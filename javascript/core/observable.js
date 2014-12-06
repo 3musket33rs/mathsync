@@ -57,7 +57,7 @@ module.exports = {
    * @example <caption>Taking items from local storage</caption>
    * var local = Rx.Observable.create(function (observer) {
    *   for (var i = 0; i < localStorage.length; i++) {
-   *     observer.onNext(JSON.parse(localStorage.getItem(key)));
+   *     observer.onNext(JSON.parse(localStorage.getItem(localStorage.key(i))));
    *   }
    *   observer.onCompleted();
    * }
@@ -83,7 +83,7 @@ module.exports = {
    * @example <caption>Taking items from local storage</caption>
    * var local = Rx.Observable.create(function (observer) {
    *   for (var i = 0; i < localStorage.length; i++) {
-   *     observer.onNext(JSON.parse(localStorage.getItem(key)));
+   *     observer.onNext(JSON.parse(localStorage.getItem(localStorage.key(i))));
    *   }
    *   observer.onCompleted();
    * }

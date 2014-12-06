@@ -3,6 +3,11 @@ layout: default
 title: Changelog
 ---
 
+# 0.6.2
+
+* additional support of [RxJS](https://github.com/Reactive-Extensions/RxJS) observable
+* npm package is now pushed with [shrinkwrap](https://www.npmjs.org/doc/cli/npm-shrinkwrap.html)
+
 # 0.6.1
 
 * additional uber-artifact with shaded dependencies in java to allow safe inclusion in any application
